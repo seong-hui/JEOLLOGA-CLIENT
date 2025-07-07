@@ -6,7 +6,6 @@ import PageName from '@components/common/pageName/PageName';
 import ExceptLayout from '@components/except/exceptLayout/ExceptLayout';
 import Footer from '@components/footer/Footer';
 import UserInfo from '@components/userInfo/userInfo';
-import { getStorageValue } from '@hooks/useLocalStorage';
 import { useState } from 'react';
 import useEventLogger from 'src/gtm/hooks/useEventLogger';
 
@@ -16,11 +15,8 @@ const MyPage = () => {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  const userId = getStorageValue('userId') || '';
-  const parseUserId = userId ? parseInt(userId, 10) : null;
-
   const postLogout = usePostLogout();
-  const postWithdraw = usePostWithdraw({ userId: parseUserId });
+  const postWithdraw = usePostWithdraw();
 
   const { data, isLoading, isError } = useGetMyPage();
 
