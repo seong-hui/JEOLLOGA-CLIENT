@@ -9,10 +9,10 @@ export const useRegisterUser = () => {
   });
 };
 
-export const useGetMyPage = (userId: string) => {
+export const useGetMyPage = () => {
   const { data, isLoading, isError } = useQuery<MyPageType>({
-    queryKey: ['myPage', userId],
-    queryFn: () => getMyPage(userId),
+    queryKey: ['myPage'],
+    queryFn: () => getMyPage(),
   });
 
   return { data, isLoading, isError };

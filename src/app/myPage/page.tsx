@@ -22,7 +22,7 @@ const MyPage = () => {
   const postLogout = usePostLogout();
   const postWithdraw = usePostWithdraw({ userId: parseUserId });
 
-  const { data, isLoading, isError } = useGetMyPage(userId);
+  const { data, isLoading, isError } = useGetMyPage();
 
   const { logClickEvent } = useEventLogger('my');
 
