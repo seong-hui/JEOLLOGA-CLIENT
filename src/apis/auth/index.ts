@@ -9,10 +9,9 @@ export const useGetKakaoLogin = () => {
   return useMutation({
     mutationFn: ({ code }: { code: string }) => getKakaoLogin(code),
     onSuccess: (response) => {
-      const userId = response.data.data.userId;
       const userNickname = response.data.data.nickname;
 
-      setCookie('userId', userId, {
+      setCookie('userNickname', userNickname, {
         httpOnly: false,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
