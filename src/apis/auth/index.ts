@@ -38,7 +38,7 @@ export const usePostLogout = () => {
     mutationFn: () => postLogout(),
     onSuccess: () => {
       localStorage.clear();
-      deleteCookie('userId');
+      deleteCookie('userNickname');
 
       router.push('/');
     },
@@ -56,7 +56,7 @@ export const usePostWithdraw = () => {
     mutationFn: () => postWithdraw(),
     onSuccess: () => {
       localStorage.clear();
-      deleteCookie('userId');
+      deleteCookie('userNickname');
       router.push('/');
       window.location.reload();
     },
