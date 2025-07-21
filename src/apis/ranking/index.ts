@@ -4,9 +4,10 @@ import { ApiResponse } from '@apis/response';
 import { useQuery } from '@tanstack/react-query';
 
 const useGetRanking = () => {
-  const { data, isLoading, isError } = useQuery<ApiResponse<RankingResponse>>({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['ranking'],
     queryFn: () => getRanking(),
+    select: (res: ApiResponse<RankingResponse>) => res.data.recommendTemplestays,
   });
 
   return { data, isLoading, isError };

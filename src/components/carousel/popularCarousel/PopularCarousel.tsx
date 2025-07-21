@@ -25,7 +25,7 @@ const PopularCarousel = ({ onRequireLogin }: PopularCarouselProps) => {
 
   const { currentIndex, carouselRef, transformStyle, handleDragChange, handleDragEnd } =
     useCarousel({
-      itemCount: data?.data.recommendTemplestays?.length || 0,
+      itemCount: data?.length || 0,
       moveDistance: 355,
     });
 
@@ -65,8 +65,8 @@ const PopularCarousel = ({ onRequireLogin }: PopularCarouselProps) => {
             onDragChange: handleDragChange,
             onDragEnd: handleDragEnd,
           })}>
-          {data?.data.recommendTemplestays &&
-            data.data.recommendTemplestays.map((temple) => (
+          {data &&
+            data.map((temple) => (
               <PopularCard
                 key={temple.id}
                 ranking={temple.rank}
@@ -81,10 +81,7 @@ const PopularCarousel = ({ onRequireLogin }: PopularCarouselProps) => {
             ))}
         </div>
       </div>
-      <CarouselIndex
-        total={data?.data.recommendTemplestays.length || 0}
-        currentIndex={currentIndex}
-      />
+      <CarouselIndex total={data?.length || 0} currentIndex={currentIndex} />
     </section>
   );
 };
