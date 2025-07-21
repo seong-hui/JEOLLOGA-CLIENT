@@ -21,11 +21,11 @@ const PopularCarousel = ({ onRequireLogin }: PopularCarouselProps) => {
   const addWishlistMutation = useAddWishlist();
   const removeWishlistMutation = useRemoveWishlist();
 
-  const { data, isLoading, isError } = useGetRanking(userId);
+  const { data, isLoading, isError } = useGetRanking();
 
   const { currentIndex, carouselRef, transformStyle, handleDragChange, handleDragEnd } =
     useCarousel({
-      itemCount: data?.rankings?.length || 0,
+      itemCount: data?.data.recommendTemplestays?.length || 0,
       moveDistance: 355,
     });
 
@@ -65,23 +65,26 @@ const PopularCarousel = ({ onRequireLogin }: PopularCarouselProps) => {
             onDragChange: handleDragChange,
             onDragEnd: handleDragEnd,
           })}>
-          {data?.rankings &&
-            data.rankings.map((rankings) => (
+          {data?.data.recommendTemplestays &&
+            data.data.recommendTemplestays.map((temple) => (
               <PopularCard
-                key={rankings.templestayId}
-                ranking={rankings.ranking}
-                templeName={rankings.templeName}
-                templeLoc={rankings.region}
-                templeImg={rankings.imgUrl}
-                isLiked={rankings.liked}
-                tag={rankings.tag}
-                onLikeToggle={(liked: boolean) => handleLikeToggle(rankings.templestayId, liked)}
-                link={`/detail/${rankings.templestayId}`}
+                key={temple.id}
+                ranking={temple.rank}
+                templestayName={temple.templestayName}
+                templeLoc={temple.region}
+                templeImg={temple.imgUrl}
+                isLiked={temple.wish}
+                templeName={temple.templeName}
+                onLikeToggle={(liked: boolean) => handleLikeToggle(temple.id, liked)}
+                link={`/detail/${temple.id}`}
               />
             ))}
         </div>
       </div>
-      <CarouselIndex total={data?.rankings?.length || 0} currentIndex={currentIndex} />
+      <CarouselIndex
+        total={data?.data.recommendTemplestays.length || 0}
+        currentIndex={currentIndex}
+      />
     </section>
   );
 };

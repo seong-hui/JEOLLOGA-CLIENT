@@ -10,10 +10,10 @@ import * as styles from './popularCard.css';
 
 interface PopularCardProps {
   ranking: number;
-  templeName: string;
+  templestayName: string;
   templeLoc: string;
   templeImg: string;
-  tag: string;
+  templeName: string;
   isLiked?: boolean;
   onLikeToggle: (liked: boolean) => void;
   link: string;
@@ -21,10 +21,10 @@ interface PopularCardProps {
 
 const PopularCard = ({
   ranking,
-  templeName,
+  templestayName,
   templeLoc,
   templeImg,
-  tag,
+  templeName,
   isLiked = false,
   onLikeToggle,
   link,
@@ -55,7 +55,7 @@ const PopularCard = ({
         <div className={styles.imgBox}>
           <Image
             src={templeImg}
-            alt={`${templeName} 대표 이미지`}
+            alt={`${templestayName} 대표 이미지`}
             fill
             style={{ objectFit: 'cover' }}
           />
@@ -63,11 +63,11 @@ const PopularCard = ({
         </div>
         <div className={styles.bottomWrapper}>
           <div className={styles.bottomContainer}>
-            <h3 className={styles.templeName}>{templeName}</h3>
+            <h3 className={styles.templestayName}>{templestayName}</h3>
             <div className={styles.bottomBox}>
               <span>{templeLoc}</span>
               <Icon.IcnDivider />
-              <span>#{tag}</span>
+              <span>{templeName}</span>
             </div>
           </div>
           <button className={styles.likeBtn} onClick={handleLikeClick}>

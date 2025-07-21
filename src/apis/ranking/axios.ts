@@ -1,11 +1,8 @@
-import { getAxiosInstance } from '@apis/instance';
+import instance from '@apis/instance';
 
-const getRanking = async (userId: number | null) => {
-  const axiosInstance = getAxiosInstance();
+const getRanking = async () => {
+  const res = await instance.get('/v2/api/templestay/recommendation');
 
-  const res = await axiosInstance.get('/ranking', {
-    params: { userId },
-  });
   return res.data;
 };
 

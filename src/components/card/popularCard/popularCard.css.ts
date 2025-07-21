@@ -17,7 +17,7 @@ export const templeInfoBox = style({
   flexDirection: 'column',
 });
 
-export const templeName = style({
+export const templestayName = style({
   ...theme.FONTS.h3Sb18,
   textAlign: 'left',
 });
