@@ -99,7 +99,7 @@ const TempleDetailClient = ({ templestayId }: TempleDetailClientProps) => {
   }
 
   if (!data) {
-    return <p>No user information available</p>;
+    return <p>템플스테이 정보를 찾을 수 없습니다</p>;
   }
 
   const handleBottomButtonClick = () => {

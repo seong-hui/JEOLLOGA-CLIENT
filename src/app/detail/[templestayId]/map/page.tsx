@@ -9,8 +9,12 @@ const LargeMap = async ({
   searchParams: Promise<{ latitude: string; longitude: string }>;
 }) => {
   const params = await searchParams;
-  const latitude = params.latitude ? parseFloat(params.latitude) : 0;
-  const longitude = params.longitude ? parseFloat(params.longitude) : 0;
+  const latitude = params.latitude ? parseFloat(params.latitude) : null;
+  const longitude = params.longitude ? parseFloat(params.longitude) : null;
+
+  if (latitude === null || longitude === null || isNaN(latitude) || isNaN(longitude)) {
+    return <div>유효하지 않은 좌표입니다.</div>;
+  }
 
   return (
     <>

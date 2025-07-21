@@ -1,18 +1,23 @@
-import { postKakaoLogin, postLogout, postWithdraw } from '@apis/auth/axios';
+import { getKakaoLogin, postLogout, postWithdraw } from '@apis/auth/axios';
 import { useMutation } from '@tanstack/react-query';
-import { setCookie } from 'cookies-next';
+import { deleteCookie, setCookie } from 'cookies-next';
 import { useRouter } from 'next/navigation';
 
-export const usePostKakaoLogin = () => {
+export const useGetKakaoLogin = () => {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: ({ code }: { code: string }) => postKakaoLogin(code),
+    mutationFn: ({ code }: { code: string }) => getKakaoLogin(code),
     onSuccess: (response) => {
-      const userId = response.data.data.userId;
       const userNickname = response.data.data.nickname;
 
-      setCookie('userId', userId);
+      setCookie('userNickname', userNickname, {
+        httpOnly: false,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        path: '/',
+        maxAge: 1209600, // 14일
+      });
 
       if (!userNickname) {
         router.push('/onboarding');
@@ -33,6 +38,8 @@ export const usePostLogout = () => {
     mutationFn: () => postLogout(),
     onSuccess: () => {
       localStorage.clear();
+      deleteCookie('userNickname');
+
       router.push('/');
     },
 
@@ -42,16 +49,14 @@ export const usePostLogout = () => {
   });
 };
 
-export const usePostWithdraw = ({ userId }: { userId: number | null }) => {
+export const usePostWithdraw = () => {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: async () => {
-      if (!userId) throw new Error('Invalid userId');
-      return await postWithdraw(userId);
-    },
+    mutationFn: () => postWithdraw(),
     onSuccess: () => {
       localStorage.clear();
+      deleteCookie('userNickname');
       router.push('/');
       window.location.reload();
     },
