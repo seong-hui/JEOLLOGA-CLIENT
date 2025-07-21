@@ -18,9 +18,7 @@ export const registerUser = async (data: OnboardingUserRequest): Promise<void> =
   await privateInstance.post('/user/register', data);
 };
 
-export const getMyPage = async (userId: string) => {
-  const res = await privateInstance.get('/user/mypage', {
-    params: { userId },
-  });
+export const getMyPage = async () => {
+  const res = await instance.get('/v2/user/mypage');
   return res.data;
 };
