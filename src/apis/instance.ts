@@ -2,6 +2,7 @@ import API_URL from '@apis/env';
 import MESSAGES from '@apis/messages';
 import { getStorageValue } from '@hooks/useLocalStorage';
 import axios, { isAxiosError } from 'axios';
+import { deleteCookie } from 'cookies-next';
 
 // const API_URL = process.env.NEXT_PUBLIC_APP_BASE_URL as string;
 
@@ -19,19 +20,23 @@ export const privateInstance = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
+    Authorization: `Bearer ${getStorageValue('Authorization')}`,
   },
   withCredentials: true,
 });
 
 export const postRefreshToken = async () => {
   try {
-    const response = await axios.get(`${API_URL}/login/refresh`, {
-      headers: {
-        'Content-Type': 'application/json',
-        refreshToken: getStorageValue('refreshToken'),
+    const response = await axios.post(
+      `${API_URL}/v2/auth/reissue`,
+      {},
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
       },
-      withCredentials: true,
-    });
+    );
     return response;
   } catch (error) {
     if (isAxiosError(error)) throw error;
@@ -39,36 +44,28 @@ export const postRefreshToken = async () => {
   }
 };
 
-privateInstance.interceptors.response.use(
+instance.interceptors.response.use(
   (response) => response,
 
   async (error) => {
-    if (!getStorageValue('Authorization')) {
+    const { config, response } = error;
+
+    if (!response) {
       return Promise.reject(error);
     }
 
-    const {
-      config,
-      response: { status },
-    } = error;
-
-    if (status === 401) {
+    if (response.status === 401) {
       try {
         const response = await postRefreshToken();
 
         if (response.status === 200) {
           const originRequest = config;
-          const newAuthorization = response.headers.authorization;
-          const parsedToken = newAuthorization.split(' ')[1];
-          localStorage.setItem('Authorization', parsedToken);
-
-          axios.defaults.headers.common.Authorization = `Bearer ${parsedToken}`;
-          originRequest.headers.Authorization = `Bearer ${parsedToken}`;
 
           return await axios(originRequest);
         }
       } catch (error) {
         localStorage.clear();
+        deleteCookie('userNickname');
         console.error(error);
         alert(MESSAGES.EXPIRED);
         window.location.replace('/');

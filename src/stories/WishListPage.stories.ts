@@ -1,4 +1,4 @@
-import WishListPage from '@app/(private)/wishList/page';
+import WishListPage from '@app/wishList/page';
 import type { Meta, StoryObj } from '@storybook/react';
 
 const meta = {
