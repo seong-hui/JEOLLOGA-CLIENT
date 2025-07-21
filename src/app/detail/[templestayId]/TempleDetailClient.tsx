@@ -104,7 +104,10 @@ const TempleDetailClient = ({ templestayId }: TempleDetailClientProps) => {
 
   const handleBottomButtonClick = () => {
     window.open(data.url, '_blank');
-
+    const newWindow = window.open(data.url, '_blank');
+    if (newWindow) {
+      newWindow.opener = null;
+    }
     logClickEvent('click_reserve', { label: data.templeName });
   };
 
