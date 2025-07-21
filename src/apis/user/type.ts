@@ -11,7 +11,6 @@ export interface OnboardingUserRequest {
 }
 
 export interface MyPageType {
-  userId: number;
   nickname: string;
   email: string;
   ageRange?: string;
