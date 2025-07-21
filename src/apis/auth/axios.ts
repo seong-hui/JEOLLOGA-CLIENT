@@ -1,4 +1,4 @@
-import instance, { privateInstance } from '@apis/instance';
+import instance from '@apis/instance';
 
 export const getKakaoLogin = async (code: string) => {
   const res = await instance.get(`v2/auth/login?code=${encodeURIComponent(code)}`);
@@ -7,7 +7,7 @@ export const getKakaoLogin = async (code: string) => {
 };
 
 export const postLogout = async () => {
-  const res = await privateInstance.post('/logout');
+  const res = await instance.post('/v2/user/auth/logout');
 
   return res;
 };
