@@ -1,3 +1,5 @@
+'use client';
+
 import Icon from '@assets/svgs';
 import useNavigateTo from '@hooks/useNavigateTo';
 

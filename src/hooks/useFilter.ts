@@ -1,3 +1,5 @@
+'use client';
+
 import useFetchFilteredList from '@apis/filter';
 import { fetchFilteredCount } from '@apis/filter/axios';
 import useLocalStorage, { getStorageValue } from '@hooks/useLocalStorage';
