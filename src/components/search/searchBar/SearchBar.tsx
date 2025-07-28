@@ -14,7 +14,7 @@ interface SearchBarProps {
 const SearchBar = ({ searchText }: SearchBarProps) => {
   const [inputValue, setInputValue] = useState(searchText || '');
 
-  const { handleSearch, handleResetFilter } = useFilter();
+  const { handleSearch } = useFilter();
   const { logClickEvent } = useEventLogger('search_bar');
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,7 +33,7 @@ const SearchBar = ({ searchText }: SearchBarProps) => {
   const handleClickSearch = () => {
     if (inputValue.trim() === '') return;
 
-    handleSearch(inputValue);
+    handleSearch({ search: inputValue });
     logClickEvent('click_enter', { label: inputValue });
   };
 
@@ -49,7 +49,6 @@ const SearchBar = ({ searchText }: SearchBarProps) => {
   // 검색 페이지에서 입력하면 기존 필터 지우기
   useEffect(() => {
     if (pathname === '/search') {
-      handleResetFilter();
       localStorage.setItem('prevPage', '/search');
     }
   }, []);

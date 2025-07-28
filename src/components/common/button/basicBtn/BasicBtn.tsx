@@ -11,6 +11,7 @@ interface ButtonProps {
   onClick?: () => void;
   onRightIconClick?: () => void;
   isActive?: boolean;
+  href?: string;
 }
 
 const BasicBtn = ({
@@ -22,14 +23,16 @@ const BasicBtn = ({
   onClick,
   onRightIconClick,
   isActive = false,
+  href,
 }: ButtonProps) => {
   const SelectedLeftIcon = leftIcon ? Icon[leftIcon] : null;
   const SelectedRightIcon = rightIcon ? Icon[rightIcon] : null;
 
-  return (
+  const buttonContent = (
     <button
-      className={styles.buttonStyle({ color: variant, size, active: isActive ? true : false })}
-      onClick={onClick}>
+      className={styles.buttonStyle({ color: variant, size, active: isActive })}
+      onClick={onClick}
+      type="button">
       {SelectedLeftIcon && (
         <span className={styles.iconWrapper}>
           <SelectedLeftIcon />
@@ -57,6 +60,8 @@ const BasicBtn = ({
       )}
     </button>
   );
+
+  return href ? <a href={href}>{buttonContent}</a> : buttonContent;
 };
 
 export default BasicBtn;

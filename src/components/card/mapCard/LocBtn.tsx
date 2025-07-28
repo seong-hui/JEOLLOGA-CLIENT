@@ -6,12 +6,13 @@ interface LocBtnProps {
   top: number;
   left: number;
   onClick?: () => void;
+  href: string;
 }
 
-const LocBtn = ({ region, top, left, onClick }: LocBtnProps) => {
+const LocBtn = ({ region, top, left, onClick, href }: LocBtnProps) => {
   return (
     <div className={btnContainer} style={{ top: `${top}px`, left: `${left}px` }}>
-      <BasicBtn label={region} onClick={onClick} />
+      <BasicBtn label={region} onClick={onClick} href={href} />
     </div>
   );
 };

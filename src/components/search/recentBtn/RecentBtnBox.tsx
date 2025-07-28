@@ -28,7 +28,7 @@ const RecentBtnBox = () => {
   };
 
   const handleRecentSearchClick = (searchContent: string) => {
-    handleSearch(searchContent);
+    handleSearch({ search: searchContent });
   };
 
   const handleDeleteSearch = (searchId: number) => {

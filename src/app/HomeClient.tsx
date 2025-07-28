@@ -2,12 +2,9 @@
 
 import PopularCarousel from '@components/carousel/popularCarousel/PopularCarousel';
 import ModalContainer from '@components/common/modal/ModalContainer';
-import useFilter from '@hooks/useFilter';
 import useNavigateTo from '@hooks/useNavigateTo';
-import { useSetAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import useEventLogger from 'src/gtm/hooks/useEventLogger';
-import { contentAtom } from 'src/store/store';
 
 import * as styles from './homePage.css';
 
@@ -16,12 +13,7 @@ const HomeClient = () => {
   const navigateToLogin = useNavigateTo('/loginStart');
   const { logClickEvent } = useEventLogger('modal_login_wish');
 
-  const { handleResetFilter } = useFilter();
-  const setContent = useSetAtom(contentAtom);
-
   useEffect(() => {
-    setContent('');
-    handleResetFilter();
     localStorage.setItem('prevPage', '/');
   }, []);
 

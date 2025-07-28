@@ -16,7 +16,7 @@ interface Props {
 }
 
 const FilterModalContent = ({ onComplete, scrollRef }: Props) => {
-  const { totalCount, toggleFilter, handleResetFilter, handleSearch } = useFilter();
+  const { toggleFilter, handleResetFilter, handleSearch } = useFilter();
   const filterInstance = useAtomValue(filterListAtom);
   const filtersState = filterInstance.getAllStates();
   const { logClickEvent } = useEventLogger('filter_tag');
@@ -45,7 +45,7 @@ const FilterModalContent = ({ onComplete, scrollRef }: Props) => {
       </main>
       <ButtonBar
         type="reset"
-        label={`${totalCount || 0}개의 템플스테이 보기`}
+        label={`${0}개의 템플스테이 보기`}
         largeBtnClick={searchFilter}
         handleResetFilter={handleResetFilter}
       />

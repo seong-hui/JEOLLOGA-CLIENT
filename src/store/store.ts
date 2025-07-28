@@ -6,5 +6,3 @@ import FilterList from 'src/model/filter/filterList';
 export const filterListAtom = atom(() => new FilterList(FILTERS));
 
 export const priceAtom = atom({ minPrice: 0, maxPrice: 30 });
-
-export const contentAtom = atom('');
