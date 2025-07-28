@@ -33,7 +33,8 @@ const FilterModalContent = ({ onComplete, scrollRef }: Props) => {
   };
 
   const searchFilter = async () => {
-    handleSearch(filtersState);
+    const selectedFilters = filterListInstance.getGroupedSelectedFilters();
+    handleSearch(selectedFilters);
     logClickEvent('click_list', { label: '' });
     onComplete?.();
   };
