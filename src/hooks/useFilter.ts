@@ -1,8 +1,7 @@
-import { useAtom } from 'jotai';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 import queryClient from 'src/queryClient';
-import { filterListAtom } from 'src/store/store';
+import { filterListInstance } from 'src/store/store';
 
 type FilterQueryParams = {
   region?: string[];
@@ -18,13 +17,10 @@ type FilterQueryParams = {
 };
 
 const useFilter = () => {
-  const [filterListInstance] = useAtom(filterListAtom);
-
   // 필터 상태 토글
   const toggleFilter = async (filterName: string) => {
     try {
       filterListInstance.toggleStatus(filterName);
-
       queryClient.invalidateQueries({ queryKey: ['filteredList'], exact: false });
     } catch (error) {
       console.error(error);
