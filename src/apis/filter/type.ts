@@ -18,3 +18,17 @@ export interface FetchFilteredListProps {
   page: number;
   userId: string;
 }
+
+export interface TemplestaySearchParamsV2 {
+  region?: string;
+  type?: string;
+  activity?: string;
+  etc?: string;
+  min?: number;
+  max?: number;
+  sort?: string;
+  search?: string;
+  page?: number;
+  userId?: string;
+  size?: number;
+}

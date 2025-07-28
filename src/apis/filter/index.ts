@@ -1,9 +1,10 @@
-import { fetchFilteredList } from '@apis/filter/axios';
+import { fetchFilteredListV2, convertToV2Params } from '@apis/filter/axios';
 import { FetchFilteredListProps } from '@apis/filter/type';
 import { useMutation } from '@tanstack/react-query';
 import queryClient from 'src/queryClient';
 
-const useFetchFilteredList = () => {
+// v2 api 사용하는 hook
+const useFetchFilteredListV2 = () => {
   return useMutation({
     mutationFn: ({
       groupedFilters,
@@ -11,17 +12,23 @@ const useFetchFilteredList = () => {
       searchQuery,
       page,
       userId,
-    }: FetchFilteredListProps) => {
-      return fetchFilteredList(
-        { ...groupedFilters, price: adjustedPrice, content: searchQuery },
+      sort,
+    }: FetchFilteredListProps & { sort?: string }) => {
+      const params = convertToV2Params(
+        groupedFilters,
+        adjustedPrice,
+        searchQuery,
         page,
         userId,
+        sort,
       );
+      return fetchFilteredListV2(params);
     },
-    onSuccess: (data, { groupedFilters, page, userId }: FetchFilteredListProps) => {
-      queryClient.setQueryData(['filteredList', groupedFilters, page, userId], data);
+    onSuccess: (data, variables) => {
+      const { groupedFilters, page, userId } = variables;
+      queryClient.setQueryData(['filteredListV2', groupedFilters, page, userId], data);
     },
   });
 };
 
-export default useFetchFilteredList;
+export default useFetchFilteredListV2;
