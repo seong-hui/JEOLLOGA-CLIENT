@@ -1,3 +1,5 @@
+'use client';
+
 import API_URL from '@apis/env';
 import MESSAGES from '@apis/messages';
 import { getStorageValue } from '@hooks/useLocalStorage';
