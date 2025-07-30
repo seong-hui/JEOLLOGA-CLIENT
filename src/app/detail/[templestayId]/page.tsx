@@ -4,25 +4,23 @@ import {
   templeReviewsQueryOptions,
 } from '@apis/templeInfo/prefetch';
 import { QueryClient, dehydrate, HydrationBoundary } from '@tanstack/react-query';
-import { cookies } from 'next/headers';
 
 import TempleDetailClient from './TempleDetailClient';
 
-const TempleDetailPage = async ({ params }: { params: Promise<{ templestayId: string }> }) => {
-  const { templestayId } = await params;
-  const cookieStore = await cookies();
-  const userId = cookieStore.get('userId')?.value;
+const TempleDetailPage = async ({ params }: { params: { templestayId: string } }) => {
+  const id = Number(params.templestayId);
+  const stringId = params.templestayId;
   const queryClient = new QueryClient();
 
   await Promise.all([
-    queryClient.prefetchQuery(templeDetailQueryOptions(templestayId, userId || undefined)),
-    queryClient.prefetchQuery(templeImagesQueryOptions(templestayId)),
-    queryClient.prefetchQuery(templeReviewsQueryOptions(templestayId, 1)),
+    queryClient.prefetchQuery(templeDetailQueryOptions(id)),
+    queryClient.prefetchQuery(templeImagesQueryOptions(id)),
+    queryClient.prefetchQuery(templeReviewsQueryOptions(stringId, 1)),
   ]);
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <TempleDetailClient templestayId={templestayId} />
+      <TempleDetailClient id={id} />
     </HydrationBoundary>
   );
 };

@@ -1,25 +1,18 @@
 import * as styles from './templeTitle.css';
 
 interface TempleTitleProps {
-  tag?: string;
   templeName: string;
   templestayName: string;
 }
 
-const TempleTitle = ({ tag, templeName, templestayName }: TempleTitleProps) => {
+const TempleTitle = ({ templeName, templestayName }: TempleTitleProps) => {
   return (
     <section className={styles.titleWrapper}>
       <div className={styles.tagBox}>
-        {tag?.split(',').map((tagItem, index) => (
-          <span key={index} className={styles.tagBox}>
-            #{tagItem.trim()}
-          </span>
-        ))}
+        <span className={styles.tagBox}>#{templeName}</span>
       </div>
       <div className={styles.templeNameBox}>
-        <h1>
-          {templeName} {templestayName}
-        </h1>
+        <h1>{templestayName}</h1>
       </div>
     </section>
   );

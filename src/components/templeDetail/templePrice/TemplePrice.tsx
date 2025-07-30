@@ -2,7 +2,7 @@ import DetailTitle from '@components/detailTitle/DetailTitle';
 
 import * as styles from './templePrice.css';
 interface TemplePriceProps {
-  templestayPrice?: string;
+  templestayPrice?: number;
 }
 
 const TemplePrice = ({ templestayPrice }: TemplePriceProps) => {

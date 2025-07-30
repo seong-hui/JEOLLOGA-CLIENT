@@ -29,18 +29,17 @@ const SmallMap = dynamic(() => import('@components/templeDetail/naverMap/smallMa
 });
 
 interface TempleDetailClientProps {
-  templestayId: string;
+  id: number;
 }
 
-const TempleDetailClient = ({ templestayId }: TempleDetailClientProps) => {
+const TempleDetailClient = ({ id }: TempleDetailClientProps) => {
   const [userId, setUserId] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    const id = getCookie('userId') as string;
-    setUserId(id);
+    const user = getCookie('userId') as string;
+    setUserId(user);
   }, []);
-
-  const { data, isLoading, isError } = useGetTempleDetails(templestayId, userId || undefined);
+  const { data, isLoading, isError } = useGetTempleDetails(id);
   const queryClient = useQueryClient();
   const addWishlistMutation = useAddWishlist();
   const removeWishlistMutation = useRemoveWishlist();
@@ -51,7 +50,7 @@ const TempleDetailClient = ({ templestayId }: TempleDetailClientProps) => {
 
   useEffect(() => {
     if (data) {
-      setLiked(data.liked);
+      setLiked(data.wish);
     }
   }, [data]);
 
@@ -66,7 +65,7 @@ const TempleDetailClient = ({ templestayId }: TempleDetailClientProps) => {
     const mutation = liked ? removeWishlistMutation : addWishlistMutation;
 
     mutation.mutate(
-      { userId: Number(userId), templestayId: Number(templestayId) },
+      { userId: Number(userId), templestayId: Number(id) },
       {
         onSuccess: () => {
           setLiked(!liked);
@@ -131,12 +130,8 @@ const TempleDetailClient = ({ templestayId }: TempleDetailClientProps) => {
       <div className={styles.topDetailContainer}>
         <DetailCarousel />
         <div className={styles.templeTitleBox}>
-          <TempleTitle
-            tag={data.tag}
-            templeName={data.templeName}
-            templestayName={data.templestayName}
-          />
-          <TempleDetailInfo address={data.address} phoneNumber={data.phoneNumber} />
+          <TempleTitle templeName={data.templeName} templestayName={data.templestayName} />
+          <TempleDetailInfo address={data.address} phoneNumber={data.phone} />
         </div>
         <StickyTapBar>
           <TapBar type="detail" />
@@ -145,15 +140,11 @@ const TempleDetailClient = ({ templestayId }: TempleDetailClientProps) => {
       <div className={styles.templeDetailMiddle}>
         <TempleReview />
         <TempleSchedule schedule={data.schedule} />
-        <TemplePrice templestayPrice={data.templestayPrice} />
+        <TemplePrice templestayPrice={data.price} />
         <TempleInfo introduction={data.introduction} />
       </div>
 
-      <SmallMap
-        detailAddress={data.detailAddress}
-        latitude={data.latitude}
-        longitude={data.longitude}
-      />
+      <SmallMap detailAddress={data.address} latitude={data.lat} longitude={data.lon} />
       <ButtonBar
         type="wish"
         label="예약하러 가기"

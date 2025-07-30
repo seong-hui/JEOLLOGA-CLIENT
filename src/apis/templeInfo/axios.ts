@@ -1,16 +1,12 @@
 import instance from '@apis/instance';
 
-export const getTempleDetails = async (templestayId: string, userId?: string) => {
-  const res = await instance.get('/templestay', {
-    params: { templestayId, userId },
-  });
+export const getTempleDetails = async (id: number) => {
+  const res = await instance.get(`/v2/api/templestay/details/${id}`);
   return res.data;
 };
 
-export const getTempleImages = async (templestayId: string) => {
-  const res = await instance.get('/public/templestay/img', {
-    params: { templestayId },
-  });
+export const getTempleImages = async (id: number) => {
+  const res = await instance.get(`/v2/api/templestay/images/${id}`);
   return res.data;
 };
 

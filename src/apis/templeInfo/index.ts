@@ -3,19 +3,19 @@ import { useQuery } from '@tanstack/react-query';
 import { getTempleReviews, getTempleImages, getTempleDetails } from './axios';
 import { ReviewsResponse, TemplestayImgsResponse, TempleDetail } from './type';
 
-export const useGetTempleDetails = (templestayId: string, userId?: string) => {
+export const useGetTempleDetails = (id: number) => {
   const { data, isLoading, isError } = useQuery<TempleDetail>({
-    queryKey: ['detailPage', templestayId, userId],
-    queryFn: () => getTempleDetails(templestayId, userId),
+    queryKey: ['detailPage', id],
+    queryFn: () => getTempleDetails(id),
   });
 
   return { data, isLoading, isError };
 };
 
-export const useGetTempleImages = (templestayId: string) => {
+export const useGetTempleImages = (id: number) => {
   const { data, isLoading, isError } = useQuery<TemplestayImgsResponse>({
-    queryKey: ['images', templestayId],
-    queryFn: () => getTempleImages(templestayId),
+    queryKey: ['images', id],
+    queryFn: () => getTempleImages(id),
   });
 
   return { data, isLoading, isError };

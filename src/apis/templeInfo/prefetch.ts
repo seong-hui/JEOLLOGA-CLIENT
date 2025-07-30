@@ -3,16 +3,16 @@ import { queryOptions } from '@tanstack/react-query';
 import { getTempleImages, getTempleReviews, getTempleDetails } from './axios';
 import { TemplestayImgsResponse, ReviewsResponse, TempleDetail } from './type';
 
-export const templeDetailQueryOptions = (templestayId: string, userId?: string) =>
+export const templeDetailQueryOptions = (id: number) =>
   queryOptions<TempleDetail>({
-    queryKey: ['detailPage', templestayId, userId],
-    queryFn: () => getTempleDetails(templestayId, userId),
+    queryKey: ['detailPage', id],
+    queryFn: () => getTempleDetails(id),
   });
 
-export const templeImagesQueryOptions = (templestayId: string) =>
+export const templeImagesQueryOptions = (id: number) =>
   queryOptions<TemplestayImgsResponse>({
-    queryKey: ['images', templestayId],
-    queryFn: () => getTempleImages(templestayId),
+    queryKey: ['images', id],
+    queryFn: () => getTempleImages(id),
   });
 
 export const templeReviewsQueryOptions = (templestayId: string, page: number) =>
