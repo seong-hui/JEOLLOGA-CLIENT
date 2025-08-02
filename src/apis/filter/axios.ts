@@ -3,7 +3,6 @@ import instance from '@apis/instance';
 import MESSAGES from '@apis/messages';
 import { isAxiosError } from 'axios';
 
-// v2 API
 export const fetchFilteredListV2 = async (params: TemplestaySearchParamsV2) => {
   try {
     const response = await instance.get('/v2/api/templestay', { params });
@@ -15,7 +14,14 @@ export const fetchFilteredListV2 = async (params: TemplestaySearchParamsV2) => {
   }
 };
 
-// 필터 데이터를 v2 API 파라미터로 변환하는 헬퍼 함수
+const getSelectedItems = (filterGroup?: Record<string, number>): string | undefined => {
+  if (!filterGroup) return undefined;
+  const selected = Object.entries(filterGroup)
+    .filter(([, value]) => value === 1)
+    .map(([item]) => item);
+  return selected.length > 0 ? selected.join(',') : undefined;
+};
+
 export const convertToV2Params = (
   groupedFilters: FilterType,
   price: PriceType,
@@ -33,42 +39,9 @@ export const convertToV2Params = (
     userId: userId && userId.trim() !== '' ? userId : undefined,
   };
 
-  // 각 필터 그룹의 선택된 아이템들을 콤마로 구분된 문자열로 변환
-  if (groupedFilters.region) {
-    const selectedRegions = Object.entries(groupedFilters.region)
-      .filter(([, isSelected]) => isSelected)
-      .map(([region]) => region);
-    if (selectedRegions.length > 0) {
-      params.region = selectedRegions.join(',');
-    }
-  }
-
-  if (groupedFilters.type) {
-    const selectedTypes = Object.entries(groupedFilters.type)
-      .filter(([, isSelected]) => isSelected)
-      .map(([type]) => type);
-    if (selectedTypes.length > 0) {
-      params.type = selectedTypes.join(',');
-    }
-  }
-
-  if (groupedFilters.activity) {
-    const selectedActivities = Object.entries(groupedFilters.activity)
-      .filter(([, isSelected]) => isSelected)
-      .map(([activity]) => activity);
-    if (selectedActivities.length > 0) {
-      params.activity = selectedActivities.join(',');
-    }
-  }
-
-  if (groupedFilters.etc) {
-    const selectedEtc = Object.entries(groupedFilters.etc)
-      .filter(([, isSelected]) => isSelected)
-      .map(([etc]) => etc);
-    if (selectedEtc.length > 0) {
-      params.etc = selectedEtc.join(',');
-    }
-  }
-
+  params.region = getSelectedItems(groupedFilters.region);
+  params.type = getSelectedItems(groupedFilters.type);
+  params.activity = getSelectedItems(groupedFilters.activity);
+  params.etc = getSelectedItems(groupedFilters.etc);
   return params;
 };

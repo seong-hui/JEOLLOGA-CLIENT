@@ -57,7 +57,7 @@ const FilterModalContent = ({ onComplete, scrollRef }: Props) => {
       </main>
       <ButtonBar
         type="reset"
-        label={`${0}개의 템플스테이 보기`}
+        label={`템플스테이 보기`}
         largeBtnClick={searchFilter}
         handleResetFilter={handleReset}
       />
