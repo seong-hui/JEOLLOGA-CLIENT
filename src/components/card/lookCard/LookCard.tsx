@@ -1,3 +1,5 @@
+'use client';
+
 import BasicBtn from '@components/common/button/basicBtn/BasicBtn';
 import useEventLogger from 'src/gtm/hooks/useEventLogger';
 

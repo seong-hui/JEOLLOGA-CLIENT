@@ -1,15 +1,13 @@
-// api 관련 interface 및 type 정리
-
 export interface Temple {
-  ranking: number;
-  templestayId: number;
-  templeName: string;
-  tag: string;
-  region: string;
-  liked: boolean;
+  id: number;
+  rank: number;
+  templestayName: string;
   imgUrl: string;
+  region: string;
+  templeName: string;
+  wish: boolean;
 }
 
 export interface RankingResponse {
-  rankings: Temple[];
+  recommendTemplestays: Temple[];
 }

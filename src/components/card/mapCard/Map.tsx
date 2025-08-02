@@ -1,3 +1,5 @@
+'use client';
+
 import mapImage from '@assets/images/home_card_map.png';
 import LocBtn from '@components/card/mapCard/LocBtn';
 import { REGION_INFOS, REGION_LABEL_MAP } from '@constants/regionInfos';
