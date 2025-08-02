@@ -1,3 +1,5 @@
+'use client';
+
 import Icon from '@assets/svgs';
 import useEventLogger from 'src/gtm/hooks/useEventLogger';
 
