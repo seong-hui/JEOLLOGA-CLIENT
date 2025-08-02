@@ -3,9 +3,10 @@ import Divider from '@components/common/divider/Divider';
 import FilterBox from '@components/filter/filterBox/FilterBox';
 import FILTERS from '@constants/filters';
 import useFilter from '@hooks/useFilter';
+import { useAtom } from 'jotai';
 import { useState } from 'react';
 import useEventLogger from 'src/gtm/hooks/useEventLogger';
-import { filterListInstance } from 'src/store/store';
+import { filterListInstance, priceAtom } from 'src/store/store';
 import titleMap from 'src/type/titleMap';
 
 import * as styles from './filterModalContent.css';
@@ -18,6 +19,7 @@ interface Props {
 const FilterModalContent = ({ onComplete, scrollRef }: Props) => {
   const { toggleFilter, handleResetFilter, handleSearch } = useFilter();
   const { logClickEvent } = useEventLogger('filter_tag');
+  const [price, setPrice] = useAtom(priceAtom);
 
   const [filtersState, setFiltersState] = useState(() => filterListInstance.getAllStates());
 
@@ -30,11 +32,17 @@ const FilterModalContent = ({ onComplete, scrollRef }: Props) => {
   const handleReset = async () => {
     await handleResetFilter();
     setFiltersState(filterListInstance.getAllStates());
+    setPrice({ minPrice: 0, maxPrice: 30 });
   };
 
   const searchFilter = async () => {
     const selectedFilters = filterListInstance.getGroupedSelectedFilters();
-    handleSearch(selectedFilters);
+    const searchParams = {
+      ...selectedFilters,
+      min: price.minPrice,
+      max: price.maxPrice,
+    };
+    handleSearch(searchParams);
     logClickEvent('click_list', { label: '' });
     onComplete?.();
   };
