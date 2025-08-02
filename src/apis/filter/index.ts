@@ -1,27 +1,14 @@
-import { fetchFilteredList } from '@apis/filter/axios';
-import { FetchFilteredListProps } from '@apis/filter/type';
-import { useMutation } from '@tanstack/react-query';
-import queryClient from 'src/queryClient';
+import { fetchFilteredListV2 } from '@apis/filter/axios';
+import { TemplestaySearchParamsV2 } from '@apis/filter/type';
+import { useQuery } from '@tanstack/react-query';
 
-const useFetchFilteredList = () => {
-  return useMutation({
-    mutationFn: ({
-      groupedFilters,
-      adjustedPrice,
-      searchQuery,
-      page,
-      userId,
-    }: FetchFilteredListProps) => {
-      return fetchFilteredList(
-        { ...groupedFilters, price: adjustedPrice, content: searchQuery },
-        page,
-        userId,
-      );
-    },
-    onSuccess: (data, { groupedFilters, page, userId }: FetchFilteredListProps) => {
-      queryClient.setQueryData(['filteredList', groupedFilters, page, userId], data);
-    },
+const useFetchFilteredListV2 = (params: TemplestaySearchParamsV2) => {
+  return useQuery({
+    queryKey: ['filteredListV2', params],
+    queryFn: () => fetchFilteredListV2(params),
+    enabled: true,
+    placeholderData: (previousData) => previousData,
   });
 };
 
-export default useFetchFilteredList;
+export default useFetchFilteredListV2;

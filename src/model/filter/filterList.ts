@@ -39,39 +39,27 @@ class FilterList {
     return result;
   }
 
-  getGroupedStates(): Record<string, Record<string, number>> {
-    const groups: Record<string, Record<string, number>> = {};
-
-    this.filters.forEach((filter) => {
-      const group = filter.getGroup();
-      const name = filter.getName();
-      const state = filter.getState();
-
-      if (!groups[group]) {
-        groups[group] = {};
-      }
-      groups[group][name] = state;
-    });
-
-    return groups;
-  }
-
   resetAllStates(): void {
     this.filters.forEach((filter) => {
       filter.setState(0);
     });
   }
 
-  getFilteredGroups(): string[] {
-    const groupsWithStateOne = new Set<string>();
+  getGroupedSelectedFilters(): Record<string, string[]> {
+    const selectedFilters: Record<string, string[]> = {};
 
     this.filters.forEach((filter) => {
       if (filter.getState() === 1) {
-        groupsWithStateOne.add(filter.getGroup());
+        const group = filter.getGroup();
+        const name = filter.getName();
+        if (!selectedFilters[group]) {
+          selectedFilters[group] = [];
+        }
+        selectedFilters[group].push(name);
       }
     });
 
-    return Array.from(groupsWithStateOne);
+    return selectedFilters;
   }
 }
 

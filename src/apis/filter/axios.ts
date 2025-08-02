@@ -1,38 +1,47 @@
-import { FilterType, PriceType } from '@apis/filter/type';
-import instance, { getAxiosInstance } from '@apis/instance';
+import { FilterType, PriceType, TemplestaySearchParamsV2 } from '@apis/filter/type';
+import instance from '@apis/instance';
 import MESSAGES from '@apis/messages';
 import { isAxiosError } from 'axios';
 
-export const fetchFilteredList = async (
-  filterData: FilterType & { price: PriceType; content: string },
-  page: number,
-  userId?: string,
-) => {
-  const axiosInstance = getAxiosInstance();
-
+export const fetchFilteredListV2 = async (params: TemplestaySearchParamsV2) => {
   try {
-    const response = await axiosInstance.post(`/search?page=${page}&userId=${userId}`, {
-      ...filterData,
-    });
+    const response = await instance.get('/v2/api/templestay', { params });
 
-    return response.data;
+    return response.data.data;
   } catch (error) {
     if (isAxiosError(error)) throw error;
     else throw new Error(MESSAGES.UNKNOWN_ERROR);
   }
 };
 
-export const fetchFilteredCount = async (
-  filterData: FilterType & { price: PriceType; content: string },
-) => {
-  try {
-    const response = await instance.post('/public/filter/count', {
-      ...filterData,
-    });
+const getSelectedItems = (filterGroup?: Record<string, number>): string | undefined => {
+  if (!filterGroup) return undefined;
+  const selected = Object.entries(filterGroup)
+    .filter(([, value]) => value === 1)
+    .map(([item]) => item);
+  return selected.length > 0 ? selected.join(',') : undefined;
+};
 
-    return response.data;
-  } catch (error) {
-    if (isAxiosError(error)) throw error;
-    else throw new Error(MESSAGES.UNKNOWN_ERROR);
-  }
+export const convertToV2Params = (
+  groupedFilters: FilterType,
+  price: PriceType,
+  search: string,
+  page: number,
+  userId?: string,
+  sort?: string,
+): TemplestaySearchParamsV2 => {
+  const params: TemplestaySearchParamsV2 = {
+    page,
+    search: search && search.trim() !== '' ? search : undefined,
+    min: price.minPrice > 0 ? price.minPrice : undefined,
+    max: price.maxPrice < 30 ? price.maxPrice : undefined,
+    sort: sort && sort.trim() !== '' ? sort : undefined,
+    userId: userId && userId.trim() !== '' ? userId : undefined,
+  };
+
+  params.region = getSelectedItems(groupedFilters.region);
+  params.type = getSelectedItems(groupedFilters.type);
+  params.activity = getSelectedItems(groupedFilters.activity);
+  params.etc = getSelectedItems(groupedFilters.etc);
+  return params;
 };

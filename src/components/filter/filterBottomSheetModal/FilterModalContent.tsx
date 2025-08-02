@@ -3,9 +3,10 @@ import Divider from '@components/common/divider/Divider';
 import FilterBox from '@components/filter/filterBox/FilterBox';
 import FILTERS from '@constants/filters';
 import useFilter from '@hooks/useFilter';
-import { useAtomValue } from 'jotai';
+import { useAtom } from 'jotai';
+import { useState } from 'react';
 import useEventLogger from 'src/gtm/hooks/useEventLogger';
-import { filterListAtom } from 'src/store/store';
+import { filterListInstance, priceAtom } from 'src/store/store';
 import titleMap from 'src/type/titleMap';
 
 import * as styles from './filterModalContent.css';
@@ -16,13 +17,32 @@ interface Props {
 }
 
 const FilterModalContent = ({ onComplete, scrollRef }: Props) => {
-  const { totalCount, toggleFilter, handleResetFilter, handleSearch } = useFilter();
-  const filterInstance = useAtomValue(filterListAtom);
-  const filtersState = filterInstance.getAllStates();
+  const { toggleFilter, handleResetFilter, handleSearch } = useFilter();
   const { logClickEvent } = useEventLogger('filter_tag');
+  const [price, setPrice] = useAtom(priceAtom);
+
+  const [filtersState, setFiltersState] = useState(() => filterListInstance.getAllStates());
+
+  const handleToggleFilter = (filterName: string) => {
+    toggleFilter(filterName);
+    const updatedState = filterListInstance.getAllStates();
+    setFiltersState(updatedState);
+  };
+
+  const handleReset = async () => {
+    await handleResetFilter();
+    setFiltersState(filterListInstance.getAllStates());
+    setPrice({ minPrice: 0, maxPrice: 30 });
+  };
 
   const searchFilter = async () => {
-    await handleSearch();
+    const selectedFilters = filterListInstance.getGroupedSelectedFilters();
+    const searchParams = {
+      ...selectedFilters,
+      min: price.minPrice,
+      max: price.maxPrice,
+    };
+    handleSearch(searchParams);
     logClickEvent('click_list', { label: '' });
     onComplete?.();
   };
@@ -37,7 +57,7 @@ const FilterModalContent = ({ onComplete, scrollRef }: Props) => {
               items={items}
               id={key}
               filtersState={filtersState}
-              onToggleFilter={toggleFilter}
+              onToggleFilter={handleToggleFilter}
             />
             <Divider />
           </div>
@@ -45,9 +65,9 @@ const FilterModalContent = ({ onComplete, scrollRef }: Props) => {
       </main>
       <ButtonBar
         type="reset"
-        label={`${totalCount || 0}개의 템플스테이 보기`}
+        label={`템플스테이 보기`}
         largeBtnClick={searchFilter}
-        handleResetFilter={handleResetFilter}
+        handleResetFilter={handleReset}
       />
     </>
   );
