@@ -1,6 +1,6 @@
 'use client';
 
-import { fetchFilteredListV2 } from '@apis/filter/axios';
+import useFetchFilteredListV2 from '@apis/filter';
 import { TemplestaySearchParamsV2 } from '@apis/filter/type';
 import { useAddWishlist, useRemoveWishlist } from '@apis/wish';
 import SearchCardList from '@components/card/templeStayCard/searchCardList/SearchCardList';
@@ -9,13 +9,15 @@ import SortBtn from '@components/common/button/sortBtn/SortBtn';
 import SearchEmpty from '@components/common/empty/searchEmpty/SearchEmpty';
 import ModalContainer from '@components/common/modal/ModalContainer';
 import Pagination from '@components/common/pagination/Pagination';
+import ExceptLayout from '@components/except/exceptLayout/ExceptLayout';
 import FilterTypeBox from '@components/filter/filterTypeBox/FilterTypeBox';
 import SearchHeader from '@components/search/searchHeader/SearchHeader';
 import { SortOption, SORT_LABELS, SORT_OPTIONS } from '@constants/sort';
 import { getStorageValue } from '@hooks/useLocalStorage';
+import { useQueryClient } from '@tanstack/react-query';
 import useUpdateSearchParams from '@utils/updateSearchParams';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import * as styles from './searchResultPage.css';
 
@@ -51,25 +53,21 @@ export default function SearchResultPageClient() {
     size: Number(searchParams.get('size') ?? '5'),
   };
 
-  const [templestays, setTemplestays] = useState<TempleStay[]>([]);
-  const [totalPages, setTotalPages] = useState(1);
-  const [currentPage, setCurrentPage] = useState(Number(queryParams.page));
   const [isSortSheetOpen, setIsSortSheetOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { mutate: addWish } = useAddWishlist();
   const { mutate: removeWish } = useRemoveWishlist();
   const updateSearchParams = useUpdateSearchParams();
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const fetch = async () => {
-      const res = await fetchFilteredListV2(queryParams);
-      setTemplestays(res.content);
-      setTotalPages(res.totalPages);
-      setCurrentPage(res.currentPage);
-    };
-    fetch();
-  }, [searchParams.toString()]);
+  const { data, isLoading } = useFetchFilteredListV2(queryParams);
+
+  const templestays = data?.content || [];
+  const totalPages = data?.totalPages || 1;
+  const currentPage = data?.currentPage || 1;
+
+  const isInitialLoading = isLoading && !data;
 
   const handleToggleWishlist = (templestayId: number, liked: boolean) => {
     const isLoggedIn = getStorageValue('isLoggedIn');
@@ -83,11 +81,16 @@ export default function SearchResultPageClient() {
     const userId = Number(userIdValue);
 
     const optimisticUpdate = (newLiked: boolean) => {
-      setTemplestays((prev) =>
-        prev.map((item) =>
-          item.templestayId === templestayId ? { ...item, liked: newLiked } : item,
-        ),
-      );
+      queryClient.setQueryData(['filteredListV2', queryParams], (oldData: unknown) => {
+        if (!oldData || typeof oldData !== 'object') return oldData;
+        const data = oldData as { content: TempleStay[] };
+        return {
+          ...data,
+          content: data.content.map((item: TempleStay) =>
+            item.templestayId === templestayId ? { ...item, liked: newLiked } : item,
+          ),
+        };
+      });
     };
 
     const mutationOptions = {
@@ -132,6 +135,10 @@ export default function SearchResultPageClient() {
   };
 
   const prevPath = getStorageValue('prevPage') || '';
+
+  if (isInitialLoading) {
+    return <ExceptLayout type="loading" />;
+  }
 
   return (
     <div className={styles.container}>
