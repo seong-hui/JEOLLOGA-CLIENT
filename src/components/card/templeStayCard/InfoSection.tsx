@@ -10,14 +10,12 @@ interface InfoSectionProps {
   type: string;
 }
 
-const InfoSection = ({ templeName, templestayName, tag, region, type }: InfoSectionProps) => {
+const InfoSection = ({ templeName, templestayName, region, type }: InfoSectionProps) => {
   return (
     <section className={styles.infoBox}>
       <div>
-        <h2 className={styles.hashTag}>#{tag}</h2>
-        <h2 className={styles.title}>
-          {templeName} {templestayName}
-        </h2>
+        <h2 className={styles.hashTag}>{templeName}</h2>
+        <h2 className={styles.title}>{templestayName}</h2>
       </div>
       <div className={styles.tagBox}>
         <Tag color="brown" label={region} />

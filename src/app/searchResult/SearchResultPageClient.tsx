@@ -14,10 +14,12 @@ import FilterTypeBox from '@components/filter/filterTypeBox/FilterTypeBox';
 import SearchHeader from '@components/search/searchHeader/SearchHeader';
 import { SortOption, SORT_LABELS, SORT_OPTIONS } from '@constants/sort';
 import { getStorageValue } from '@hooks/useLocalStorage';
+import useNavigateTo from '@hooks/useNavigateTo';
 import { useQueryClient } from '@tanstack/react-query';
 import useUpdateSearchParams from '@utils/updateSearchParams';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
+import useEventLogger from 'src/gtm/hooks/useEventLogger';
 
 import * as styles from './searchResultPage.css';
 
@@ -134,6 +136,20 @@ export default function SearchResultPageClient() {
     updateSearchParams({ ...queryParams, page: 1, sort: option });
   };
 
+  const navigateToLogin = useNavigateTo('/loginStart');
+  const { logClickEvent } = useEventLogger('searchReault');
+
+  const handleLogin = () => {
+    navigateToLogin();
+    logClickEvent('click_login', { screen: 'modal_login_wish' });
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+
+    logClickEvent('click_cancel', { screen: 'modal_login_wish' });
+  };
+
   const prevPath = getStorageValue('prevPage') || '';
 
   if (isInitialLoading) {
@@ -147,10 +163,8 @@ export default function SearchResultPageClient() {
           modalTitle="로그인 하시겠어요?"
           modalBody="찜하려면 로그인이 필요해요."
           isOpen={isModalOpen}
-          handleClose={() => setIsModalOpen(false)}
-          handleSubmit={() => {
-            // 로그인 이동
-          }}
+          handleClose={closeModal}
+          handleSubmit={handleLogin}
           leftBtnLabel="취소"
           rightBtnLabel="로그인하기"
         />
