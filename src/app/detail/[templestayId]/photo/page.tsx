@@ -1,12 +1,6 @@
 import TempleImageClient from './TempleImagesClient';
 
-interface Props {
-  params: {
-    templestayId: string;
-  };
-}
-
-const TemplePhotoPage = async ({ params }: Props) => {
+const TemplePhotoPage = async ({ params }: { params: Promise<{ templestayId: string }> }) => {
   const { templestayId } = await params;
   const templestayIdNumber = Number(templestayId);
 
