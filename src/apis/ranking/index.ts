@@ -7,7 +7,7 @@ const useGetRanking = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['ranking'],
     queryFn: () => getRanking(),
-    select: (res: ApiResponse<RankingResponse>) => res.data.recommendTemplestays,
+    select: (res: ApiResponse<RankingResponse>) => res.data?.recommendTemplestays,
   });
 
   return { data, isLoading, isError };
