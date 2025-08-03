@@ -1,21 +1,24 @@
+import { ApiResponse } from '@apis/response';
 import { useQuery } from '@tanstack/react-query';
 
 import { getTempleReviews, getTempleImages, getTempleDetails } from './axios';
 import { ReviewsResponse, TemplestayImgsResponse, TempleDetail } from './type';
 
 export const useGetTempleDetails = (id: number) => {
-  const { data, isLoading, isError } = useQuery<TempleDetail>({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['detailPage', id],
     queryFn: () => getTempleDetails(id),
+    select: (res: ApiResponse<TempleDetail>) => res.data,
   });
 
   return { data, isLoading, isError };
 };
 
 export const useGetTempleImages = (id: number) => {
-  const { data, isLoading, isError } = useQuery<TemplestayImgsResponse>({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['images', id],
     queryFn: () => getTempleImages(id),
+    select: (res: ApiResponse<TemplestayImgsResponse>) => res.data,
   });
 
   return { data, isLoading, isError };

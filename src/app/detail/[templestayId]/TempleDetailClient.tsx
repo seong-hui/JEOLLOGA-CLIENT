@@ -125,7 +125,7 @@ const TempleDetailClient = ({ id }: TempleDetailClientProps) => {
       )}
 
       <div className={styles.headerBox}>
-        <TempleTopbar templeName={data.templeName} templestayName={data.templestayName} />
+        <TempleTopbar templestayName={data.templestayName} />
       </div>
       <div className={styles.topDetailContainer}>
         <DetailCarousel />

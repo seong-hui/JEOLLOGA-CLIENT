@@ -14,7 +14,7 @@ export interface TempleDetail {
 }
 
 export interface TemplestayImg {
-  imgUrl: string;
+  imgurl: string;
 }
 
 export interface TemplestayImgsResponse {
