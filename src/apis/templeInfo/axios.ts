@@ -19,5 +19,5 @@ export const getTempleReviews = async (templestayId: string, page: number) => {
 
 export const postViewNum = async (id: number) => {
   const res = await instance.post(`/v2/api/templestay/view/${id}`);
-  return res.data;
+  return res;
 };
