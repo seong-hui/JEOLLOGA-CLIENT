@@ -28,10 +28,19 @@ const useLocalStorage = () => {
 
   // 검색어 저장
   const addStorageValue = (searchQuery: string) => {
+    const current: SearchHistoryItem[] = (() => {
+      try {
+        const data = localStorage.getItem('searchHistory');
+        return data ? JSON.parse(data) : [];
+      } catch {
+        return [];
+      }
+    })();
+
     // 중복된 검색어는 저장 안 하도록, 최대 10개까지만
     const updatedHistory = [
       { id: new Date().getTime(), search: searchQuery },
-      ...searchHistory.filter((item) => item.search !== searchQuery),
+      ...current.filter((item) => item.search !== searchQuery),
     ].slice(0, 10);
 
     setSearchHistory(updatedHistory);
