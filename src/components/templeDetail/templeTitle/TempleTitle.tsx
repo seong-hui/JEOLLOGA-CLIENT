@@ -9,7 +9,7 @@ const TempleTitle = ({ templeName, templestayName }: TempleTitleProps) => {
   return (
     <section className={styles.titleWrapper}>
       <div className={styles.tagBox}>
-        <span className={styles.tagBox}>#{templeName}</span>
+        <span>{templeName}</span>
       </div>
       <div className={styles.templeNameBox}>
         <h1>{templestayName}</h1>

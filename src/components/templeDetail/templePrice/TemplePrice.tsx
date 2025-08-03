@@ -6,13 +6,14 @@ interface TemplePriceProps {
 }
 
 const TemplePrice = ({ templestayPrice }: TemplePriceProps) => {
+  const hasPrice = templestayPrice !== null && templestayPrice !== undefined;
   return (
     <div className={styles.templePriceWrapper} id="detail-section-2">
       <DetailTitle title="가격" />
-      {templestayPrice ? (
+      {hasPrice ? (
         <div className={styles.templePriceBox}>
           <p className={styles.adultString}>성인(1인)</p>
-          <p className={styles.priceString}>{templestayPrice}</p>
+          <p className={styles.priceString}>{templestayPrice.toLocaleString()}원</p>
         </div>
       ) : (
         <div className={styles.emptyContainer}>

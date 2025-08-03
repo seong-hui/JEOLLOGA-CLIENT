@@ -10,6 +10,9 @@ import TempleDetailClient from './TempleDetailClient';
 const TempleDetailPage = async ({ params }: { params: Promise<{ templestayId: string }> }) => {
   const { templestayId } = await params;
   const id = Number(templestayId);
+  if (!Number.isInteger(id) || id <= 0) {
+    throw new Error(`Invalid templestay ID: ${templestayId}`);
+  }
   const stringId = templestayId;
   const queryClient = new QueryClient();
 
