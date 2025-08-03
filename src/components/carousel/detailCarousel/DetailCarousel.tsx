@@ -45,7 +45,7 @@ const DetailCarousel = () => {
         })}>
         {data.imgUrls.map((image, index) => (
           <ImageItem
-            key={index}
+            key={image.imgurl}
             id={index}
             imgUrl={image.imgurl}
             currentNum={index + 1}
