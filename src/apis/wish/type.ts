@@ -2,18 +2,23 @@ export interface WishItem {
   templestayId: number;
   templeName: string;
   templestayName: string;
-  tag: string;
   region: string;
   type: string;
   imgUrl: string;
-  liked: boolean;
+  wish: boolean;
 }
 
 export interface WishlistResponse {
-  page: number;
-  pageSize: number;
-  totalPages: number;
-  wishlist: WishItem[];
+  code: number;
+  msg: string;
+  data: {
+    currentPage: number;
+    size: number;
+    totalElements: number;
+    totalPages: number;
+    last: boolean;
+    content: WishItem[];
+  };
 }
 
 export interface WishlistRequest {
@@ -21,7 +26,7 @@ export interface WishlistRequest {
   templestayId: number;
 }
 
-export interface SuccessResponse {
-  data: 'success';
-  msg: string | null;
+export interface WishActionResponse {
+  code: number;
+  msg: string;
 }
