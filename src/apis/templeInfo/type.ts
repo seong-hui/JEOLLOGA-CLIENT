@@ -1,29 +1,25 @@
 export interface TempleDetail {
-  templestayId: string;
-  templeName: string;
+  id: number;
   templestayName: string;
-  phoneNumber: string;
+  templeName: string;
   address: string;
-  tag?: string;
-  templestayPrice?: string;
-  introduction?: string;
-  detailAddress: string;
-  youtube?: string;
-  schedule?: string;
-  latitude: number;
-  longitude: number;
-  liked: boolean;
+  phone: string;
+  schedule: string;
+  price: number;
+  introduction: string;
   url: string;
+  lat: number;
+  lon: number;
+  wish: boolean;
 }
 
 export interface TemplestayImg {
-  imageUrlId: number;
-  imgUrl: string;
+  imgurl: string;
 }
 
 export interface TemplestayImgsResponse {
-  total: number;
-  templestayImgs: TemplestayImg[];
+  id: number;
+  imgUrls: TemplestayImg[];
 }
 
 export interface Review {

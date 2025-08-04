@@ -8,36 +8,26 @@ import * as styles from './templeInfo.css';
 interface TempleInfoProps {
   introduction?: string;
 }
-interface StringKeyValue {
-  [key: string]: string;
-}
 
 const TempleInfo = ({ introduction }: TempleInfoProps) => {
   const contentRef = useRef<HTMLParagraphElement>(null);
   const { isAppeared, isExpanded, handleToggleExpand } = useExpandHook(contentRef);
 
-  let parsedIntroduction: StringKeyValue | null = null;
-  if (introduction) {
-    parsedIntroduction = JSON.parse(introduction);
-  }
-
   return (
     <div className={styles.templeInfoContainer} id="detail-section-3">
       <DetailTitle title="템플스테이 정보" />
-      {parsedIntroduction ? (
+      {introduction ? (
         <div className={styles.templeInfoBoxStyle}>
           {(() => {
-            const key = Object.keys(parsedIntroduction)[0];
-            const value = parsedIntroduction[key];
             return (
               <>
-                <h3 className={styles.templeInfoTitle}>{key}</h3>
+                {/* <h3 className={styles.templeInfoTitle}>{key}</h3> */}
                 <p
                   ref={contentRef}
                   className={`${styles.templeInfoContent} ${
                     isExpanded ? styles.expandedContent : ''
                   }`}>
-                  {value}
+                  {introduction}
                 </p>
               </>
             );
