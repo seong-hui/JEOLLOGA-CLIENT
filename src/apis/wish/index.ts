@@ -1,25 +1,25 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { addWishlist, fetchWishlist, removeWishlist } from './axios';
-import { WishlistRequest, WishlistResponse, SuccessResponse } from './type';
+import { WishlistRequest, WishlistResponse, WishActionResponse } from './type';
 
-export const useWishlistQuery = (page: number, userId: number) => {
+export const useWishlistQuery = (page: number) => {
   return useQuery<WishlistResponse>({
-    queryKey: ['wishlist', userId, page],
-    queryFn: () => fetchWishlist({ page, userId }),
+    queryKey: ['wishlist', page],
+    queryFn: () => fetchWishlist({ page }),
     staleTime: 0,
   });
 };
 
 export const useAddWishlist = () => {
-  return useMutation<SuccessResponse, Error, WishlistRequest>({
+  return useMutation<WishActionResponse, Error, WishlistRequest>({
     mutationFn: (data: WishlistRequest) => addWishlist(data),
     onSuccess: () => {},
   });
 };
 
 export const useRemoveWishlist = () => {
-  return useMutation<SuccessResponse, Error, WishlistRequest>({
+  return useMutation<WishActionResponse, Error, WishlistRequest>({
     mutationFn: (data: WishlistRequest) => removeWishlist(data),
     onSuccess: () => {},
   });

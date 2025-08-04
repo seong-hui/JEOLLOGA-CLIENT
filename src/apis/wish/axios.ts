@@ -1,21 +1,15 @@
-import { privateInstance } from '@apis/instance';
+import instance from '@apis/instance';
 
-import { SuccessResponse, WishlistRequest, WishlistResponse } from './type';
+import { WishActionResponse, WishlistRequest, WishlistResponse } from './type';
 
 interface FetchWishlistParams {
   page: number;
-  userId: number;
 }
 
-export const fetchWishlist = async ({
-  page,
-  userId,
-}: FetchWishlistParams): Promise<WishlistResponse> => {
-  const response = await privateInstance.get<WishlistResponse>('/user/wishlist', {
-    params: {
-      page,
-      userId,
-    },
+export const fetchWishlist = async ({ page }: FetchWishlistParams): Promise<WishlistResponse> => {
+  const response = await instance.get<WishlistResponse>('/v2/user/wish', {
+    params: { page },
+    withCredentials: true,
   });
   return response.data;
 };
@@ -23,8 +17,8 @@ export const fetchWishlist = async ({
 export const addWishlist = async ({
   userId,
   templestayId,
-}: WishlistRequest): Promise<SuccessResponse> => {
-  const response = await privateInstance.post<SuccessResponse>('/user/templestay/liked', {
+}: WishlistRequest): Promise<WishActionResponse> => {
+  const response = await instance.post<WishActionResponse>('/user/templestay/liked', {
     userId,
     templestayId,
   });
@@ -34,8 +28,8 @@ export const addWishlist = async ({
 export const removeWishlist = async ({
   userId,
   templestayId,
-}: WishlistRequest): Promise<SuccessResponse> => {
-  const response = await privateInstance.delete<SuccessResponse>('/user/templestay/liked/delete', {
+}: WishlistRequest): Promise<WishActionResponse> => {
+  const response = await instance.delete<WishActionResponse>('/user/templestay/liked/delete', {
     data: {
       userId,
       templestayId,
