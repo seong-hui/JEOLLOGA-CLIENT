@@ -3,7 +3,9 @@ import type { NextRequest } from 'next/server';
 
 export const middleware = (request: NextRequest) => {
   const { pathname } = request.nextUrl;
-  const token = request.cookies.get('userNickname'); // TODO : accessToken으로 변경 필요
+
+  const isLocal = process.env.NODE_ENV === 'development';
+  const token = request.cookies.get(isLocal ? 'userNickname' : 'accessToken');
 
   if ((pathname.startsWith('/myPage') || pathname.startsWith('/wishList')) && !token) {
     const loginUrl = new URL('/login', request.url);
