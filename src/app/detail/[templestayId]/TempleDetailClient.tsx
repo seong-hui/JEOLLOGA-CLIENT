@@ -144,7 +144,7 @@ const TempleDetailClient = ({ id }: TempleDetailClientProps) => {
         </StickyTapBar>
       </div>
       <div className={styles.templeDetailMiddle}>
-        <TempleReview />
+        <TempleReview templeId={id} />
         <TempleSchedule schedule={data.schedule} />
         <TemplePrice templestayPrice={data.price} />
         <TempleInfo introduction={data.introduction} />

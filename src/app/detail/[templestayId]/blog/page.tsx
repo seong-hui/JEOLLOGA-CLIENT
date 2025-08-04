@@ -11,20 +11,21 @@ const BlogReviewPage = async ({
   searchParams: Promise<{ page?: string }>;
 }) => {
   const { templestayId } = await params;
+  const id = Number(templestayId);
   const { page } = await searchParams;
   const currentPage = parseInt(page || '1', 10);
 
   const queryClient = new QueryClient();
 
-  const cachedData = queryClient.getQueryData(['reviews', templestayId, currentPage]);
+  const cachedData = queryClient.getQueryData(['reviews', id, currentPage]);
 
   if (!cachedData) {
-    await queryClient.prefetchQuery(templeReviewsQueryOptions(templestayId, currentPage));
+    await queryClient.prefetchQuery(templeReviewsQueryOptions(id, currentPage));
   }
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <BlogReviewClient templestayId={templestayId} initialPage={currentPage} />
+      <BlogReviewClient templestayId={id} initialPage={currentPage} />
     </HydrationBoundary>
   );
 };

@@ -11,7 +11,7 @@ import { useState, useEffect } from 'react';
 import * as styles from './style.css';
 
 interface BlogReviewClientProps {
-  templestayId: string;
+  templestayId: number;
   initialPage: number;
 }
 

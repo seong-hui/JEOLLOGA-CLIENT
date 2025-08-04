@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
 
   images: {
-    domains: ['noms.templestay.com', 'www.templestay.com'],
+    domains: ['noms.templestay.com', 'www.templestay.com', 'blogthumb.pstatic.net'],
   },
 
   webpack(config) {
