@@ -1,7 +1,7 @@
 import { ApiResponse } from '@apis/response';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 
-import { getTempleReviews, getTempleImages, getTempleDetails } from './axios';
+import { getTempleReviews, getTempleImages, getTempleDetails, postViewNum } from './axios';
 import { ReviewsResponse, TemplestayImgsResponse, TempleDetail } from './type';
 
 export const useGetTempleDetails = (id: number) => {
@@ -31,4 +31,13 @@ export const useGetTempleReviews = (templestayId: string, page: number) => {
   });
 
   return { data, isLoading, isError };
+};
+
+export const usePostViewNum = (id: number) => {
+  return useMutation({
+    mutationFn: () => postViewNum(id),
+    onError: (error) => {
+      console.error(error);
+    },
+  });
 };

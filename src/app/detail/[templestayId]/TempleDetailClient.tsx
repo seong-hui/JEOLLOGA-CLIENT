@@ -1,5 +1,5 @@
 'use client';
-import { useGetTempleDetails } from '@apis/templeInfo';
+import { useGetTempleDetails, usePostViewNum } from '@apis/templeInfo';
 import { useAddWishlist, useRemoveWishlist } from '@apis/wish';
 import DetailCarousel from '@components/carousel/detailCarousel/DetailCarousel';
 import ButtonBar from '@components/common/button/buttonBar/ButtonBar';
@@ -39,6 +39,12 @@ const TempleDetailClient = ({ id }: TempleDetailClientProps) => {
     const user = getCookie('userId') as string;
     setUserId(user);
   }, []);
+
+  const { mutate } = usePostViewNum(id);
+  useEffect(() => {
+    mutate();
+  }, [mutate]);
+
   const { data, isLoading, isError } = useGetTempleDetails(id);
   const queryClient = useQueryClient();
   const addWishlistMutation = useAddWishlist();
