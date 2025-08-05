@@ -18,7 +18,7 @@ type FilterQueryParams = {
   size?: number;
 };
 
-const isLoggedIn = getCookie('Accesstoken');
+const isLoggedIn = getCookie('userNickname');
 
 const useFilter = () => {
   const { addStorageValue } = useLocalStorage();
