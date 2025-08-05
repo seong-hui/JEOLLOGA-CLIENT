@@ -1,5 +1,4 @@
 import { useGetSearchHistory, useDelAllSearchRecord, useDelSearchRecord } from '@apis/search';
-import { Content } from '@apis/search/type';
 import BasicBtn from '@components/common/button/basicBtn/BasicBtn';
 import DetailTitle from '@components/detailTitle/DetailTitle';
 import ExceptLayout from '@components/except/exceptLayout/ExceptLayout';
@@ -9,7 +8,7 @@ import useLocalStorage from '@hooks/useLocalStorage';
 import { getCookie } from 'cookies-next';
 
 const RecentBtnBox = () => {
-  const isLoggedIn = getCookie('Accesstoken');
+  const isLoggedIn = getCookie('userNickname');
 
   const { data, isLoading, isError } = useGetSearchHistory();
   const { mutate: deleteAllSearchRecords } = useDelAllSearchRecord();
@@ -17,7 +16,7 @@ const RecentBtnBox = () => {
   const { handleSearch } = useFilter();
   const { searchHistory, delStorageValue, clearStorageValue } = useLocalStorage();
 
-  const searchData: Content[] = isLoggedIn ? data?.searchList || [] : searchHistory;
+  const searchData = isLoggedIn ? data || [] : searchHistory;
 
   const handleDeleteAll = () => {
     if (isLoggedIn) {
