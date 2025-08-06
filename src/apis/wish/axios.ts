@@ -1,6 +1,6 @@
 import instance from '@apis/instance';
 
-import { WishActionResponse, WishlistRequest, WishlistResponse } from './type';
+import { WishActionResponse, WishlistResponse } from './type';
 
 interface FetchWishlistParams {
   page: number;
@@ -15,25 +15,27 @@ export const fetchWishlist = async ({ page }: FetchWishlistParams): Promise<Wish
 };
 
 export const addWishlist = async ({
-  userId,
   templestayId,
-}: WishlistRequest): Promise<WishActionResponse> => {
-  const response = await instance.post<WishActionResponse>('/user/templestay/liked', {
-    userId,
-    templestayId,
-  });
+}: {
+  templestayId: number;
+}): Promise<WishActionResponse> => {
+  const response = await instance.post<WishActionResponse>(
+    `/v2/user/wish/${templestayId}`,
+    {},
+    {
+      withCredentials: true,
+    },
+  );
   return response.data;
 };
 
 export const removeWishlist = async ({
-  userId,
   templestayId,
-}: WishlistRequest): Promise<WishActionResponse> => {
-  const response = await instance.delete<WishActionResponse>('/user/templestay/liked/delete', {
-    data: {
-      userId,
-      templestayId,
-    },
+}: {
+  templestayId: number;
+}): Promise<WishActionResponse> => {
+  const response = await instance.delete<WishActionResponse>(`/v2/user/wish/${templestayId}`, {
+    withCredentials: true,
   });
   return response.data;
 };

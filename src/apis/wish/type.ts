@@ -21,11 +21,6 @@ export interface WishlistResponse {
   };
 }
 
-export interface WishlistRequest {
-  userId: number;
-  templestayId: number;
-}
-
 export interface WishActionResponse {
   code: number;
   msg: string;
