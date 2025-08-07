@@ -1,26 +1,19 @@
-import { privateInstance } from '@apis/instance';
-import { DelAllSearchRecordType, DelSearchRecordType } from '@apis/search/type';
+import instance from '@apis/instance';
 
-export const delSearchRecord = async ({ userId, searchId }: DelSearchRecordType) => {
-  const res = await privateInstance.delete('/user/search/record/delete', {
-    data: { userId, searchId },
-  });
+export const delSearchRecord = async (searchId: number) => {
+  const res = await instance.delete(`/v2/user/search/${searchId}`);
 
   return res.data;
 };
 
-export const delAllSearchRecord = async ({ userId }: DelAllSearchRecordType) => {
-  const res = await privateInstance.delete('/user/search/record/deleteAll', {
-    data: { userId },
-  });
+export const delAllSearchRecord = async () => {
+  const res = await instance.delete('/v2/user/search');
 
   return res.data;
 };
 
-export const getSearchHistory = async (userId: number | null) => {
-  const res = await privateInstance.get('/user/search/record', {
-    params: { userId },
-  });
+export const getSearchHistory = async () => {
+  const res = await instance.get('/v2/user/search-list');
 
   return res.data;
 };
