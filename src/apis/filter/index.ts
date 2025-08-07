@@ -1,4 +1,4 @@
-import { fetchFilteredListV2 } from '@apis/filter/axios';
+import fetchFilteredListV2 from '@apis/filter/axios';
 import { TemplestaySearchParamsV2 } from '@apis/filter/type';
 import { useQuery } from '@tanstack/react-query';
 
