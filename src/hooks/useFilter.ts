@@ -1,3 +1,5 @@
+import useLocalStorage from '@hooks/useLocalStorage';
+import { getCookie } from 'cookies-next';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 import queryClient from 'src/queryClient';
@@ -16,7 +18,11 @@ type FilterQueryParams = {
   size?: number;
 };
 
+const isLoggedIn = getCookie('userNickname');
+
 const useFilter = () => {
+  const { addStorageValue } = useLocalStorage();
+
   // 필터 상태 토글
   const toggleFilter = async (filterName: string) => {
     try {
@@ -48,10 +54,19 @@ const useFilter = () => {
         }
       });
 
+      if (
+        !isLoggedIn &&
+        params.search &&
+        typeof params.search === 'string' &&
+        params.search.trim() !== ''
+      ) {
+        addStorageValue(params.search);
+      }
+
       const queryString = searchParams.toString();
       router.push(queryString ? `/searchResult?${queryString}` : `/searchResult`);
     },
-    [router],
+    [router, addStorageValue],
   );
 
   // 필터 초기화

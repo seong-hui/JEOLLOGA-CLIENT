@@ -13,13 +13,12 @@ const TempleDetailPage = async ({ params }: { params: Promise<{ templestayId: st
   if (!Number.isInteger(id) || id <= 0) {
     throw new Error(`Invalid templestay ID: ${templestayId}`);
   }
-  const stringId = templestayId;
   const queryClient = new QueryClient();
 
   await Promise.all([
     queryClient.prefetchQuery(templeDetailQueryOptions(id)),
     queryClient.prefetchQuery(templeImagesQueryOptions(id)),
-    queryClient.prefetchQuery(templeReviewsQueryOptions(stringId, 1)),
+    queryClient.prefetchQuery(templeReviewsQueryOptions(id, 1)),
   ]);
 
   return (

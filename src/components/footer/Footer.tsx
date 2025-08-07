@@ -23,11 +23,9 @@ const Footer = () => {
         </a>
         <div className={styles.contentContainer}>
           <ul className={styles.contentTitle}>
-            <li>대표</li>
             <li>이메일</li>
           </ul>
           <ul className={styles.contentBody}>
-            <li>조아영</li>
             <li>jjeolloga@gmail.com</li>
           </ul>
         </div>

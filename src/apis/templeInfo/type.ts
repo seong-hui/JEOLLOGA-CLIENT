@@ -33,10 +33,10 @@ export interface Review {
 }
 
 export interface ReviewsResponse {
-  templestayId: string;
+  id: number;
+  reviewCount: number;
   page: number;
   pageSize: number;
   totalPages: number;
-  reviewCount: number;
   reviews?: Review[];
 }

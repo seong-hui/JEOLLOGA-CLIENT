@@ -6,16 +6,19 @@ import DetailTitle from '@components/detailTitle/DetailTitle';
 import ExceptLayout from '@components/except/exceptLayout/ExceptLayout';
 import useNavigateTo from '@hooks/useNavigateTo';
 import { useQuery } from '@tanstack/react-query';
-import { useParams } from 'next/navigation';
 import useEventLogger from 'src/gtm/hooks/useEventLogger';
 
 import * as styles from './templeReview.css';
 
-const TempleReview = () => {
-  const { templestayId } = useParams();
-  const navigateToLargeReview = useNavigateTo(`/detail/${templestayId}/blog`);
+interface TempleReviewProps {
+  templeId: number;
+}
 
-  const { data, isLoading, isError } = useQuery(templeReviewsQueryOptions(String(templestayId), 1));
+const TempleReview = ({ templeId }: TempleReviewProps) => {
+  const Id = templeId;
+  const navigateToLargeReview = useNavigateTo(`/detail/${Id}/blog`);
+
+  const { data, isLoading, isError } = useQuery(templeReviewsQueryOptions(Id, 1));
 
   const { logClickEvent } = useEventLogger('blog_review');
 
@@ -32,7 +35,7 @@ const TempleReview = () => {
     return <ExceptLayout type="networkError" />;
   }
 
-  if (!(data && data.reviews && data.reviews.length)) {
+  if (!(data && data.reviews)) {
     return (
       <div className={styles.emptyContainer}>
         <DetailTitle title="리뷰" isTotal={false} />
