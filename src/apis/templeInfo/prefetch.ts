@@ -1,5 +1,6 @@
 import { queryOptions } from '@tanstack/react-query';
 
+import { ApiResponse } from '@apis/response';
 import { getTempleImages, getTempleReviews, getTempleDetails } from './axios';
 import { TemplestayImgsResponse, ReviewsResponse, TempleDetail } from './type';
 
@@ -15,8 +16,9 @@ export const templeImagesQueryOptions = (id: number) =>
     queryFn: () => getTempleImages(id),
   });
 
-export const templeReviewsQueryOptions = (templestayId: string, page: number) =>
-  queryOptions<ReviewsResponse>({
-    queryKey: ['reviews', templestayId, page],
-    queryFn: () => getTempleReviews(templestayId, page),
+export const templeReviewsQueryOptions = (id: number, page: number) =>
+  queryOptions({
+    queryKey: ['reviews', id, page],
+    queryFn: () => getTempleReviews(id, page),
+    select: (res: ApiResponse<ReviewsResponse>) => res.data,
   });

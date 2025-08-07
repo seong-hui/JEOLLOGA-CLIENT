@@ -10,9 +10,9 @@ export const getTempleImages = async (id: number) => {
   return res.data;
 };
 
-export const getTempleReviews = async (templestayId: string, page: number) => {
-  const res = await instance.get('/public/templestay/reviews', {
-    params: { templestayId, page },
+export const getTempleReviews = async (id: number, page: number) => {
+  const res = await instance.get(`/v2/api/templestay/${id}/reviews`, {
+    params: { page },
   });
   return res.data;
 };

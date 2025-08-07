@@ -24,10 +24,11 @@ export const useGetTempleImages = (id: number) => {
   return { data, isLoading, isError };
 };
 
-export const useGetTempleReviews = (templestayId: string, page: number) => {
-  const { data, isLoading, isError } = useQuery<ReviewsResponse>({
-    queryKey: ['reviews', templestayId, page],
-    queryFn: () => getTempleReviews(templestayId, page),
+export const useGetTempleReviews = (id: number, page: number) => {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['reviews', id, page],
+    queryFn: () => getTempleReviews(id, page),
+    select: (res: ApiResponse<ReviewsResponse>) => res.data,
   });
 
   return { data, isLoading, isError };

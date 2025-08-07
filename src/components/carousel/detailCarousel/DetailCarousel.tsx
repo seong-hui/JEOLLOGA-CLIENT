@@ -2,6 +2,7 @@ import { useGetTempleImages } from '@apis/templeInfo';
 import ExceptLayout from '@components/except/exceptLayout/ExceptLayout';
 import useCarousel from '@hooks/useCarousel';
 import registDragEvent from '@utils/registDragEvent';
+import Image from 'next/image';
 import { useParams } from 'next/navigation';
 
 import * as styles from './detailCarousel.css';
@@ -29,7 +30,7 @@ const DetailCarousel = () => {
   if (!data) {
     return (
       <div className={styles.emptyImageContainer}>
-        <img src={largeEmptyImage} alt="빈 이미지"></img>
+        <Image src={largeEmptyImage} alt="빈 이미지" width={335} height={210}></Image>
       </div>
     );
   }
