@@ -2,8 +2,8 @@
 
 export const dynamic = 'force-dynamic';
 
-import { useGetNickname, useRegisterUser } from '@apis/user';
-import { OnboardingUserRequest } from '@apis/user/type';
+import { useGetNickname, usePostOnboardingData } from '@apis/user';
+import { OnboardingDataV2 } from '@apis/user/type';
 import ProgressBar from '@components/common/progressBar/ProgressBar';
 import ExceptLayout from '@components/except/exceptLayout/ExceptLayout';
 import OnboardingSection from '@components/onboarding/OnboardingSection';
@@ -31,7 +31,7 @@ const OnboardingPage = () => {
   });
 
   const userId = Number(getStorageValue('userId'));
-  const { mutate: registerUserMutate } = useRegisterUser();
+  const { mutate: postOnboardingMutate } = usePostOnboardingData();
 
   const { data, isLoading } = useGetNickname(userId);
   const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
@@ -68,7 +68,7 @@ const OnboardingPage = () => {
   };
 
   const handleFinalSubmit = async () => {
-    const requestData: OnboardingUserRequest = {
+    const requestData: OnboardingDataV2 = {
       userId,
       ageRange: selections['ageRange'],
       gender: selections['gender'],
@@ -76,8 +76,9 @@ const OnboardingPage = () => {
       hasExperience: selections['hasExperience'],
     };
 
-    registerUserMutate(requestData, {
-      onSuccess: () => {
+    postOnboardingMutate(requestData, {
+      onSuccess: (response) => {
+        console.log('온보딩 성공:', response.msg);
         localStorage.removeItem('onboardingSelections');
         nextStep();
       },

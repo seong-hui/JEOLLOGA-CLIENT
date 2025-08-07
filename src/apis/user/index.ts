@@ -1,12 +1,12 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { ApiResponse } from './../response';
-import { fetchUserNickname, getMyPage, registerUser } from './axios';
-import { MyPageType, OnboardingUserRequest } from './type';
+import { fetchUserNickname, getMyPage, postOnboardingData } from './axios';
+import { MyPageType, OnboardingDataV2, OnboardingResponseV2 } from './type';
 
-export const useRegisterUser = () => {
-  return useMutation<void, Error, OnboardingUserRequest>({
-    mutationFn: (data) => registerUser(data),
+export const usePostOnboardingData = () => {
+  return useMutation<OnboardingResponseV2, Error, OnboardingDataV2>({
+    mutationFn: (data) => postOnboardingData(data),
   });
 };
 
