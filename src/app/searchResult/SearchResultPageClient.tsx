@@ -2,7 +2,7 @@
 
 import useFetchFilteredListV2 from '@apis/filter';
 import { TemplestaySearchParamsV2 } from '@apis/filter/type';
-import { useAddWishlist, useRemoveWishlist } from '@apis/wish';
+import { useAddWishlistV2, useRemoveWishlistV2 } from '@apis/wish';
 import SearchCardList from '@components/card/templeStayCard/searchCardList/SearchCardList';
 import BottomSheet from '@components/common/bottmsheet/BottomSheet';
 import SortBtn from '@components/common/button/sortBtn/SortBtn';
@@ -15,24 +15,13 @@ import SearchHeader from '@components/search/searchHeader/SearchHeader';
 import { SortOption, SORT_LABELS, SORT_OPTIONS } from '@constants/sort';
 import { getStorageValue } from '@hooks/useLocalStorage';
 import useNavigateTo from '@hooks/useNavigateTo';
-import { useQueryClient } from '@tanstack/react-query';
 import useUpdateSearchParams from '@utils/updateSearchParams';
+import { getCookie } from 'cookies-next';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import useEventLogger from 'src/gtm/hooks/useEventLogger';
 
 import * as styles from './searchResultPage.css';
-
-interface TempleStay {
-  templestayId: number;
-  templeName: string;
-  templestayName: string;
-  tag: string;
-  region: string;
-  type: string;
-  imgUrl: string;
-  liked: boolean;
-}
 
 export default function SearchResultPageClient() {
   const searchParams = useSearchParams();
@@ -58,10 +47,9 @@ export default function SearchResultPageClient() {
   const [isSortSheetOpen, setIsSortSheetOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { mutate: addWish } = useAddWishlist();
-  const { mutate: removeWish } = useRemoveWishlist();
+  const { mutate: addWish } = useAddWishlistV2();
+  const { mutate: removeWish } = useRemoveWishlistV2();
   const updateSearchParams = useUpdateSearchParams();
-  const queryClient = useQueryClient();
 
   const { data, isLoading } = useFetchFilteredListV2(queryParams);
 
@@ -72,42 +60,17 @@ export default function SearchResultPageClient() {
   const isInitialLoading = isLoading && !data;
 
   const handleToggleWishlist = (templestayId: number, liked: boolean) => {
-    const isLoggedIn = getStorageValue('isLoggedIn');
-    const userIdValue = getStorageValue('userId');
+    const userNickname = getCookie('userNickname');
 
-    if (!isLoggedIn || !userIdValue) {
+    if (!userNickname) {
       setIsModalOpen(true);
       return;
     }
 
-    const userId = Number(userIdValue);
-
-    const optimisticUpdate = (newLiked: boolean) => {
-      queryClient.setQueryData(['filteredListV2', queryParams], (oldData: unknown) => {
-        if (!oldData || typeof oldData !== 'object') return oldData;
-        const data = oldData as { content: TempleStay[] };
-        return {
-          ...data,
-          content: data.content.map((item: TempleStay) =>
-            item.templestayId === templestayId ? { ...item, liked: newLiked } : item,
-          ),
-        };
-      });
-    };
-
-    const mutationOptions = {
-      onSuccess: () => {},
-      onError: () => {
-        optimisticUpdate(!liked);
-      },
-    };
-
-    optimisticUpdate(!liked);
-
     if (liked) {
-      removeWish({ userId, templestayId }, mutationOptions);
+      removeWish(templestayId);
     } else {
-      addWish({ userId, templestayId }, mutationOptions);
+      addWish(templestayId);
     }
   };
 
