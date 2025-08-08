@@ -1,4 +1,4 @@
-export interface WishItem {
+export interface WishItemV2 {
   templestayId: number;
   templeName: string;
   templestayName: string;
@@ -8,17 +8,13 @@ export interface WishItem {
   wish: boolean;
 }
 
-export interface WishlistResponse {
-  code: number;
-  msg: string;
-  data: {
-    currentPage: number;
-    size: number;
-    totalElements: number;
-    totalPages: number;
-    last: boolean;
-    content: WishItem[];
-  };
+export interface WishlistResponseV2 {
+  currentPage: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+  last: boolean;
+  content: WishItemV2[];
 }
 
 export interface WishActionResponse {
