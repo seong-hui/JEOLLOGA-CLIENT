@@ -41,7 +41,8 @@ const meta = {
     templeName: '봉선사',
     link: 'https://www.gototemplestay.com/',
     isLiked: false,
-    onLikeToggle: () => alert('Liked'),
+    templestayId: 123,
+    onLikeToggle: (id) => alert(`Toggled like for ID: ${id}`),
   },
 } satisfies Meta<typeof PopularCard>;
 
