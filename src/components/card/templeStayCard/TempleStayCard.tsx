@@ -1,8 +1,9 @@
 'use client';
 const errorImage = '/assets/images/img_gray_light_leaf_medium.png';
+import { WishItemV2 } from '@apis/wish/type';
 import InfoSection from '@components/card/templeStayCard/InfoSection';
 import FlowerIcon from '@components/common/icon/flowerIcon/FlowerIcon';
-import { getStorageValue } from '@hooks/useLocalStorage';
+import { getCookie } from 'cookies-next';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import useEventLogger from 'src/gtm/hooks/useEventLogger';
@@ -10,55 +11,42 @@ import useEventLogger from 'src/gtm/hooks/useEventLogger';
 import * as styles from './templeStayCard.css';
 
 interface TempleStayCardProps {
-  templestayId: number;
-  templeName: string;
-  templestayName: string;
-  tag: string;
-  region: string;
-  type: string;
-  imgUrl?: string;
-  liked: boolean;
+  item: WishItemV2;
   layout: 'vertical' | 'horizontal';
-  onToggleWishlist: (templestayId: number, liked: boolean) => void;
+  onToggleWishlist: (templestayId: number, currentLiked: boolean) => void;
   onRequireLogin?: () => void;
   link: string;
 }
 
 const TempleStayCard = ({
-  templestayId,
-  templeName,
-  templestayName,
-  tag,
-  region,
-  type,
-  imgUrl,
-  liked,
+  item,
   layout,
   onToggleWishlist,
   link,
   onRequireLogin,
 }: TempleStayCardProps) => {
-  const [isWished, setIsWished] = useState(liked);
-  const isHorizontal = layout === 'horizontal';
+  const [isWished, setIsWished] = useState(item.wish);
+
   const { logClickEvent } = useEventLogger('templestay_card');
   const pathname = usePathname();
-
+  const isHorizontal = layout === 'horizontal';
   const isWishPage = pathname === '/wishList';
 
   const onClickWishBtn = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
 
-    const userId = Number(getStorageValue('userId'));
-    if (!userId) {
+    const userNickname = getCookie('userNickname');
+    if (!userNickname) {
       onRequireLogin?.();
       return;
     }
 
+    onToggleWishlist(item.templestayId, isWished);
     setIsWished((prev) => !prev);
-    onToggleWishlist(templestayId, isWished);
+
     logClickEvent(`click_wish_${isWished ? 'remove' : 'add'}`, {
-      label: templeName,
+      label: item.templeName,
       screen: `${isWishPage ? 'wish' : 'templestay_card'}`,
     });
   };
@@ -68,12 +56,12 @@ const TempleStayCard = ({
       href={link}
       className={isHorizontal ? styles.horizontalContainer : styles.verticalContainer}
       onClick={() => logClickEvent('click_card_detail')}>
-      {imgUrl ? (
+      {item.imgUrl ? (
         <section className={isHorizontal ? styles.horizontalImgSection : styles.verticalImgSection}>
           <img
             className={isHorizontal ? styles.horizontalImage : styles.verticalImage}
-            src={imgUrl}
-            alt={templeName + ' 대표사진'}
+            src={item.imgUrl}
+            alt={item.templeName + ' 대표사진'}
           />
           <button className={styles.wishBtn} onClick={onClickWishBtn}>
             <FlowerIcon isActive={isWished} />
@@ -89,11 +77,10 @@ const TempleStayCard = ({
       )}
 
       <InfoSection
-        templeName={templeName}
-        templestayName={templestayName}
-        tag={tag}
-        region={region}
-        type={type}
+        templeName={item.templeName}
+        templestayName={item.templestayName}
+        region={item.region}
+        type={item.type}
       />
     </a>
   );

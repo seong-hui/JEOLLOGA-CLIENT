@@ -1,79 +1,49 @@
 'use client';
 
-import { useAddWishlist, useRemoveWishlist } from '@apis/wish';
-import { WishlistResponse } from '@apis/wish/type';
+import { useAddWishlistV2, useRemoveWishlistV2, useWishlistQueryV2 } from '@apis/wish';
 import WishCardList from '@components/card/templeStayCard/wishCardList/WishCardList';
 import WishEmpty from '@components/common/empty/wishEmpty/WishEmpty';
 import PageName from '@components/common/pageName/PageName';
 import Pagination from '@components/common/pagination/Pagination';
 import ExceptLayout from '@components/except/exceptLayout/ExceptLayout';
-import { useQueryClient } from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
 
 import * as styles from './wishList.css';
 
-interface WishListClientProps {
-  initialData: WishlistResponse | null;
-  currentPage: number;
-  error?: boolean;
-}
-
-const WishListClient = ({ initialData, currentPage, error }: WishListClientProps) => {
+const WishListClient = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const queryClient = useQueryClient();
 
-  const addWishlistMutation = useAddWishlist();
-  const removeWishlistMutation = useRemoveWishlist();
+  const currentPage = Number(searchParams.get('page') || 1);
 
-  const wishlist = initialData?.wishlist || [];
-  const totalPages = initialData?.totalPages || 1;
+  const { data, isLoading, isError } = useWishlistQueryV2(currentPage);
+  const addWishlistMutation = useAddWishlistV2();
+  const removeWishlistMutation = useRemoveWishlistV2();
 
-  useEffect(() => {
-    if (initialData && totalPages > 0 && currentPage > totalPages) {
-      const params = new URLSearchParams(searchParams);
-      params.set('page', totalPages.toString());
-      router.replace(`/wishList?${params.toString()}`);
-    }
-  }, [initialData, currentPage, totalPages, router, searchParams]);
+  const wishlistData = data?.data;
+  const wishlist = wishlistData?.content || [];
+  const totalPages = wishlistData?.totalPages || 1;
 
   const handlePageChange = (page: number) => {
-    const params = new URLSearchParams(searchParams);
-    params.set('page', page.toString());
-    router.push(`/wishList?${params.toString()}`);
-
+    router.push(`/wishList?page=${page}`);
     window.scrollTo({
       top: 0,
       behavior: 'smooth',
     });
   };
 
-  const handleToggleWishlist = (templestayId: number, liked: boolean) => {
-    if (liked) {
-      removeWishlistMutation.mutate(
-        { templestayId },
-        {
-          onSuccess: () => {
-            // 페이지 새로고침으로 서버 데이터 업데이트
-            router.refresh();
-          },
-        },
-      );
+  const handleToggleWishlist = (templestayId: number, isWished: boolean) => {
+    if (isWished) {
+      removeWishlistMutation.mutate(templestayId);
     } else {
-      addWishlistMutation.mutate(
-        { templestayId },
-        {
-          onSuccess: () => {
-            // 페이지 새로고침으로 서버 데이터 업데이트
-            router.refresh();
-          },
-        },
-      );
+      addWishlistMutation.mutate(templestayId);
     }
   };
 
-  if (error) {
+  if (isLoading) {
+    return <ExceptLayout type="loading" />;
+  }
+  if (isError) {
     return <ExceptLayout type="networkError" />;
   }
 
@@ -82,7 +52,7 @@ const WishListClient = ({ initialData, currentPage, error }: WishListClientProps
       <div className={styles.headerBox}>
         <PageName title="위시리스트" />
       </div>
-      {totalPages === 1 && wishlist.length === 0 ? (
+      {!isLoading && wishlist.length === 0 ? (
         <div className={styles.emptyBox}>
           <WishEmpty />
         </div>
@@ -96,7 +66,7 @@ const WishListClient = ({ initialData, currentPage, error }: WishListClientProps
             />
           </div>
           <Pagination
-            currentPage={initialData?.page || 1}
+            currentPage={wishlistData?.currentPage || 1}
             totalPages={totalPages}
             onPageChange={handlePageChange}
             color="gray"

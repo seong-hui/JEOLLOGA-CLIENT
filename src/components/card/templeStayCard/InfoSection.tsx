@@ -5,7 +5,6 @@ import * as styles from './infoSection.css';
 interface InfoSectionProps {
   templeName: string;
   templestayName: string;
-  tag: string;
   region: string;
   type: string;
 }
