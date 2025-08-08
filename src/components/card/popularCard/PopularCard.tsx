@@ -2,9 +2,7 @@
 
 import Icon from '@assets/svgs';
 import RankBtn from '@components/card/popularCard/RankBtn';
-import { getStorageValue } from '@hooks/useLocalStorage';
 import Image from 'next/image';
-import { useState } from 'react';
 
 import * as styles from './popularCard.css';
 
@@ -14,8 +12,9 @@ interface PopularCardProps {
   templeLoc: string;
   templeImg: string;
   templeName: string;
-  isLiked?: boolean;
-  onLikeToggle: (liked: boolean) => void;
+  isLiked: boolean;
+  onLikeToggle: (templestayId: number) => void;
+  templestayId: number;
   link: string;
 }
 
@@ -25,24 +24,16 @@ const PopularCard = ({
   templeLoc,
   templeImg,
   templeName,
-  isLiked = false,
+  isLiked,
   onLikeToggle,
+  templestayId,
   link,
 }: PopularCardProps) => {
-  const [liked, setLiked] = useState(isLiked);
-
   const handleLikeClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
 
-    const userId = Number(getStorageValue('userId'));
-    if (!userId) {
-      onLikeToggle(liked);
-      return;
-    }
-
-    setLiked((prev) => !prev);
-    onLikeToggle(liked);
+    onLikeToggle(templestayId);
   };
 
   return (
@@ -71,7 +62,7 @@ const PopularCard = ({
             </div>
           </div>
           <button className={styles.likeBtn} onClick={handleLikeClick}>
-            {liked ? <Icon.IcnFlowerPink /> : <Icon.IcnFlowerGray />}
+            {isLiked ? <Icon.IcnFlowerPink /> : <Icon.IcnFlowerGray />}
           </button>
         </div>
       </div>
