@@ -35,6 +35,7 @@ const ReviewCard = ({
     <button className={styles.cardContainer({ size })} onClick={handleButtonClick}>
       {blogImage ? (
         <Image
+          unoptimized
           className={styles.cardImage({ size })}
           src={blogImage}
           alt="thumbnail"
