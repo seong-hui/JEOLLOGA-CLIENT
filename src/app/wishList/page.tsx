@@ -3,9 +3,10 @@ import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query
 
 import WishListClient from './WishListClient';
 
-const WishListPage = async ({ searchParams }: { searchParams: { page?: string } }) => {
+const WishListPage = async ({ searchParams }: { searchParams: Promise<{ page?: string }> }) => {
   const queryClient = new QueryClient();
-  const page = Number(searchParams?.page || 1);
+  const params = await searchParams;
+  const page = Number(params?.page || 1);
   const queryKey = ['wishlistV2', page];
 
   await queryClient.prefetchQuery({
