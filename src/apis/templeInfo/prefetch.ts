@@ -1,6 +1,6 @@
+import { ApiResponse } from '@apis/response';
 import { queryOptions } from '@tanstack/react-query';
 
-import { ApiResponse } from '@apis/response';
 import { getTempleImages, getTempleReviews, getTempleDetails } from './axios';
 import { TemplestayImgsResponse, ReviewsResponse, TempleDetail } from './type';
 
