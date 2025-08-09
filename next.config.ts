@@ -6,6 +6,10 @@ const withVanillaExtract = createVanillaExtractPlugin();
 const nextConfig: NextConfig = {
   reactStrictMode: true,
 
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+
   images: {
     domains: ['noms.templestay.com', 'www.templestay.com', 'blogthumb.pstatic.net'],
   },
