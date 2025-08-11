@@ -16,6 +16,7 @@ interface PopularCardProps {
   onLikeToggle: (templestayId: number) => void;
   templestayId: number;
   link: string;
+  onClick: () => void;
 }
 
 const PopularCard = ({
@@ -28,6 +29,7 @@ const PopularCard = ({
   onLikeToggle,
   templestayId,
   link,
+  onClick,
 }: PopularCardProps) => {
   const handleLikeClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -41,7 +43,8 @@ const PopularCard = ({
       href={link}
       className={styles.cardWrapper}
       draggable={false}
-      onDragStart={(e) => e.preventDefault()}>
+      onDragStart={(e) => e.preventDefault()}
+      onClick={onClick}>
       <div>
         <div className={styles.imgBox}>
           <Image

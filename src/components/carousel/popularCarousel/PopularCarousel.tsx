@@ -7,6 +7,7 @@ import useCarousel from '@hooks/useCarousel';
 import { useQueryClient } from '@tanstack/react-query';
 import registDragEvent from '@utils/registDragEvent';
 import { getCookie } from 'cookies-next';
+import useEventLogger from 'src/gtm/hooks/useEventLogger';
 
 import * as styles from './popularCarousel.css';
 
@@ -26,6 +27,8 @@ const PopularCarousel = ({ onRequireLogin }: PopularCarouselProps) => {
       itemCount: data?.length || 0,
       moveDistance: 355,
     });
+
+  const { logClickEvent } = useEventLogger('home_popularity_component');
 
   if (isLoading) {
     return <ExceptLayout type="loading" />;
@@ -78,6 +81,11 @@ const PopularCarousel = ({ onRequireLogin }: PopularCarouselProps) => {
                 templestayId={temple.id}
                 onLikeToggle={handleLikeToggle}
                 link={`/detail/${temple.id}`}
+                onClick={() => {
+                  logClickEvent('click_popularity_card', {
+                    label: temple.id,
+                  });
+                }}
               />
             ))}
         </div>

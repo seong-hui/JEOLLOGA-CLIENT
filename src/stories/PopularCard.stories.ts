@@ -43,6 +43,7 @@ const meta = {
     isLiked: false,
     templestayId: 123,
     onLikeToggle: (id) => alert(`Toggled like for ID: ${id}`),
+    onClick: () => alert('Card clicked!'),
   },
 } satisfies Meta<typeof PopularCard>;
 
