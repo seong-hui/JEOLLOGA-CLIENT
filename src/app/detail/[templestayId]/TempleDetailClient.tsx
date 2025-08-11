@@ -1,6 +1,6 @@
 'use client';
 import { useGetTempleDetails, usePostViewNum } from '@apis/templeInfo';
-import { useAddWishlist, useRemoveWishlist } from '@apis/wish';
+import { useAddWishlistV2, useRemoveWishlistV2 } from '@apis/wish';
 import DetailCarousel from '@components/carousel/detailCarousel/DetailCarousel';
 import ButtonBar from '@components/common/button/buttonBar/ButtonBar';
 import ModalContainer from '@components/common/modal/ModalContainer';
@@ -15,7 +15,6 @@ import TempleSchedule from '@components/templeDetail/templeSchedule/TempleSchedu
 import TempleTitle from '@components/templeDetail/templeTitle/TempleTitle';
 import TempleTopbar from '@components/templeDetail/templeTopbar/TempleTopbar';
 import useNavigateTo from '@hooks/useNavigateTo';
-import { useQueryClient } from '@tanstack/react-query';
 import { getCookie } from 'cookies-next';
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
@@ -33,22 +32,14 @@ interface TempleDetailClientProps {
 }
 
 const TempleDetailClient = ({ id }: TempleDetailClientProps) => {
-  const [userId, setUserId] = useState<string | undefined>(undefined);
-
-  useEffect(() => {
-    const user = getCookie('userId') as string;
-    setUserId(user);
-  }, []);
-
   const { mutate } = usePostViewNum(id);
   useEffect(() => {
     mutate();
   }, [mutate]);
 
   const { data, isLoading, isError } = useGetTempleDetails(id);
-  const queryClient = useQueryClient();
-  const addWishlistMutation = useAddWishlist();
-  const removeWishlistMutation = useRemoveWishlist();
+  const addWishlistMutation = useAddWishlistV2();
+  const removeWishlistMutation = useRemoveWishlistV2();
 
   const [liked, setLiked] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -63,23 +54,22 @@ const TempleDetailClient = ({ id }: TempleDetailClientProps) => {
   const { logClickEvent } = useEventLogger('bottom_tab');
 
   const handleToggleWishlist = () => {
-    if (!userId) {
+    const userNickname = getCookie('userNickname');
+    if (!userNickname) {
       setIsModalOpen(true);
       return;
     }
 
-    const mutation = liked ? removeWishlistMutation : addWishlistMutation;
+    const currentLiked = liked;
+    const mutation = currentLiked ? removeWishlistMutation : addWishlistMutation;
 
-    mutation.mutate(
-      { userId: Number(userId), templestayId: Number(id) },
-      {
-        onSuccess: () => {
-          setLiked(!liked);
-          queryClient.invalidateQueries({ queryKey: ['ranking', userId] });
-          queryClient.refetchQueries({ queryKey: ['ranking', userId] });
-        },
+    setLiked(!currentLiked);
+
+    mutation.mutate(Number(id), {
+      onError: () => {
+        setLiked(currentLiked);
       },
-    );
+    });
 
     logClickEvent(`click_wish_${liked ? 'remove' : 'add'}`, {});
   };

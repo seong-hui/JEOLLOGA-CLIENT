@@ -1,17 +1,10 @@
+import { WishItemV2 } from '@apis/wish/type';
+
 import TempleStayCard from '../TempleStayCard';
 import container from './searchCardList.css';
 
 interface SearchCardListProps {
-  data: {
-    templestayId: number;
-    templeName: string;
-    templestayName: string;
-    tag: string;
-    region: string;
-    type: string;
-    imgUrl: string;
-    liked: boolean;
-  }[];
+  data: WishItemV2[];
   layout: 'vertical' | 'horizontal';
   onToggleWishlist: (templestayId: number, liked: boolean) => void;
   onRequireLogin?: () => void;
@@ -28,14 +21,7 @@ const SearchCardList = ({
       {data.map((temple) => (
         <TempleStayCard
           key={temple.templestayId}
-          templestayId={temple.templestayId}
-          templeName={temple.templeName}
-          templestayName={temple.templestayName}
-          tag={temple.tag}
-          region={temple.region}
-          type={temple.type}
-          imgUrl={temple.imgUrl}
-          liked={temple.liked}
+          item={temple}
           layout={layout}
           onToggleWishlist={onToggleWishlist}
           onRequireLogin={onRequireLogin}

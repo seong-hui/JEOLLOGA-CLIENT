@@ -1,45 +1,21 @@
-import { privateInstance } from '@apis/instance';
+import instance from '@apis/instance';
+import { ApiResponse } from '@apis/response';
 
-import { SuccessResponse, WishlistRequest, WishlistResponse } from './type';
+import { WishlistResponseV2, WishActionResponse } from './type';
 
-interface FetchWishlistParams {
-  page: number;
-  userId: number;
-}
-
-export const fetchWishlist = async ({
-  page,
-  userId,
-}: FetchWishlistParams): Promise<WishlistResponse> => {
-  const response = await privateInstance.get<WishlistResponse>('/user/wishlist', {
-    params: {
-      page,
-      userId,
-    },
+export const fetchWishlistV2 = async (page: number): Promise<ApiResponse<WishlistResponseV2>> => {
+  const response = await instance.get<ApiResponse<WishlistResponseV2>>('/v2/user/wish', {
+    params: { page },
   });
   return response.data;
 };
 
-export const addWishlist = async ({
-  userId,
-  templestayId,
-}: WishlistRequest): Promise<SuccessResponse> => {
-  const response = await privateInstance.post<SuccessResponse>('/user/templestay/liked', {
-    userId,
-    templestayId,
-  });
+export const addWishlistV2 = async (templestayId: number): Promise<WishActionResponse> => {
+  const response = await instance.post<WishActionResponse>(`/v2/user/wish/${templestayId}`);
   return response.data;
 };
 
-export const removeWishlist = async ({
-  userId,
-  templestayId,
-}: WishlistRequest): Promise<SuccessResponse> => {
-  const response = await privateInstance.delete<SuccessResponse>('/user/templestay/liked/delete', {
-    data: {
-      userId,
-      templestayId,
-    },
-  });
+export const removeWishlistV2 = async (templestayId: number): Promise<WishActionResponse> => {
+  const response = await instance.delete<WishActionResponse>(`/v2/user/wish/${templestayId}`);
   return response.data;
 };

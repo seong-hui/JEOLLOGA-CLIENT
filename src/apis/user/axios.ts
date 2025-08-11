@@ -1,6 +1,6 @@
 import instance, { privateInstance } from '@apis/instance';
 
-import { OnboardingUserRequest, UserNicknameResponse } from './type';
+import { OnboardingDataV2, OnboardingResponseV2, UserNicknameResponse } from './type';
 
 export const fetchUserNickname = async (userId?: number) => {
   if (userId === 0) {
@@ -14,8 +14,9 @@ export const fetchUserNickname = async (userId?: number) => {
   return response.data;
 };
 
-export const registerUser = async (data: OnboardingUserRequest): Promise<void> => {
-  await privateInstance.post('/user/register', data);
+export const postOnboardingData = async (data: OnboardingDataV2): Promise<OnboardingResponseV2> => {
+  const response = await instance.post<OnboardingResponseV2>('/v2/user/onboarding', data);
+  return response.data;
 };
 
 export const getMyPage = async () => {

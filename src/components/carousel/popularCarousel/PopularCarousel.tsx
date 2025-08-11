@@ -1,12 +1,12 @@
 import useGetRanking from '@apis/ranking';
-import { useAddWishlist, useRemoveWishlist } from '@apis/wish';
+import { useAddWishlistV2, useRemoveWishlistV2 } from '@apis/wish';
 import PopularCard from '@components/card/popularCard/PopularCard';
 import CarouselIndex from '@components/carousel/popularCarousel/CarouselIndex';
 import ExceptLayout from '@components/except/exceptLayout/ExceptLayout';
 import useCarousel from '@hooks/useCarousel';
-import { getStorageValue } from '@hooks/useLocalStorage';
 import { useQueryClient } from '@tanstack/react-query';
 import registDragEvent from '@utils/registDragEvent';
+import { getCookie } from 'cookies-next';
 
 import * as styles from './popularCarousel.css';
 
@@ -15,11 +15,9 @@ interface PopularCarouselProps {
 }
 
 const PopularCarousel = ({ onRequireLogin }: PopularCarouselProps) => {
-  const userId = Number(getStorageValue('userId'));
   const queryClient = useQueryClient();
-
-  const addWishlistMutation = useAddWishlist();
-  const removeWishlistMutation = useRemoveWishlist();
+  const addWishlistMutation = useAddWishlistV2();
+  const removeWishlistMutation = useRemoveWishlistV2();
 
   const { data, isLoading, isError } = useGetRanking();
 
@@ -37,22 +35,24 @@ const PopularCarousel = ({ onRequireLogin }: PopularCarouselProps) => {
     return <ExceptLayout type="networkError" />;
   }
 
-  const handleLikeToggle = (templestayId: number, liked: boolean) => {
-    if (!userId) {
+  const handleLikeToggle = (templestayId: number) => {
+    const userNickname = getCookie('userNickname');
+    if (!userNickname) {
       onRequireLogin();
       return;
     }
 
-    const mutation = liked ? removeWishlistMutation : addWishlistMutation;
-    mutation.mutate(
-      { userId, templestayId },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ['ranking', userId] });
-          queryClient.refetchQueries({ queryKey: ['ranking', userId] });
-        },
+    const targetTemple = data?.find((temple) => temple.id === templestayId);
+    if (!targetTemple) return;
+
+    const currentIsWished = targetTemple.wish;
+
+    const mutation = currentIsWished ? removeWishlistMutation : addWishlistMutation;
+    mutation.mutate(templestayId, {
+      onError: () => {
+        queryClient.invalidateQueries({ queryKey: ['ranking'] });
       },
-    );
+    });
   };
 
   return (
@@ -75,7 +75,8 @@ const PopularCarousel = ({ onRequireLogin }: PopularCarouselProps) => {
                 templeImg={temple.imgUrl}
                 isLiked={temple.wish}
                 templeName={temple.templeName}
-                onLikeToggle={(liked: boolean) => handleLikeToggle(temple.id, liked)}
+                templestayId={temple.id}
+                onLikeToggle={handleLikeToggle}
                 link={`/detail/${temple.id}`}
               />
             ))}
