@@ -17,7 +17,7 @@ export const templeInfoBox = style({
   flexDirection: 'column',
 });
 
-export const templeName = style({
+export const templestayName = style({
   ...theme.FONTS.h3Sb18,
   textAlign: 'left',
 });
@@ -41,8 +41,8 @@ export const imgBox = style({
   justifyContent: 'flex-end',
   color: theme.COLORS.white,
   overflow: 'hidden',
-  backgroundSize: 'cover',
   backgroundPosition: 'center',
+  position: 'relative',
 });
 
 export const bottomContainer = style({

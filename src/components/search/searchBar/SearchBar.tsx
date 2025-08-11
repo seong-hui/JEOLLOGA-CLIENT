@@ -1,7 +1,9 @@
+'use client';
+
 import Icon from '@assets/svgs';
 import useFilter from '@hooks/useFilter';
+import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import useEventLogger from 'src/gtm/hooks/useEventLogger';
 
 import * as styles from './searchBar.css';
@@ -13,8 +15,7 @@ interface SearchBarProps {
 const SearchBar = ({ searchText }: SearchBarProps) => {
   const [inputValue, setInputValue] = useState(searchText || '');
 
-  const { handleSearch, handleResetFilter } = useFilter();
-  const location = useLocation();
+  const { handleSearch } = useFilter();
   const { logClickEvent } = useEventLogger('search_bar');
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,7 +34,7 @@ const SearchBar = ({ searchText }: SearchBarProps) => {
   const handleClickSearch = () => {
     if (inputValue.trim() === '') return;
 
-    handleSearch(inputValue);
+    handleSearch({ search: inputValue });
     logClickEvent('click_enter', { label: inputValue });
   };
 
@@ -44,10 +45,11 @@ const SearchBar = ({ searchText }: SearchBarProps) => {
     }
   };
 
+  const pathname = usePathname();
+
   // 검색 페이지에서 입력하면 기존 필터 지우기
   useEffect(() => {
-    if (location.pathname === '/search') {
-      handleResetFilter();
+    if (pathname === '/search') {
       localStorage.setItem('prevPage', '/search');
     }
   }, []);

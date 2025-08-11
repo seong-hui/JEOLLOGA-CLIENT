@@ -1,3 +1,5 @@
+'use client';
+
 import Icon from '@assets/svgs';
 import useNavigateTo from '@hooks/useNavigateTo';
 
@@ -12,13 +14,29 @@ const Header = () => {
       <button onClick={useNavigateTo('/')}>
         <Icon.SmallLogo />
       </button>
+
       <nav className={styles.iconBox}>
-        <Icon.IcnSearchLargeBlack className={styles.iconStyle} onClick={useNavigateTo('/search')} />
-        <Icon.IcnMyPage className={styles.iconStyle} onClick={navigateToMyPage} />
-        <Icon.IcnFlowerPink
-          className={`${styles.iconStyle} ${styles.flowerPinkStyle}`}
-          onClick={navigateToWishList}
-        />
+        <button onClick={useNavigateTo('/search')}>
+          <img
+            src="/assets/svgs/icn_search_large_black.svg"
+            className={styles.iconStyle}
+            alt="검색 아이콘"
+          />
+        </button>
+        <button onClick={navigateToMyPage}>
+          <img
+            src="/assets/svgs/icn_mypage.svg"
+            className={styles.iconStyle}
+            alt="마이페이지 아이콘"
+          />
+        </button>
+        <button onClick={navigateToWishList}>
+          <img
+            src="/assets/svgs/icn_flower_pink.svg"
+            className={`${styles.iconStyle} ${styles.flowerPinkStyle}`}
+            alt="위시리스트 아이콘"
+          />
+        </button>
       </nav>
     </header>
   );

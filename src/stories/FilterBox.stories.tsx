@@ -32,16 +32,6 @@ export const Region: Story = {
   },
 };
 
-export const Purpose: Story = {
-  args: {
-    title: titleMap.purpose,
-    items: FILTERS.purpose,
-    id: 'purpose',
-    filtersState: mockFiltersState,
-    onToggleFilter: mockOnToggleFilter,
-  },
-};
-
 export const Activity: Story = {
   args: {
     title: titleMap.activity,

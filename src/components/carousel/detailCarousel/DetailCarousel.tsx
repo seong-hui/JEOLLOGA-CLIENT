@@ -1,19 +1,21 @@
-import useGetTempleImages from '@apis/templeImages';
-import LargeEmptyImage from '@assets/images/img_gray_light_leaf_large.png';
+import { useGetTempleImages } from '@apis/templeInfo';
 import ExceptLayout from '@components/except/exceptLayout/ExceptLayout';
 import useCarousel from '@hooks/useCarousel';
 import registDragEvent from '@utils/registDragEvent';
-import { useParams } from 'react-router-dom';
+import Image from 'next/image';
+import { useParams } from 'next/navigation';
 
 import * as styles from './detailCarousel.css';
 import ImageItem from './DetailImage';
 
+const largeEmptyImage = '@assets/images/img_gray_light_leaf_large.png';
+
 const DetailCarousel = () => {
   const { templestayId } = useParams();
-  const { data, isLoading, isError } = useGetTempleImages(String(templestayId));
+  const { data, isLoading, isError } = useGetTempleImages(Number(templestayId));
 
   const { carouselRef, transformStyle, handleDragChange, handleDragEnd } = useCarousel({
-    itemCount: data?.total || 0,
+    itemCount: data?.imgUrls.length || 0,
     moveDistance: 355,
   });
 
@@ -28,7 +30,7 @@ const DetailCarousel = () => {
   if (!data) {
     return (
       <div className={styles.emptyImageContainer}>
-        <img src={LargeEmptyImage} alt="빈 이미지"></img>
+        <Image src={largeEmptyImage} alt="빈 이미지" width={335} height={210}></Image>
       </div>
     );
   }
@@ -42,13 +44,13 @@ const DetailCarousel = () => {
           onDragChange: handleDragChange,
           onDragEnd: handleDragEnd,
         })}>
-        {data.templestayImgs.map((image, index) => (
+        {data.imgUrls.map((image, index) => (
           <ImageItem
-            key={image.imageUrlId}
-            id={image.imageUrlId}
-            imgUrl={image.imgUrl}
+            key={image.imgurl}
+            id={index}
+            imgUrl={image.imgurl}
             currentNum={index + 1}
-            totalNum={data.total}
+            totalNum={data.imgUrls.length}
           />
         ))}
       </div>

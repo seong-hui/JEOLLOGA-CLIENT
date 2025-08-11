@@ -2,7 +2,7 @@ export interface UserNicknameResponse {
   nickname: string;
 }
 
-export interface OnboardingUserRequest {
+export interface OnboardingDataV2 {
   userId: number;
   ageRange: string | null;
   gender: string | null;
@@ -10,8 +10,12 @@ export interface OnboardingUserRequest {
   hasExperience: string | null;
 }
 
+export interface OnboardingResponseV2 {
+  code: number;
+  msg: string;
+}
+
 export interface MyPageType {
-  userId: number;
   nickname: string;
   email: string;
   ageRange?: string;

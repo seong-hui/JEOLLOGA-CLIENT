@@ -1,120 +1,83 @@
-import useFetchFilteredList from '@apis/filter';
-import { fetchFilteredCount } from '@apis/filter/axios';
 import useLocalStorage from '@hooks/useLocalStorage';
-import { useQuery, keepPreviousData } from '@tanstack/react-query';
-import { useAtom } from 'jotai';
-import { useNavigate } from 'react-router-dom';
+import { getCookie } from 'cookies-next';
+import { useRouter } from 'next/navigation';
+import { useCallback } from 'react';
 import queryClient from 'src/queryClient';
-import { filterListAtom, priceAtom, contentAtom } from 'src/store/store';
+import { filterListInstance } from 'src/store/store';
+
+type FilterQueryParams = {
+  region?: string[];
+  type?: string[];
+  activity?: string[];
+  etc?: string[];
+  min?: number;
+  max?: number;
+  sort?: string;
+  search?: string;
+  page?: number;
+  size?: number;
+};
+
+const isLoggedIn = getCookie('userNickname');
 
 const useFilter = () => {
-  const [filterListInstance] = useAtom(filterListAtom);
-  const [price, setPrice] = useAtom(priceAtom);
-  const [content, setContent] = useAtom(contentAtom);
-
-  const navigate = useNavigate();
-  const { mutateAsync: fetchFilterLists } = useFetchFilteredList();
-
-  const getAdjustedPrice = () => ({
-    minPrice: price.minPrice * 10000,
-    maxPrice: price.maxPrice * 10000,
-  });
-
-  const getGroupedFilters = () => filterListInstance.getGroupedStates();
-
-  const { data: totalCount } = useQuery({
-    queryKey: ['filteredCount', price, content],
-    queryFn: async () => {
-      const groupedFilters = getGroupedFilters();
-      const adjustedPrice = getAdjustedPrice();
-
-      const response = await fetchFilteredCount({
-        ...groupedFilters,
-        price: adjustedPrice,
-        content,
-      });
-
-      return response.count;
-    },
-    staleTime: 0,
-    placeholderData: keepPreviousData,
-  });
+  const { addStorageValue } = useLocalStorage();
 
   // 필터 상태 토글
   const toggleFilter = async (filterName: string) => {
     try {
       filterListInstance.toggleStatus(filterName);
-
-      queryClient.invalidateQueries({
-        queryKey: ['filteredCount'],
-        exact: false,
-      });
+      queryClient.invalidateQueries({ queryKey: ['filteredList'], exact: false });
     } catch (error) {
       console.error(error);
     }
   };
 
-  const getUserId = () => localStorage.getItem('userId') || '';
+  const router = useRouter();
 
-  const { addStorageValue } = useLocalStorage();
+  const handleSearch = useCallback(
+    (params: FilterQueryParams = {}) => {
+      const searchParams = new URLSearchParams();
 
-  // 검색 실행 함수
-  const handleSearch = async (searchContent?: string, currentPage = 1) => {
-    const groupedFilters = getGroupedFilters();
-    const searchQuery = searchContent ? searchContent.replace(/\s+/g, '') : content;
-    const adjustedPrice = getAdjustedPrice();
-
-    const isLoggedIn = localStorage.getItem('Authorization');
-
-    try {
-      const response = await fetchFilterLists({
-        groupedFilters,
-        adjustedPrice,
-        searchQuery,
-        page: currentPage,
-        userId: getUserId(),
+      Object.entries(params).forEach(([key, value]) => {
+        if (
+          value !== undefined &&
+          value !== null &&
+          value !== '' &&
+          !(Array.isArray(value) && value.length === 0)
+        ) {
+          if (Array.isArray(value)) {
+            value.forEach((v) => searchParams.append(key, v));
+          } else {
+            searchParams.set(key, String(value));
+          }
+        }
       });
 
-      setContent(searchQuery);
-
-      // 로그인 안 한 사용자의 경우 검색어를 로컬스토리지에 저장
-      if (!isLoggedIn && searchQuery.trim() !== '') {
-        addStorageValue(searchQuery);
+      if (
+        !isLoggedIn &&
+        params.search &&
+        typeof params.search === 'string' &&
+        params.search.trim() !== ''
+      ) {
+        addStorageValue(params.search);
       }
 
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-
-      navigate('/searchResult', {
-        state: {
-          selectedfilters: groupedFilters,
-          content: searchQuery,
-          results: response,
-          price,
-        },
-      });
-    } catch (error) {
-      console.error('Error executing search:', error);
-    }
-  };
+      const queryString = searchParams.toString();
+      router.push(queryString ? `/searchResult?${queryString}` : `/searchResult`);
+    },
+    [router, addStorageValue],
+  );
 
   // 필터 초기화
   const handleResetFilter = async () => {
     filterListInstance.resetAllStates();
-    setPrice({ minPrice: 0, maxPrice: 30 });
+    router.replace('/searchResult');
 
-    queryClient.invalidateQueries({
-      queryKey: ['filteredCount'],
-      exact: false,
-    });
+    queryClient.invalidateQueries({ queryKey: ['filteredList'], exact: false });
   };
 
-  return {
-    price,
-    totalCount,
-    toggleFilter,
-    handleResetFilter,
-    handleSearch,
-  };
+  return { toggleFilter, handleSearch, handleResetFilter };
 };
 
 export default useFilter;

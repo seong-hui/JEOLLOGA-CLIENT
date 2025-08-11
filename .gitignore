@@ -29,4 +29,10 @@ dist-ssr
 
 .next
 next-env.d.ts
+
 dist
+
+CLAUDE.md
+
+# TypeScript build cache
+tsconfig.tsbuildinfo

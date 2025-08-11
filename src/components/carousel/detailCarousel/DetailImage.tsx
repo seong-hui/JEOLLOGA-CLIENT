@@ -1,12 +1,13 @@
 import useNavigateTo from '@hooks/useNavigateTo';
-import { useParams } from 'react-router-dom';
+import Image from 'next/image';
+import { useParams } from 'next/navigation';
 
 import * as styles from './detailCarousel.css';
 import NumberTag from './numberTag/NumberTag';
 
 interface ImageItemProps {
   id: number;
-  imgUrl?: string;
+  imgUrl: string;
   currentNum: number;
   totalNum?: number;
 }
@@ -27,7 +28,14 @@ const ImageItem = ({ id, imgUrl, currentNum, totalNum }: ImageItemProps) => {
       }}
       className={styles.imageBox}
       key={id}>
-      <img className={styles.imageStyle} src={imgUrl} alt={`Templestay ${id}`} draggable={false} />
+      <Image
+        className={styles.imageStyle}
+        src={imgUrl}
+        alt={`Templestay ${id}`}
+        draggable={false}
+        width={335}
+        height={210}
+      />
       <div className={styles.numberStyle}>
         <NumberTag currentNum={currentNum} totalNum={totalNum} />
       </div>

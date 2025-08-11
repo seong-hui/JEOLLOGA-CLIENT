@@ -1,27 +1,23 @@
-export interface WishItem {
+export interface WishItemV2 {
   templestayId: number;
   templeName: string;
   templestayName: string;
-  tag: string;
   region: string;
   type: string;
   imgUrl: string;
-  liked: boolean;
+  wish: boolean;
 }
 
-export interface WishlistResponse {
-  page: number;
-  pageSize: number;
+export interface WishlistResponseV2 {
+  currentPage: number;
+  size: number;
+  totalElements: number;
   totalPages: number;
-  wishlist: WishItem[];
+  last: boolean;
+  content: WishItemV2[];
 }
 
-export interface WishlistRequest {
-  userId: number;
-  templestayId: number;
-}
-
-export interface SuccessResponse {
-  data: 'success';
-  msg: string | null;
+export interface WishActionResponse {
+  code: number;
+  msg: string;
 }

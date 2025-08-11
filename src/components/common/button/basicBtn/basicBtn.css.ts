@@ -1,13 +1,13 @@
 import theme from '@styles/theme.css';
+import { style } from '@vanilla-extract/css';
 import { recipe } from '@vanilla-extract/recipes';
 
-const buttonStyle = recipe({
+export const buttonStyle = recipe({
   base: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: '40px',
-    transition: 'background-color 0.2s, color 0.2s, border 0.2s', // 임시로 넣어놓은 transition
     boxSizing: 'border-box',
   },
 
@@ -145,4 +145,8 @@ const buttonStyle = recipe({
   },
 });
 
-export default buttonStyle;
+export const iconWrapper = style({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+});

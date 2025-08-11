@@ -1,28 +1,28 @@
-import { postKakaoLogin, postLogout, postWithdraw } from '@apis/auth/axios';
+import { getKakaoLogin, postLogout, postWithdraw } from '@apis/auth/axios';
 import { useMutation } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
+import { deleteCookie, setCookie } from 'cookies-next';
+import { useRouter } from 'next/navigation';
 
-export const usePostKakaoLogin = () => {
-  const navigate = useNavigate();
+export const useGetKakaoLogin = () => {
+  const router = useRouter();
 
   return useMutation({
-    mutationFn: ({ code, redirectUri }: { code: string; redirectUri: string }) =>
-      postKakaoLogin(code, redirectUri),
+    mutationFn: ({ code }: { code: string }) => getKakaoLogin(code),
     onSuccess: (response) => {
-      const userId = response.data.userId;
-      const accessToken = response.headers['authorization'].replace('Bearer ', '');
-      const refreshToken = response.headers['refreshtoken'];
-      const userNickname = response.data.nickname;
+      const userNickname = response.data.data.nickname;
 
-      localStorage.setItem('userId', userId);
-      localStorage.setItem('Authorization', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
-      localStorage.removeItem('searchKeyword');
+      setCookie('userNickname', userNickname, {
+        httpOnly: false,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        path: '/',
+        maxAge: 1209600, // 14일
+      });
 
       if (!userNickname) {
-        navigate('/onboarding');
+        router.push('/onboarding');
       } else {
-        navigate('/');
+        router.push('/');
       }
     },
     onError: (error) => {
@@ -32,13 +32,15 @@ export const usePostKakaoLogin = () => {
 };
 
 export const usePostLogout = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   return useMutation({
     mutationFn: () => postLogout(),
     onSuccess: () => {
       localStorage.clear();
-      navigate('/');
+      deleteCookie('userNickname');
+
+      router.push('/');
     },
 
     onError: (error) => {
@@ -47,17 +49,15 @@ export const usePostLogout = () => {
   });
 };
 
-export const usePostWithdraw = ({ userId }: { userId: number | null }) => {
-  const navigate = useNavigate();
+export const usePostWithdraw = () => {
+  const router = useRouter();
 
   return useMutation({
-    mutationFn: async () => {
-      if (!userId) throw new Error('Invalid userId');
-      return await postWithdraw(userId);
-    },
+    mutationFn: () => postWithdraw(),
     onSuccess: () => {
       localStorage.clear();
-      navigate('/');
+      deleteCookie('userNickname');
+      router.push('/');
       window.location.reload();
     },
     onError: (error) => {

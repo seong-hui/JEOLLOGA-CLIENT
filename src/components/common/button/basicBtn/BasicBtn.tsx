@@ -1,5 +1,6 @@
 import Icon from '@assets/svgs';
-import buttonStyle from '@components/common/button/basicBtn/basicBtn.css';
+
+import * as styles from './basicBtn.css';
 
 interface ButtonProps {
   variant?: 'primary' | 'grayOutlined' | 'blackOutlined' | 'lightGrayOutlined' | 'green';
@@ -10,6 +11,7 @@ interface ButtonProps {
   onClick?: () => void;
   onRightIconClick?: () => void;
   isActive?: boolean;
+  href?: string;
 }
 
 const BasicBtn = ({
@@ -21,30 +23,45 @@ const BasicBtn = ({
   onClick,
   onRightIconClick,
   isActive = false,
+  href,
 }: ButtonProps) => {
   const SelectedLeftIcon = leftIcon ? Icon[leftIcon] : null;
   const SelectedRightIcon = rightIcon ? Icon[rightIcon] : null;
 
-  return (
+  const buttonContent = (
     <button
-      className={buttonStyle({ color: variant, size, active: isActive ? true : false })}
-      onClick={onClick}>
-      {SelectedLeftIcon && <SelectedLeftIcon />}
+      className={styles.buttonStyle({ color: variant, size, active: isActive })}
+      onClick={onClick}
+      type="button">
+      {SelectedLeftIcon && (
+        <span className={styles.iconWrapper}>
+          <SelectedLeftIcon />
+        </span>
+      )}
       <p>{label}</p>
       {SelectedRightIcon && (
-        <button
-          onClick={
-            onRightIconClick &&
-            ((e) => {
+        <span
+          role="button"
+          tabIndex={0}
+          onClick={(e) => {
+            e.stopPropagation();
+            onRightIconClick?.();
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
               e.stopPropagation();
-              onRightIconClick();
-            })
-          }>
+              onRightIconClick?.();
+            }
+          }}
+          className={styles.iconWrapper}>
           <SelectedRightIcon />
-        </button>
+        </span>
       )}
     </button>
   );
+
+  return href ? <a href={href}>{buttonContent}</a> : buttonContent;
 };
 
 export default BasicBtn;

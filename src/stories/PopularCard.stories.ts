@@ -12,7 +12,7 @@ const meta = {
     ranking: {
       control: { type: 'number' },
     },
-    templeName: {
+    templestayName: {
       control: { type: 'text' },
     },
     templeLoc: {
@@ -21,7 +21,7 @@ const meta = {
     templeImg: {
       control: { type: 'text' },
     },
-    tag: {
+    templeName: {
       control: { type: 'text' },
     },
 
@@ -34,15 +34,16 @@ const meta = {
   },
   args: {
     ranking: 1,
-    templeName: '봉은사',
-    templeLoc: '서울',
+    templestayName: '봉선사 사부대중과 함께하는 선명상',
+    templeLoc: '경기',
     templeImg:
       'https://img.danawa.com/images/descFiles/6/110/5109431_agiLaciMHn_1659098198501.jpeg',
-    tag: '방긋방긋',
+    templeName: '봉선사',
     link: 'https://www.gototemplestay.com/',
     isLiked: false,
-    onLikeToggle: () => alert('Liked'),
-    onClick: () => {},
+    templestayId: 123,
+    onLikeToggle: (id) => alert(`Toggled like for ID: ${id}`),
+    onClick: () => alert('Card clicked!'),
   },
 } satisfies Meta<typeof PopularCard>;
 

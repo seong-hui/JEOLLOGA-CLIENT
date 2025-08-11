@@ -1,3 +1,5 @@
+'use client';
+
 import CurationCard from '@components/curation/curationCard/CurationCard';
 import { CURATION_INFO } from '@constants/curationInfo';
 import useCarousel from '@hooks/useCarousel';

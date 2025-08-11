@@ -1,18 +1,24 @@
-import useGetTempleReviews from '@apis/templeReviews';
+'use client';
+
+import { templeReviewsQueryOptions } from '@apis/templeInfo/prefetch';
 import ReviewCard from '@components/card/reviewCard/reviewCard/ReviewCard';
 import DetailTitle from '@components/detailTitle/DetailTitle';
 import ExceptLayout from '@components/except/exceptLayout/ExceptLayout';
 import useNavigateTo from '@hooks/useNavigateTo';
-import { useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import useEventLogger from 'src/gtm/hooks/useEventLogger';
 
 import * as styles from './templeReview.css';
 
-const TempleReview = () => {
-  const { templestayId } = useParams();
-  const navigateToLargeReview = useNavigateTo(`/detail/${templestayId}/blog`);
+interface TempleReviewProps {
+  templeId: number;
+}
 
-  const { data, isLoading, isError } = useGetTempleReviews(String(templestayId), Number(1));
+const TempleReview = ({ templeId }: TempleReviewProps) => {
+  const Id = templeId;
+  const navigateToLargeReview = useNavigateTo(`/detail/${Id}/blog`);
+
+  const { data, isLoading, isError } = useQuery(templeReviewsQueryOptions(Id, 1));
 
   const { logClickEvent } = useEventLogger('blog_review');
 
@@ -29,7 +35,7 @@ const TempleReview = () => {
     return <ExceptLayout type="networkError" />;
   }
 
-  if (!(data && data.reviews && data.reviews.length)) {
+  if (!(data && data.reviews)) {
     return (
       <div className={styles.emptyContainer}>
         <DetailTitle title="리뷰" isTotal={false} />

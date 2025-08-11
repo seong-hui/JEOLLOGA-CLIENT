@@ -1,65 +1,71 @@
+'use client';
+
 import Icon from '@assets/svgs';
 import RankBtn from '@components/card/popularCard/RankBtn';
-import { useState } from 'react';
+import Image from 'next/image';
 
 import * as styles from './popularCard.css';
 
 interface PopularCardProps {
   ranking: number;
-  templeName: string;
+  templestayName: string;
   templeLoc: string;
   templeImg: string;
-  tag: string;
-  isLiked?: boolean;
-  onLikeToggle: (liked: boolean) => void;
+  templeName: string;
+  isLiked: boolean;
+  onLikeToggle: (templestayId: number) => void;
+  templestayId: number;
   link: string;
   onClick: () => void;
 }
 
 const PopularCard = ({
   ranking,
-  templeName,
+  templestayName,
   templeLoc,
   templeImg,
-  tag,
-  isLiked = false,
+  templeName,
+  isLiked,
   onLikeToggle,
+  templestayId,
   link,
   onClick,
 }: PopularCardProps) => {
-  const [liked, setLiked] = useState(isLiked);
-
   const handleLikeClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
 
-    const userId = Number(localStorage.getItem('userId'));
-    if (!userId) {
-      onLikeToggle(liked);
-      return;
-    }
-
-    setLiked((prev) => !prev);
-    onLikeToggle(liked);
+    onLikeToggle(templestayId);
   };
 
   return (
-    <a href={link} className={styles.cardWrapper} onClick={onClick}>
+    <a
+      href={link}
+      className={styles.cardWrapper}
+      draggable={false}
+      onDragStart={(e) => e.preventDefault()}
+      onClick={onClick}>
       <div>
-        <div className={styles.imgBox} style={{ backgroundImage: `url(${templeImg})` }}>
+        <div className={styles.imgBox}>
+          <Image
+            src={templeImg}
+            alt={`${templestayName} 대표 이미지`}
+            fill
+            style={{ objectFit: 'cover' }}
+          />
           <RankBtn ranking={ranking} />
         </div>
         <div className={styles.bottomWrapper}>
           <div className={styles.bottomContainer}>
-            <h3 className={styles.templeName}>{templeName}</h3>
+            <h3 className={styles.templestayName}>{templestayName}</h3>
             <div className={styles.bottomBox}>
               <span>{templeLoc}</span>
               <Icon.IcnDivider />
-              <span>#{tag}</span>
+              <span>{templeName}</span>
             </div>
           </div>
           <button className={styles.likeBtn} onClick={handleLikeClick}>
-            {liked ? <Icon.IcnFlowerPink /> : <Icon.IcnFlowerGray />}
+            {isLiked ? <Icon.IcnFlowerPink /> : <Icon.IcnFlowerGray />}
           </button>
         </div>
       </div>

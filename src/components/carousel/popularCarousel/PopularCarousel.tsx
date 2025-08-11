@@ -1,11 +1,12 @@
 import useGetRanking from '@apis/ranking';
-import { useAddWishlist, useRemoveWishlist } from '@apis/wish';
+import { useAddWishlistV2, useRemoveWishlistV2 } from '@apis/wish';
 import PopularCard from '@components/card/popularCard/PopularCard';
 import CarouselIndex from '@components/carousel/popularCarousel/CarouselIndex';
 import ExceptLayout from '@components/except/exceptLayout/ExceptLayout';
 import useCarousel from '@hooks/useCarousel';
 import { useQueryClient } from '@tanstack/react-query';
 import registDragEvent from '@utils/registDragEvent';
+import { getCookie } from 'cookies-next';
 import useEventLogger from 'src/gtm/hooks/useEventLogger';
 
 import * as styles from './popularCarousel.css';
@@ -15,17 +16,15 @@ interface PopularCarouselProps {
 }
 
 const PopularCarousel = ({ onRequireLogin }: PopularCarouselProps) => {
-  const userId = Number(localStorage.getItem('userId'));
   const queryClient = useQueryClient();
+  const addWishlistMutation = useAddWishlistV2();
+  const removeWishlistMutation = useRemoveWishlistV2();
 
-  const addWishlistMutation = useAddWishlist();
-  const removeWishlistMutation = useRemoveWishlist();
-
-  const { data, isLoading, isError } = useGetRanking(userId);
+  const { data, isLoading, isError } = useGetRanking();
 
   const { currentIndex, carouselRef, transformStyle, handleDragChange, handleDragEnd } =
     useCarousel({
-      itemCount: data?.rankings?.length || 0,
+      itemCount: data?.length || 0,
       moveDistance: 355,
     });
 
@@ -39,22 +38,24 @@ const PopularCarousel = ({ onRequireLogin }: PopularCarouselProps) => {
     return <ExceptLayout type="networkError" />;
   }
 
-  const handleLikeToggle = (templestayId: number, liked: boolean) => {
-    if (!userId) {
+  const handleLikeToggle = (templestayId: number) => {
+    const userNickname = getCookie('userNickname');
+    if (!userNickname) {
       onRequireLogin();
       return;
     }
 
-    const mutation = liked ? removeWishlistMutation : addWishlistMutation;
-    mutation.mutate(
-      { userId, templestayId },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ['ranking', userId] });
-          queryClient.refetchQueries({ queryKey: ['ranking', userId] });
-        },
+    const targetTemple = data?.find((temple) => temple.id === templestayId);
+    if (!targetTemple) return;
+
+    const currentIsWished = targetTemple.wish;
+
+    const mutation = currentIsWished ? removeWishlistMutation : addWishlistMutation;
+    mutation.mutate(templestayId, {
+      onError: () => {
+        queryClient.invalidateQueries({ queryKey: ['ranking'] });
       },
-    );
+    });
   };
 
   return (
@@ -67,28 +68,29 @@ const PopularCarousel = ({ onRequireLogin }: PopularCarouselProps) => {
             onDragChange: handleDragChange,
             onDragEnd: handleDragEnd,
           })}>
-          {data?.rankings &&
-            data.rankings.map((rankings, index) => (
+          {data &&
+            data.map((temple) => (
               <PopularCard
-                key={rankings.templestayId}
-                ranking={rankings.ranking}
-                templeName={rankings.templeName}
-                templeLoc={rankings.region}
-                templeImg={rankings.imgUrl}
-                isLiked={rankings.liked}
-                tag={rankings.tag}
-                onLikeToggle={(liked: boolean) => handleLikeToggle(rankings.templestayId, liked)}
-                link={`/detail/${rankings.templestayId}`}
+                key={temple.id}
+                ranking={temple.rank}
+                templestayName={temple.templestayName}
+                templeLoc={temple.region}
+                templeImg={temple.imgUrl}
+                isLiked={temple.wish}
+                templeName={temple.templeName}
+                templestayId={temple.id}
+                onLikeToggle={handleLikeToggle}
+                link={`/detail/${temple.id}`}
                 onClick={() => {
                   logClickEvent('click_popularity_card', {
-                    label: index + 1,
+                    label: temple.id,
                   });
                 }}
               />
             ))}
         </div>
       </div>
-      <CarouselIndex total={data?.rankings?.length || 0} currentIndex={currentIndex} />
+      <CarouselIndex total={data?.length || 0} currentIndex={currentIndex} />
     </section>
   );
 };

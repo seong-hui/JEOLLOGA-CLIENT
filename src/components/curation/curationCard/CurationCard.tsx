@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 import * as styles from './curationCard.css';
 
 interface CurationCardProps {
@@ -13,8 +15,11 @@ const CurationCard = ({ bgImage, title, subtitle, link, onClick }: CurationCardP
     <a
       href={link}
       className={styles.cardContainer}
-      style={{ backgroundImage: `url(${bgImage})` }}
+      draggable={false}
+      onDragStart={(e) => e.preventDefault()}
       onClick={onClick}>
+      
+      <Image src={bgImage} alt={title} fill style={{ objectFit: 'cover' }} />
       <div className={styles.textbox}>
         <p className={styles.title}>{title}</p>
         <p className={styles.subtitle}>{subtitle}</p>

@@ -1,39 +1,38 @@
 import { useGetSearchHistory, useDelAllSearchRecord, useDelSearchRecord } from '@apis/search';
-import { Content } from '@apis/search/type';
 import BasicBtn from '@components/common/button/basicBtn/BasicBtn';
 import DetailTitle from '@components/detailTitle/DetailTitle';
 import ExceptLayout from '@components/except/exceptLayout/ExceptLayout';
 import * as styles from '@components/search/recentBtn/recentBtnBox.css';
 import useFilter from '@hooks/useFilter';
 import useLocalStorage from '@hooks/useLocalStorage';
+import { getCookie } from 'cookies-next';
 
 const RecentBtnBox = () => {
-  const userId = localStorage.getItem('userId');
-  const numericUserId = userId ? Number(userId) : null;
+  const isLoggedIn = getCookie('userNickname');
 
-  const { data, isLoading, isError } = useGetSearchHistory(numericUserId);
+  const { data, isLoading, isError } = useGetSearchHistory();
   const { mutate: deleteAllSearchRecords } = useDelAllSearchRecord();
   const { mutate: deleteSearchRecord } = useDelSearchRecord();
   const { handleSearch } = useFilter();
   const { searchHistory, delStorageValue, clearStorageValue } = useLocalStorage();
 
-  const searchData: Content[] = numericUserId ? data?.searchHistory || [] : searchHistory;
+  const searchData = isLoggedIn ? data || [] : searchHistory;
 
   const handleDeleteAll = () => {
-    if (numericUserId) {
-      deleteAllSearchRecords({ userId: numericUserId });
+    if (isLoggedIn) {
+      deleteAllSearchRecords();
     } else {
       clearStorageValue();
     }
   };
 
   const handleRecentSearchClick = (searchContent: string) => {
-    handleSearch(searchContent);
+    handleSearch({ search: searchContent });
   };
 
   const handleDeleteSearch = (searchId: number) => {
-    if (numericUserId) {
-      deleteSearchRecord({ userId: numericUserId, searchId });
+    if (isLoggedIn) {
+      deleteSearchRecord(searchId);
     } else {
       delStorageValue(searchId);
     }
@@ -65,13 +64,13 @@ const RecentBtnBox = () => {
         ) : (
           searchData.map((item) => (
             <BasicBtn
-              key={item.searchId}
-              label={item.content}
+              key={item.id}
+              label={item.search}
               variant="lightGrayOutlined"
               size="small"
               rightIcon="IcnCloseSmallGray"
-              onClick={() => handleRecentSearchClick(item.content)} // 검색어 클릭 이벤트
-              onRightIconClick={() => handleDeleteSearch(item.searchId)}
+              onClick={() => handleRecentSearchClick(item.search)} // 검색어 클릭 이벤트
+              onRightIconClick={() => handleDeleteSearch(item.id)}
             />
           ))
         )}

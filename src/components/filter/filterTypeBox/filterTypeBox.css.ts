@@ -1,3 +1,4 @@
+import theme from '@styles/theme.css';
 import { style } from '@vanilla-extract/css';
 
 export const container = style({
@@ -15,4 +16,16 @@ export const scrollContainer = style({
   overflowX: 'auto',
   whiteSpace: 'nowrap',
   scrollbarWidth: 'none',
+});
+
+export const titleStyle = style({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: '100%',
+  height: '4rem',
+  marginBottom: '1.2rem',
+  marginTop: '3.4rem',
+  ...theme.FONTS.h3Sb18,
+  color: theme.COLORS.black,
 });

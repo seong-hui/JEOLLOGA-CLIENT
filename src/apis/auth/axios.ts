@@ -1,24 +1,19 @@
-import instance, { privateInstance } from '@apis/instance';
+import instance from '@apis/instance';
 
-export const postKakaoLogin = async (code: string, redirectUri: string) => {
-  const res = await instance.post('/login', {
-    code: code,
-    redirectUri: redirectUri,
-  });
+export const getKakaoLogin = async (code: string) => {
+  const res = await instance.get(`v2/auth/login?code=${encodeURIComponent(code)}`);
 
   return res;
 };
 
 export const postLogout = async () => {
-  const res = await privateInstance.post('/logout');
+  const res = await instance.post('/v2/user/auth/logout');
 
   return res;
 };
 
-export const postWithdraw = async (userId: number | null) => {
-  const res = await instance.post('/login/unlink', {
-    userId: userId,
-  });
+export const postWithdraw = async () => {
+  const res = await instance.post('/v2/user/auth/unlink');
 
   return res;
 };

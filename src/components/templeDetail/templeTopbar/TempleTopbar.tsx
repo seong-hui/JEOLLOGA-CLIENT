@@ -1,14 +1,13 @@
 import PageName from '@components/common/pageName/PageName';
 
 interface TempleTopbarProps {
-  templeName: string;
   templestayName: string;
 }
 
-const TempleTopbar = ({ templeName, templestayName }: TempleTopbarProps) => {
+const TempleTopbar = ({ templestayName }: TempleTopbarProps) => {
   return (
     <div>
-      <PageName title={`${templeName} ${templestayName}`} />
+      <PageName title={`${templestayName}`} />
     </div>
   );
 };
