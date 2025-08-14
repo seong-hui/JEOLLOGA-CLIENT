@@ -1,36 +1,37 @@
 'use client';
 
-import { useGetNickname } from '@apis/user';
+import React, { useState, useEffect } from 'react';
+import { getCookie } from 'cookies-next';
+import { useRouter } from 'next/navigation';
+import useEventLogger from 'src/gtm/hooks/useEventLogger';
+
 import PageBottomBtn from '@components/common/button/pageBottomBtn/PageBottomBtn';
 import LottiePlayer from '@components/common/lottie/LottiePlayer';
-import ExceptLayout from '@components/except/exceptLayout/ExceptLayout';
 import { WELCOME_TEXT } from '@constants/onboarding/onboardingSteps';
-import { getStorageValue } from '@hooks/useLocalStorage';
-import { useRouter } from 'next/navigation';
-import React from 'react';
-import useEventLogger from 'src/gtm/hooks/useEventLogger';
 
 import * as styles from './welcomePage.css';
 
 const WelcomePage = () => {
   const router = useRouter();
-  const userId = Number(getStorageValue('userId'));
-  const { data, isLoading } = useGetNickname(userId);
   const { logClickEvent } = useEventLogger('onboarding_end');
 
-  if (isLoading) {
-    return <ExceptLayout type="loading" />;
-  }
+  const [userName, setUserName] = useState('');
+
+  useEffect(() => {
+    const name = getCookie('userNickname');
+    if (typeof name === 'string') {
+      setUserName(name);
+    }
+  }, []);
 
   const handleStart = () => {
     router.push('/');
-
     logClickEvent('click_start');
   };
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.titleStyle}>{`${data?.nickname}${WELCOME_TEXT}`}</h1>
+      <h1 className={styles.titleStyle}>{userName ? `${userName}${WELCOME_TEXT}` : ''}</h1>
       <div className={styles.lottieStyle}>
         <LottiePlayer keyId="onboarding" src="/lotties/onboarding.lottie" />
       </div>
