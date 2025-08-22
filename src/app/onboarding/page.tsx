@@ -2,20 +2,29 @@
 
 export const dynamic = 'force-dynamic';
 
-import { useGetNickname, usePostOnboardingData } from '@apis/user';
+import { usePostOnboardingData } from '@apis/user';
 import { OnboardingDataV2 } from '@apis/user/type';
 import ProgressBar from '@components/common/progressBar/ProgressBar';
-import ExceptLayout from '@components/except/exceptLayout/ExceptLayout';
 import OnboardingSection from '@components/onboarding/OnboardingSection';
 import { ONBOARDING_STEPS, COMMON_DESCRIPTION } from '@constants/onboarding/onboardingSteps';
 import useFunnel from '@hooks/useFunnel';
 import { getStorageValue } from '@hooks/useLocalStorage';
 import React, { useState, useEffect } from 'react';
+import { getCookie } from 'cookies-next';
 import useEventLogger from 'src/gtm/hooks/useEventLogger';
 
 import container from './onboardingPage.css';
 
 const OnboardingPage = () => {
+  const [userName, setUserName] = useState('');
+
+  useEffect(() => {
+    const name = getCookie('userNickname');
+    if (typeof name === 'string') {
+      setUserName(name);
+    }
+  }, []);
+
   const { Funnel, Step, nextStep, prevStep, currentStep } = useFunnel(
     ONBOARDING_STEPS.map((step) => step.id),
     '/welcome',
@@ -33,7 +42,6 @@ const OnboardingPage = () => {
   const userId = Number(getStorageValue('userId'));
   const { mutate: postOnboardingMutate } = usePostOnboardingData();
 
-  const { data, isLoading } = useGetNickname(userId);
   const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
   const setVh = () => {
     const vh = window.innerHeight * 0.01;
@@ -85,10 +93,6 @@ const OnboardingPage = () => {
     });
   };
 
-  if (isLoading) {
-    return <ExceptLayout type="loading" />;
-  }
-
   return (
     <div className={container}>
       <ProgressBar
@@ -102,9 +106,7 @@ const OnboardingPage = () => {
             <Step key={id} name={id}>
               <OnboardingSection
                 id={id}
-                title={
-                  id === 'ageRange' || id === 'gender' ? [`${data?.nickname}님의`, title] : title
-                }
+                title={id === 'ageRange' || id === 'gender' ? [`${userName}님의`, title] : title}
                 description={COMMON_DESCRIPTION}
                 options={options}
                 isNextDisabledInitially={isNextDisabledInitially || false}

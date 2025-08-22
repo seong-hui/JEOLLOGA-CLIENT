@@ -10,6 +10,8 @@ export const useGetKakaoLogin = () => {
     mutationFn: ({ code }: { code: string }) => getKakaoLogin(code),
     onSuccess: (response) => {
       const userNickname = response.data.data.nickname;
+      const userId = response.data.data.userId;
+      const userInfo = response.data.data.userInfo;
 
       setCookie('userNickname', userNickname, {
         httpOnly: false,
@@ -19,7 +21,9 @@ export const useGetKakaoLogin = () => {
         maxAge: 1209600, // 14일
       });
 
-      if (!userNickname) {
+      localStorage.setItem('userId', userId);
+
+      if (!userInfo) {
         router.push('/onboarding');
       } else {
         router.push('/');
