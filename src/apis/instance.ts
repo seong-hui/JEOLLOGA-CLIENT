@@ -2,11 +2,8 @@
 
 import API_URL from '@apis/env';
 import MESSAGES from '@apis/messages';
-import { getStorageValue } from '@hooks/useLocalStorage';
 import axios, { isAxiosError } from 'axios';
 import { deleteCookie } from 'cookies-next';
-
-// const API_URL = process.env.NEXT_PUBLIC_APP_BASE_URL as string;
 
 // 토큰이 필요없는 api 요청
 const instance = axios.create({
@@ -15,16 +12,6 @@ const instance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-});
-
-// 토큰이 필요한 api 요청
-export const privateInstance = axios.create({
-  baseURL: API_URL,
-  headers: {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${getStorageValue('Authorization')}`,
-  },
-  withCredentials: true,
 });
 
 export const postRefreshToken = async () => {
@@ -66,6 +53,19 @@ instance.interceptors.response.use(
           return await axios(originRequest);
         }
       } catch (error) {
+        await axios
+          .post(
+            `${API_URL}/v2/user/auth/logout`,
+            {},
+            {
+              headers: { 'Content-Type': 'application/json' },
+              withCredentials: true,
+            },
+          )
+          .catch((logoutError) => {
+            console.error(logoutError);
+          });
+
         localStorage.clear();
         deleteCookie('userNickname');
         console.error(error);
@@ -76,11 +76,5 @@ instance.interceptors.response.use(
     return Promise.reject(error);
   },
 );
-
-// 로그인 상태에 따라 axios인스턴스 선택을 위한 훅
-export const getAxiosInstance = () => {
-  const isLoggedIn = !!getStorageValue('Authorization');
-  return isLoggedIn ? privateInstance : instance;
-};
 
 export default instance;

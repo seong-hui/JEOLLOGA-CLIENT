@@ -11,7 +11,12 @@ const nextConfig: NextConfig = {
   },
 
   images: {
-    domains: ['noms.templestay.com', 'www.templestay.com', 'blogthumb.pstatic.net'],
+    domains: [
+      'noms.templestay.com',
+      'www.templestay.com',
+      'blogthumb.pstatic.net',
+      'phinf.pstatic.net',
+    ],
   },
 
   webpack(config) {
