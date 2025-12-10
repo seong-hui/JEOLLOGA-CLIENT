@@ -39,10 +39,14 @@ const theme = createGlobalTheme(':root', {
     kakao: '#FEE500',
 
     gradient: 'linear-gradient(180deg, #00000000 61.26%, #000000BF 100%)',
+    btnGradient: 'linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.4) 100%)',
 
     filerDropshadow: '0px 4px 7px 0px rgba(0, 0, 0, 0.05)',
     reserveBtnDropshadow: '0px -4px 7px 0px #0000000D',
     boxArrowBtnDropshadow: '0px 3px 19px 0px rgba(0, 0, 0, 0.08)',
+    titleDropshadow: '0px 0px 7px rgba(251, 221, 109, 0.5)',
+    blueDropshadow: '0px 0px 7px #2193E8',
+    greenDropshqdow: '0px 0px 7px #65C677',
   },
 
   FONTS: {
