@@ -29,6 +29,8 @@ const theme = createGlobalTheme(':root', {
     green4: '#6EBE7D',
     green5: '#779971',
     green6: '#EDF7F3',
+    green7: '#408F07',
+    green8: '#C8FB87',
 
     pink1: '#FF9999',
     pink2: '#FF8B8B',
@@ -224,7 +226,13 @@ const theme = createGlobalTheme(':root', {
     i1R15: {
       fontSize: '1.5rem',
       fontFamily: "'Pretendard-Regular', sans-serif",
-      lineHeight: '170%',
+      lineHeight: '160%',
+      letterSpacing: '1%',
+    },
+    i2R14: {
+      fontSize: '1.4rem',
+      fontFamily: "'Pretendard-Regular', sans-serif",
+      lineHeight: '140%',
       letterSpacing: '1%',
     },
   },
