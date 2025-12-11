@@ -48,7 +48,7 @@ const theme = createGlobalTheme(':root', {
     boxArrowBtnDropshadow: '0px 3px 19px 0px rgba(0, 0, 0, 0.08)',
     titleDropshadow: '0px 0px 7px rgba(251, 221, 109, 0.5)',
     blueDropshadow: '0px 0px 7px #2193E8',
-    greenDropshqdow: '0px 0px 7px #65C677',
+    greenDropshadow: '0px 0px 7px #65C677',
   },
 
   FONTS: {

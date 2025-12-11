@@ -55,3 +55,5 @@ export const TEST_STEPS = [
     isFinalStep: true,
   },
 ];
+
+export type TestType = 'IAP' | 'IAJ' | 'IHJ' | 'IHP' | 'EAJ' | 'EAP' | 'EHJ' | 'EHP';

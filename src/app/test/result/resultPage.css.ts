@@ -32,23 +32,14 @@ export const subtitle = style({
   color: theme.COLORS.green7,
   textShadow: theme.COLORS.titleDropshadow,
   textAlign: 'center',
-  marginTop: '0.8rem',
-});
-
-export const centerCard = style({
-  width: '20.6rem',
-  height: '26.6rem',
-  borderRadius: '20px',
-  backgroundColor: theme.COLORS.white,
-  boxShadow: theme.COLORS.greenDropshqdow,
-  marginTop: '3.2rem',
+  margin: '0.8rem 0 3.2rem 0',
 });
 
 export const saveButton = style({
   width: '20.6rem',
   height: '4.6rem',
   borderRadius: '40px',
-  boxShadow: theme.COLORS.greenDropshqdow,
+  boxShadow: theme.COLORS.greenDropshadow,
   background: theme.COLORS.btnGradient,
   marginTop: '1.2rem',
   ...theme.FONTS.c5M13,

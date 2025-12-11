@@ -26,14 +26,5 @@ export const subTitle = style({
   color: theme.COLORS.white,
   textShadow: theme.COLORS.titleDropshadow,
   textAlign: 'center',
-  marginTop: '0.8rem',
-});
-
-export const centerCard = style({
-  width: '20.6rem',
-  height: '26.6rem',
-  borderRadius: '20px',
-  backgroundColor: theme.COLORS.white,
-  boxShadow: theme.COLORS.blueDropshadow,
-  marginTop: '6.1rem',
+  margin: '0.8rem 0 6.1rem 0',
 });
