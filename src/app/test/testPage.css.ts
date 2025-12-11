@@ -1,6 +1,6 @@
 import theme from '@styles/theme.css';
 import { style } from '@vanilla-extract/css';
-import bgImage from '@assets/images/test_question_img.png';
+import bgImage from '@assets/images/test/test_question_img.png';
 
 export const layout = style({
   display: 'flex',
