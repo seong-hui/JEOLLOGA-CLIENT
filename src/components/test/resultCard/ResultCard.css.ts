@@ -1,7 +1,7 @@
 import theme from '@styles/theme.css';
 import { recipe } from '@vanilla-extract/recipes';
 
-export const container = recipe({
+const container = recipe({
   base: {
     borderRadius: '20px',
     display: 'flex',
@@ -24,10 +24,12 @@ export const container = recipe({
         boxShadow: theme.COLORS.blueDropshadow,
         backgroundColor: theme.COLORS.white,
       },
-      NONE: { boxShadow: 'none' }, // 빈칸으로 나두면 안됨?
+      NONE: { boxShadow: 'none' },
     },
   },
   defaultVariants: {
     color: 'NONE', // 기본값
   },
 });
+
+export default container;

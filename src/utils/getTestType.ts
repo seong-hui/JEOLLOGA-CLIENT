@@ -25,6 +25,8 @@ const testResultMap: Record<TestType, TestResultData> = {
   EHP: { text: '지금 템스가 끌려', image: EHPImg },
 };
 
-export const getTestType = (type: TestType): TestResultData => {
+const getTestType = (type: TestType): TestResultData => {
   return testResultMap[type];
 };
+
+export default getTestType;

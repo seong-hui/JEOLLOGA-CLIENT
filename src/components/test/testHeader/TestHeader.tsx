@@ -12,7 +12,6 @@ interface TestHeaderProps {
 }
 
 const TestHeader = ({ currentStep, totalSteps, onBackClick, onCloseClick }: TestHeaderProps) => {
-  console.log(currentStep);
   return (
     <div className={styles.headerContainer}>
       <div className={styles.headerTop}>
