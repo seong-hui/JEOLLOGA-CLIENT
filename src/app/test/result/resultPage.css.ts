@@ -51,12 +51,10 @@ export const description = style({
   ...theme.FONTS.c4M14,
   color: theme.COLORS.gray10,
   padding: '4rem 2rem 5rem 2rem',
+});
 
-  selectors: {
-    '& li': {
-      listStyle: 'disc',
-    },
-  },
+globalStyle(`${description} li`, {
+  listStyle: 'disc',
 });
 
 export const divider = style({
