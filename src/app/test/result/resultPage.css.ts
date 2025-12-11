@@ -14,6 +14,7 @@ export const resultSection = style({
   alignItems: 'center',
   flex: 1,
   width: '100%',
+  minHeight: '91.8rem',
   backgroundImage: `url(${bgImage.src})`,
   backgroundSize: 'cover',
   backgroundRepeat: 'no-repeat',
@@ -79,7 +80,6 @@ export const mateSection = style({
 
 export const mateTitle = style({
   ...theme.FONTS.h2Sb20,
-  marginTop: '5rem',
 });
 
 export const mateSubtitle = style({

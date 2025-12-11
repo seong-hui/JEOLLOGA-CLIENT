@@ -14,10 +14,11 @@ import * as styles from './testPage.css';
 const TestPage = () => {
   const steps = ['START', ...TEST_STEPS.map((step) => step.id)];
 
-  const { Funnel, Step, nextStep } = useFunnel(steps, '/test/result');
+  const { Funnel, Step, nextStep, currentStep } = useFunnel(steps, '/test/result');
 
   return (
-    <div className={styles.container}>
+    <div
+      className={`${styles.container} ${currentStep === 'START' ? styles.startBg : styles.stepBg}`}>
       <Funnel steps={steps}>
         {[
           <Step key="START" name="START">

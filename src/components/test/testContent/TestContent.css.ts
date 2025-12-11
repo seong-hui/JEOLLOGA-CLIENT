@@ -13,7 +13,7 @@ export const title = style({
   color: theme.COLORS.white,
   textShadow: theme.COLORS.titleDropshadow,
   textAlign: 'center',
-  paddingTop: '5.4rem',
+  padding: '5.4rem 2rem 0 2rem',
 });
 
 export const textButton = style({
