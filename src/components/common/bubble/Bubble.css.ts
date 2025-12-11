@@ -10,6 +10,7 @@ export const bubble = style({
   textAlign: 'center',
   width: 'fit-content',
   padding: '0.6rem 1.6rem',
+  fontFamily: "'KotraHope', sans-serif",
 });
 
 export const tail = style({
