@@ -25,7 +25,7 @@ const OnboardingPage = () => {
     }
   }, []);
 
-  const { Funnel, Step, nextStep, prevStep, currentStep } = useFunnel(
+  const { Funnel, Step, nextStep, currentStep } = useFunnel(
     ONBOARDING_STEPS.map((step) => step.id),
     '/welcome',
   );
