@@ -15,7 +15,7 @@ export const resultSection = style({
   flex: 1,
   width: '100%',
   minHeight: '91.8rem',
-  backgroundImage: `url(${bgImage.src})`,
+  backgroundImage: `url(${(bgImage as { src: string }).src})`,
   backgroundSize: 'cover',
   backgroundRepeat: 'no-repeat',
   padding: '5.4rem 0',
