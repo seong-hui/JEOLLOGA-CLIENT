@@ -17,3 +17,9 @@ globalFontFace('Pretendard-SemiBold', {
   fontStyle: 'normal',
   src: "url('/assets/fonts/Pretendard-SemiBold.woff2') format('woff2')",
 });
+
+globalFontFace('KotraHope', {
+  fontWeight: 400,
+  fontStyle: 'normal',
+  src: "url('/assets/fonts/KOTRAHOPE.woff2') format('woff2')",
+});

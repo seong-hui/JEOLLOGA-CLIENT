@@ -38,7 +38,7 @@ const useFunnel = (steps: string[], completePath: string) => {
     };
 
     const searchString = new URLSearchParams(updatedQuery).toString();
-    const targetUrl = `/onboarding?${searchString}`;
+    const targetUrl = `/test?${searchString}`;
 
     if (stepChangeType === 'replace') {
       router.replace(targetUrl);

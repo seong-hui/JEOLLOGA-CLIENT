@@ -10,7 +10,6 @@ const meta = {
   args: {
     currentStep: 1,
     totalSteps: 4,
-    onBackClick: () => alert('clicked'),
   },
   argTypes: {
     currentStep: {

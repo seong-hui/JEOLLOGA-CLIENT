@@ -25,7 +25,7 @@ const OnboardingPage = () => {
     }
   }, []);
 
-  const { Funnel, Step, nextStep, prevStep, currentStep } = useFunnel(
+  const { Funnel, Step, nextStep, currentStep } = useFunnel(
     ONBOARDING_STEPS.map((step) => step.id),
     '/welcome',
   );
@@ -98,7 +98,6 @@ const OnboardingPage = () => {
       <ProgressBar
         currentStep={ONBOARDING_STEPS.findIndex((step) => step.id === currentStep) + 1}
         totalSteps={ONBOARDING_STEPS.length}
-        onBackClick={prevStep}
       />
       <Funnel steps={ONBOARDING_STEPS.map((step) => step.id)}>
         {ONBOARDING_STEPS.map(({ id, title, options, isNextDisabledInitially, isFinalStep }) => {
