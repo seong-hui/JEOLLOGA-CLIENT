@@ -11,7 +11,6 @@ export const useGetKakaoLogin = () => {
     onSuccess: (response) => {
       const userNickname = response.data.data.nickname;
       const userId = response.data.data.userId;
-      const userInfo = response.data.data.userInfo;
 
       setCookie('userNickname', userNickname, {
         httpOnly: false,
@@ -23,11 +22,7 @@ export const useGetKakaoLogin = () => {
 
       localStorage.setItem('userId', userId);
 
-      if (!userInfo) {
-        router.push('/onboarding');
-      } else {
-        router.push('/');
-      }
+      router.push('/');
     },
     onError: (error) => {
       console.error(error);
