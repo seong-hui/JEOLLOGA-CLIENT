@@ -8,8 +8,6 @@ import React from 'react';
 import TestContent from '@components/test/testContent/TestContent';
 import { TEST_STEPS } from '@constants/test';
 import TestStart from '@components/test/testStart/TestStart';
-import StartBgImage from '@assets/images/test/test_start_img.png';
-import StepBgImage from '@assets/images/test/test_question_img.png';
 
 import * as styles from './testPage.css';
 
@@ -18,10 +16,8 @@ const TestPage = () => {
 
   const { Funnel, Step, nextStep, currentStep } = useFunnel(steps, '/test/result');
 
-  const bgImage = currentStep === 'START' ? StartBgImage.src : StepBgImage.src;
-
   return (
-    <div className={styles.container} style={{ backgroundImage: `url(${bgImage})` }}>
+    <div className={styles.container}>
       <Funnel steps={steps}>
         {[
           <Step key="START" name="START">
