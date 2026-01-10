@@ -15,7 +15,7 @@ interface ResultCardProps {
 const ResultCard = ({ color = 'NONE', type }: ResultCardProps) => {
   const { text, image } = type
     ? getTestType(type)
-    : { text: '절에서 나의 모습은?', image: EmptyImage };
+    : { text: '절에서 나의 모습은?', image: EmptyImage.src };
 
   return (
     <div className={container({ color })}>

@@ -1,6 +1,4 @@
 import { style } from '@vanilla-extract/css';
-import StartBgImage from '@assets/images/test/test_start_img.png';
-import StepBgImage from '@assets/images/test/test_question_img.png';
 
 export const layout = style({
   display: 'flex',
@@ -21,12 +19,4 @@ export const container = style({
   width: '100%',
   backgroundSize: '100% auto',
   backgroundRepeat: 'no-repeat',
-});
-
-export const startBg = style({
-  backgroundImage: `url(${StartBgImage.src})`,
-});
-
-export const stepBg = style({
-  backgroundImage: `url(${StepBgImage.src})`,
 });

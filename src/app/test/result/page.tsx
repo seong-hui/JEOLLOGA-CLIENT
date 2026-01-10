@@ -9,6 +9,7 @@ import MateImage from '@assets/images/test/test_img_large_EAJ.png';
 import KakaoBtn from '@components/common/button/kakaoBtn/KakaoBtn';
 import Bubble from '@components/common/bubble/Bubble';
 import ResultCard from '@components/test/resultCard/ResultCard';
+import bgImage from '@assets/images/test/test_result_img.png';
 
 const ResultPage = () => {
   const text = `누가 뭐 하자고 해도 잠깐의 망설임이 먼저 찾아와요.\n조용한 카페 창가 자리나 집 안의 오후 햇살처럼, 잔잔한 순간에 마음이 풀려요.\n시끌벅적한 대화보다 차 한 잔의 여유가 훨씬 오래 남는 편이에요.\n그래서 명상이나 차담 같은 고요한 프로그램이 잘 어울려요.\n누군가와 대화하지 않아도 그 공간이 나를 이해해 주는 느낌이 드니까요.`;
@@ -18,7 +19,7 @@ const ResultPage = () => {
 
   return (
     <div className={styles.page}>
-      <section className={styles.resultSection}>
+      <section className={styles.resultSection} style={{ backgroundImage: `url(${bgImage.src})` }}>
         <h1 className={styles.title}>잔잔호수형 목탁이</h1>
         <h3 className={styles.subtitle}>차분하면서도 편안한 곳을 좋아해요.</h3>
 
