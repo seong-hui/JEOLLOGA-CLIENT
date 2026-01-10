@@ -24,9 +24,9 @@ export const container = style({
 });
 
 export const startBg = style({
-  backgroundImage: `url(${(StartBgImage as { src: string }).src})`,
+  backgroundImage: `url(${StartBgImage.src})`,
 });
 
 export const stepBg = style({
-  backgroundImage: `url(${(StepBgImage as { src: string }).src})`,
+  backgroundImage: `url(${StepBgImage.src})`,
 });

@@ -15,7 +15,7 @@
       "@apis/*": ["src/apis/*"],
       "@utils/*": ["src/utils/*"]
     },
-    "types": ["node"],
+    "types": ["node", "next", "next/image-types/global"],
     /* Bundler mode */
     "moduleResolution": "node",
     "resolveJsonModule": true,

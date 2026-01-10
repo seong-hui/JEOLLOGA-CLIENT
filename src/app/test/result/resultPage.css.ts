@@ -1,6 +1,7 @@
 import theme from '@styles/theme.css';
 import { globalStyle, style } from '@vanilla-extract/css';
 import bgImage from '@assets/images/test/test_result_img.png';
+import { StaticImageData } from 'next/image';
 
 export const page = style({
   display: 'flex',
@@ -15,7 +16,7 @@ export const resultSection = style({
   flex: 1,
   width: '100%',
   minHeight: '91.8rem',
-  backgroundImage: `url(${(bgImage as { src: string }).src})`,
+  backgroundImage: `url(${bgImage.src})`,
   backgroundSize: 'cover',
   backgroundRepeat: 'no-repeat',
   padding: '5.4rem 0',
