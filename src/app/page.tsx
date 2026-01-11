@@ -23,7 +23,10 @@ const HomePage = async () => {
         <CurationCarousel />
       </div>
       <div className={styles.popularCarouselStyle}>
-        <DetailTitle title="이번 주 인기 템플스테이" />
+        <DetailTitle
+          title="이번 주 인기 템플스테이"
+          subtitle="다른 분들은 어떤 템플스테이를 가장 좋아할까요?"
+        />
         <HomeClient /> {/* 인기 템플스테이 캐러셀 */}
       </div>
       <Footer />

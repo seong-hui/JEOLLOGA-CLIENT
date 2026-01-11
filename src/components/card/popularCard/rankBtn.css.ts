@@ -11,6 +11,8 @@ const rankBox = style({
   backgroundColor: theme.COLORS.black60,
   ...theme.FONTS.c2R14,
   marginRight: '2rem',
+  position: 'absolute',
+  zIndex: 1,
 });
 
 export default rankBox;

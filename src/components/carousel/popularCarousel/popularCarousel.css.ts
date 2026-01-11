@@ -5,7 +5,7 @@ export const carouselWrapper = style({
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
-  gap: '1.6rem',
+  gap: '1.5rem',
 });
 
 export const carouselContainer = style({

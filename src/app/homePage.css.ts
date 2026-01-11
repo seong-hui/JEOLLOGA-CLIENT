@@ -22,7 +22,7 @@ export const curationCarouselStyle = style([
 export const popularCarouselStyle = style([
   flexCenterColumn,
   {
-    gap: '0.8rem',
+    gap: '1.2rem',
     margin: '5.4rem 0 28rem 0',
     touchAction: 'none',
   },
