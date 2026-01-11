@@ -13,7 +13,19 @@ import ResultCard from '@components/test/resultCard/ResultCard';
 const ResultPage = () => {
   const text = `누가 뭐 하자고 해도 잠깐의 망설임이 먼저 찾아와요.\n조용한 카페 창가 자리나 집 안의 오후 햇살처럼, 잔잔한 순간에 마음이 풀려요.\n시끌벅적한 대화보다 차 한 잔의 여유가 훨씬 오래 남는 편이에요.\n그래서 명상이나 차담 같은 고요한 프로그램이 잘 어울려요.\n누군가와 대화하지 않아도 그 공간이 나를 이해해 주는 느낌이 드니까요.`;
 
-  const handleLinkCopy = () => {};
+  const handleShare = async () => {
+    if (navigator.share) {
+      await navigator.share({
+        text: `나의 템플 캐릭터는 무엇일까요?🌺
+성향 테스트 참여하고, 친구와 결과를 공유해보세요!
+테스트를 통해 나와 잘 맞는 템플스테이 메이트를 찾아봐요.\n
+https://www.gototemplestay.com`,
+      });
+    } else {
+      console.log('Else');
+    }
+  };
+
   const handleSaveImage = () => {};
 
   return (
@@ -62,7 +74,7 @@ const ResultPage = () => {
       <div className={styles.buttonSection}>
         <Bubble text="나에게 맞는 절을 계속 추천받을 수 있어요!" />
         <KakaoBtn type="TEST" />
-        <PageBottomBtn btnText="친구에게 공유하기" size="large" onClick={handleLinkCopy} />
+        <PageBottomBtn btnText="친구에게 공유하기" size="large" onClick={handleShare} />
       </div>
     </div>
   );
