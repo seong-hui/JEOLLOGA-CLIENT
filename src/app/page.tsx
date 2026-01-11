@@ -4,6 +4,7 @@ import MapCard from '@components/card/mapCard/MapCard';
 import DetailTitle from '@components/detailTitle/DetailTitle';
 import Footer from '@components/footer/Footer';
 import Header from '@components/header/Header';
+import TestBanner from '@components/test/testBanner/TestBanner';
 import { cookies } from 'next/headers';
 
 import * as styles from './homePage.css';
@@ -17,6 +18,7 @@ const HomePage = async () => {
       <Header />
       <LookCard name={userName} />
       <MapCard />
+      <TestBanner />
       <div className={styles.popularCarouselStyle}>
         <DetailTitle
           title="이번 주 인기 템플스테이"
