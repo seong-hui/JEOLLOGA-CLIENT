@@ -5,18 +5,18 @@ interface TestContentProps {
   title: string;
   topButton: string;
   bottomButton: string;
-  onClick?: () => void;
+  onClick: (choice: string) => void;
 }
 
 const TestContent = ({ title, topButton, bottomButton, onClick }: TestContentProps) => {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>{title}</h1>
-      <div className={(styles.selectContainer)}>
-        <button className={styles.textButton} onClick={onClick}>
+      <div className={styles.selectContainer}>
+        <button className={styles.textButton} onClick={() => onClick('A')}>
           {topButton}
         </button>
-        <button className={styles.textButton} onClick={onClick}>
+        <button className={styles.textButton} onClick={() => onClick('B')}>
           {bottomButton}
         </button>
       </div>
