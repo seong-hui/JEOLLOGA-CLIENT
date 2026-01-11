@@ -1,7 +1,8 @@
-import { titleContainerStyle, titleStyle, buttonStyle } from './detailTitle.css';
+import { titleContainerStyle, titleStyle, buttonStyle, subtitleStyle } from './detailTitle.css';
 
 interface DetailTitleProps {
   title: string;
+  subtitle?: string;
   isTotal?: boolean;
   size?: 'small' | 'medium';
   rigntBtnLabel?: string;
@@ -11,6 +12,7 @@ interface DetailTitleProps {
 
 const DetailTitle = ({
   title,
+  subtitle,
   isTotal = false,
   size = 'medium',
   rigntBtnLabel,
@@ -18,13 +20,16 @@ const DetailTitle = ({
   rightBtnDisabled = false,
 }: DetailTitleProps) => {
   return (
-    <div className={titleContainerStyle}>
-      <h2 className={titleStyle({ size })}>{title}</h2>
-      {isTotal && (
-        <button className={buttonStyle} onClick={onClick} disabled={rightBtnDisabled}>
-          {rigntBtnLabel}
-        </button>
-      )}
+    <div>
+      <div className={titleContainerStyle}>
+        <h2 className={titleStyle({ size })}>{title}</h2>
+        {isTotal && (
+          <button className={buttonStyle} onClick={onClick} disabled={rightBtnDisabled}>
+            {rigntBtnLabel}
+          </button>
+        )}
+      </div>
+      <h3 className={subtitleStyle}>{subtitle}</h3>
     </div>
   );
 };
