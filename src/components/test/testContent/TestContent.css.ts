@@ -12,7 +12,11 @@ export const title = style({
   color: theme.COLORS.white,
   textShadow: theme.COLORS.titleDropshadow,
   textAlign: 'center',
-  padding: '5.4rem 2rem 0 2rem',
+  margin: '5.4rem 2rem 0 2rem',
+
+  minHeight: '6rem',
+  alignItems: 'flex-start',
+  justifyContent: 'center',
 });
 
 export const textButton = style({
@@ -30,5 +34,5 @@ export const selectContainer = style({
   display: 'flex',
   flexDirection: 'column',
   gap: '1.2rem',
-  marginTop: '7.8rem',
+  marginTop: '4.8rem',
 });

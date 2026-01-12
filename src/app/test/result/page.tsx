@@ -5,12 +5,13 @@ import React from 'react';
 import * as styles from './resultPage.css';
 import PageBottomBtn from '@components/common/button/pageBottomBtn/PageBottomBtn';
 import Image from 'next/image';
-import MateImage from '@assets/images/test/test_img_large_EAJ.png';
 import KakaoBtn from '@components/common/button/kakaoBtn/KakaoBtn';
 import Bubble from '@components/common/bubble/Bubble';
 import ResultCard from '@components/test/resultCard/ResultCard';
 import { useQueryClient } from '@tanstack/react-query';
 import { TestResponse } from '@apis/test/type';
+import getTestType from '@utils/getTestType';
+import { TestType } from '@constants/test';
 
 const ResultPage = () => {
   const queryClient = useQueryClient();
@@ -21,7 +22,8 @@ const ResultPage = () => {
     return <div>결과를 불러올 수 없습니다. 다시 테스트를 진행해주세요.</div>;
   }
 
-  const [title, subtitle] = resultData.tagline.split(',');
+  const bestMate = getTestType(resultData.bestMate as TestType);
+  const worstMate = getTestType(resultData.worstMate as TestType);
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -41,8 +43,8 @@ https://www.gototemplestay.com`,
   return (
     <div className={styles.page}>
       <section className={styles.resultSection}>
-        <h1 className={styles.title}>{title}</h1>
-        <h3 className={styles.subtitle}>{subtitle}</h3>
+        <h1 className={styles.title}>{getTestType(resultData.code).name}</h1>
+        <h3 className={styles.subtitle}>{resultData.tagline}</h3>
 
         <div>
           <ResultCard color="GREEN" type={resultData.code} />
@@ -64,16 +66,15 @@ https://www.gototemplestay.com`,
       <h2 className={styles.mateTitle}>나의 템플메이트는?</h2>
       <section className={styles.mateSection}>
         <div className={styles.bestMate}>
-          <Image src={MateImage} alt="친목도모형 목탁이" width={144} height={144} />
+          <Image src={bestMate.image} alt={`${bestMate.name} 이미지`} width={144} height={144} />
           <p className={styles.mateSubtitle}>환상의 템플메이트</p>
-          <h5>{resultData.bestMate}</h5>
+          <h5 className={styles.mateName}>{bestMate.name}</h5>
         </div>
 
         <div className={styles.worstMate}>
-          <Image src={MateImage} alt="친목도모형 목탁이" width={144} height={144} />
-
+          <Image src={worstMate.image} alt={`${worstMate.name} 이미지`} width={144} height={144} />
           <p className={styles.mateSubtitle}>환장의 템플메이트</p>
-          <h5>{resultData.worstMate}</h5>
+          <h5 className={styles.mateName}>{worstMate.name}</h5>
         </div>
       </section>
 

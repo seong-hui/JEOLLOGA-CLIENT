@@ -40,7 +40,8 @@ const TestPage = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <div
+      className={`${styles.container} ${currentStep === 'START' ? styles.startBg : styles.stepBg}`}>
       <Funnel steps={steps}>
         {[
           <Step key="START" name="START">
