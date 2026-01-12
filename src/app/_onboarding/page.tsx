@@ -27,7 +27,6 @@ const OnboardingPage = () => {
 
   const { Funnel, Step, nextStep, currentStep } = useFunnel(
     ONBOARDING_STEPS.map((step) => step.id),
-    '/welcome',
   );
 
   const { logClickEvent } = useEventLogger('onboarding');

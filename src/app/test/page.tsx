@@ -16,7 +16,7 @@ const TestPage = () => {
   const [selections, setSelections] = useState<string[]>([]);
   const steps = ['START', ...TEST_STEPS.map((step) => step.id)];
 
-  const { Funnel, Step, nextStep, currentStep } = useFunnel(steps, '/test/result');
+  const { Funnel, Step, nextStep, currentStep } = useFunnel(steps);
   const { mutate } = usePostTestResult();
 
   const handleSelect = (choice: string) => {

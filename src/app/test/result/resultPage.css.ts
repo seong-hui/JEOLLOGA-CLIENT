@@ -66,6 +66,7 @@ export const footerText = style({
   color: theme.COLORS.green7,
   textShadow: theme.COLORS.titleDropshadow,
   textAlign: 'center',
+  whiteSpace: 'pre-wrap',
 });
 
 export const mateSection = style({

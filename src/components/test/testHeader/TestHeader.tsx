@@ -3,6 +3,7 @@ import React from 'react';
 import Icon from '@assets/svgs';
 
 import * as styles from './TestHeader.css';
+import { useRouter } from 'next/navigation';
 
 interface TestHeaderProps {
   currentStep: number;
@@ -12,6 +13,8 @@ interface TestHeaderProps {
 }
 
 const TestHeader = ({ currentStep, totalSteps, onBackClick, onCloseClick }: TestHeaderProps) => {
+  const router = useRouter();
+
   return (
     <div className={styles.headerContainer}>
       <div className={styles.headerTop}>
@@ -20,7 +23,9 @@ const TestHeader = ({ currentStep, totalSteps, onBackClick, onCloseClick }: Test
             <Icon.IcnArrowBlackLeft />
           </button>
         ) : (
-          <Icon.SmallLogo />
+          <button onClick={() => router.push('/')}>
+            <Icon.SmallLogo />
+          </button>
         )}
         <button onClick={onCloseClick}>
           <Icon.IcnCloseLargeGray />

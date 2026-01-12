@@ -6,12 +6,25 @@ import { TEST_STEPS } from '@constants/test';
 import useFunnel from '@hooks/useFunnel';
 
 import * as styles from './testPage.css';
+import { usePathname, useRouter } from 'next/navigation';
 
 const TestLayout = ({ children }: { children: React.ReactNode }) => {
+  const pathname = usePathname();
+  const router = useRouter();
+
   const steps = ['START', ...TEST_STEPS.map((step) => step.id)];
-  const { currentStep, prevStep } = useFunnel(steps, '/result');
+  const { currentStep, prevStep } = useFunnel(steps);
 
   const progressStep = steps.indexOf(currentStep);
+
+  const isResultPage = pathname === '/test/result';
+  const handleClose = () => {
+    if (isResultPage) {
+      router.push('/');
+    } else {
+      prevStep();
+    }
+  };
 
   return (
     <div className={styles.layout}>
@@ -19,7 +32,7 @@ const TestLayout = ({ children }: { children: React.ReactNode }) => {
         currentStep={progressStep}
         totalSteps={TEST_STEPS.length}
         onBackClick={prevStep}
-        onCloseClick={prevStep}
+        onCloseClick={handleClose}
       />
       <main className={styles.main}>{children}</main>
     </div>

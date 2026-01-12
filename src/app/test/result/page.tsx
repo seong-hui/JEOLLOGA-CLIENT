@@ -9,9 +9,19 @@ import MateImage from '@assets/images/test/test_img_large_EAJ.png';
 import KakaoBtn from '@components/common/button/kakaoBtn/KakaoBtn';
 import Bubble from '@components/common/bubble/Bubble';
 import ResultCard from '@components/test/resultCard/ResultCard';
+import { useQueryClient } from '@tanstack/react-query';
+import { TestResponse } from '@apis/test/type';
 
 const ResultPage = () => {
-  const text = `누가 뭐 하자고 해도 잠깐의 망설임이 먼저 찾아와요.\n조용한 카페 창가 자리나 집 안의 오후 햇살처럼, 잔잔한 순간에 마음이 풀려요.\n시끌벅적한 대화보다 차 한 잔의 여유가 훨씬 오래 남는 편이에요.\n그래서 명상이나 차담 같은 고요한 프로그램이 잘 어울려요.\n누군가와 대화하지 않아도 그 공간이 나를 이해해 주는 느낌이 드니까요.`;
+  const queryClient = useQueryClient();
+
+  const resultData = queryClient.getQueryData<TestResponse>(['test-result']);
+
+  if (!resultData) {
+    return <div>결과를 불러올 수 없습니다. 다시 테스트를 진행해주세요.</div>;
+  }
+
+  const [title, subtitle] = resultData.tagline.split(',');
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -31,28 +41,24 @@ https://www.gototemplestay.com`,
   return (
     <div className={styles.page}>
       <section className={styles.resultSection}>
-        <h1 className={styles.title}>잔잔호수형 목탁이</h1>
-        <h3 className={styles.subtitle}>차분하면서도 편안한 곳을 좋아해요.</h3>
+        <h1 className={styles.title}>{title}</h1>
+        <h3 className={styles.subtitle}>{subtitle}</h3>
 
         <div>
-          <ResultCard color="GREEN" type="EAP" />
+          <ResultCard color="GREEN" type={resultData.code} />
           <button className={styles.saveButton} onClick={handleSaveImage}>
             이미지를 꾹 눌러서 저장해보세요!
           </button>
         </div>
 
         <ul className={styles.description}>
-          {text.split('\n').map((line, idx) => (
+          {resultData.description.split('\n').map((line, idx) => (
             <li key={idx}>{line}</li>
           ))}
         </ul>
 
         <div className={styles.divider}></div>
-        <h2 className={styles.footerText}>
-          당신에게 필요한 건 고요함 한 스푼.
-          <br />
-          마음의 속도를 잠시 늦춰보세요.
-        </h2>
+        <h2 className={styles.footerText}>{resultData.requirement}</h2>
       </section>
 
       <h2 className={styles.mateTitle}>나의 템플메이트는?</h2>
@@ -60,14 +66,14 @@ https://www.gototemplestay.com`,
         <div className={styles.bestMate}>
           <Image src={MateImage} alt="친목도모형 목탁이" width={144} height={144} />
           <p className={styles.mateSubtitle}>환상의 템플메이트</p>
-          <h5>친목도모형 목탁이</h5>
+          <h5>{resultData.bestMate}</h5>
         </div>
 
         <div className={styles.worstMate}>
           <Image src={MateImage} alt="친목도모형 목탁이" width={144} height={144} />
 
           <p className={styles.mateSubtitle}>환장의 템플메이트</p>
-          <h5>친목도모형 목탁이</h5>
+          <h5>{resultData.worstMate}</h5>
         </div>
       </section>
 
