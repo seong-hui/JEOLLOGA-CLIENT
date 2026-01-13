@@ -15,34 +15,35 @@ import useEventLogger from 'src/gtm/hooks/useEventLogger';
 
 import * as styles from './myPage.css';
 
-const MOCK_USER_DATA_DONE = {
-  type: 'IAJ',
-  typeContent: '잔잔한 호수형 목탁이',
-  nickname: '배영경',
-  email: 'jjeolloga@gmail.com',
-  hasType: true,
-};
+// const MOCK_USER_DATA_DONE = {
+//   type: 'IAJ',
+//   typeContent: '잔잔한 호수형 목탁이',
+//   nickname: '배영경',
+//   email: 'jjeolloga@gmail.com',
+//   hasType: true,
+// };
 
-const MOCK_USER_DATA_NONE = {
-  type: null,
-  typeContent: null,
-  nickname: '배영경',
-  email: 'jjeolloga@gmail.com',
-  hasType: false,
-};
+// const MOCK_USER_DATA_NONE = {
+//   type: null,
+//   typeContent: null,
+//   nickname: '배영경',
+//   email: 'jjeolloga@gmail.com',
+//   hasType: false,
+// };
 
 const MyPage = () => {
   const router = useRouter();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  const userData = MOCK_USER_DATA_DONE;
+  // const userData = MOCK_USER_DATA_DONE;
   // const userData = MOCK_USER_DATA_NONE;
 
   const postLogout = usePostLogout();
   const postWithdraw = usePostWithdraw();
 
   const { data, isLoading, isError } = useGetMyPage();
+  const userData = data?.data;
 
   const { logClickEvent } = useEventLogger('my');
 
@@ -102,6 +103,10 @@ const MyPage = () => {
   }
 
   if (isError) {
+    return <ExceptLayout type="networkError" />;
+  }
+
+  if (!userData) {
     return <ExceptLayout type="networkError" />;
   }
 
