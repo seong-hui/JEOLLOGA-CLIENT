@@ -13,15 +13,19 @@ import { TestResponse } from '@apis/test/type';
 import getTestType from '@utils/getTestType';
 import { TestType } from '@constants/test';
 import { toPng } from 'html-to-image';
+import TestHeader from '@components/test/testHeader/TestHeader';
+import { useRouter } from 'next/navigation';
+import ExceptLayout from '@components/except/exceptLayout/ExceptLayout';
 
 const ResultPage = () => {
   const cardRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
   const queryClient = useQueryClient();
 
   const resultData = queryClient.getQueryData<TestResponse>(['test-result']);
 
   if (!resultData) {
-    return <div>결과를 불러올 수 없습니다. 다시 테스트를 진행해주세요.</div>;
+    return <ExceptLayout type="testError" />;
   }
 
   const bestMate = getTestType(resultData.bestMate as TestType);
@@ -53,6 +57,7 @@ https://www.gototemplestay.com/test`,
 
   return (
     <div className={styles.page}>
+      <TestHeader onCloseClick={() => router.push('/')} />
       <section className={styles.resultSection}>
         <h1 className={styles.title}>{getTestType(resultData.code).name}</h1>
         <h3 className={styles.subtitle}>{resultData.tagline}</h3>

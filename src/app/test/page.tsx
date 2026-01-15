@@ -11,28 +11,19 @@ import TestStart from '@components/test/testStart/TestStart';
 
 import * as styles from './testPage.css';
 import { usePostTestResult } from '@apis/test';
+import { useRouter } from 'next/navigation';
+import TestHeader from '@components/test/testHeader/TestHeader';
 
 const TestPage = () => {
+  const router = useRouter();
   const [selections, setSelections] = useState<string[]>([]);
   const steps = ['START', ...TEST_STEPS.map((step) => step.id)];
 
-  const { Funnel, Step, nextStep, currentStep } = useFunnel(steps);
-  const { mutate, isPending, isSuccess } = usePostTestResult();
+  const { Funnel, Step, nextStep, prevStep, currentStep } = useFunnel(steps);
+  const progressStep = steps.indexOf(currentStep);
 
-  if (isPending || isSuccess) {
-    return (
-      <div className={styles.pendingContainer}>
-        <dotlottie-player
-          key="look"
-          className={styles.lottieStyle}
-          src="/lotties/moktak_hit.lottie"
-          autoplay
-          loop
-        />
-        <p>테스트 결과를 분석 중...</p>
-      </div>
-    );
-  }
+  const { mutate, isPending, isSuccess } = usePostTestResult();
+  const isLoading = isPending || isSuccess;
 
   const handleSelect = (choice: string) => {
     const currentStepIndex = steps.indexOf(currentStep) - 1;
@@ -55,26 +46,49 @@ const TestPage = () => {
   };
 
   return (
-    <div
-      className={`${styles.container} ${currentStep === 'START' ? styles.startBg : styles.stepBg}`}>
-      <Funnel steps={steps}>
-        {[
-          <Step key="START" name="START">
-            <TestStart onClick={nextStep} />
-          </Step>,
+    <div className={styles.layout}>
+      <TestHeader
+        isLoading={isLoading}
+        currentStep={isLoading ? undefined : progressStep}
+        totalSteps={isLoading ? undefined : TEST_STEPS.length}
+        onBackClick={prevStep}
+        onCloseClick={() => router.push('/')}
+      />
 
-          ...TEST_STEPS.map(({ id, title, option1, option2 }) => (
-            <Step key={id} name={id}>
-              <TestContent
-                title={title}
-                topButton={option1}
-                bottomButton={option2}
-                onClick={(choice) => handleSelect(choice)}
-              />
-            </Step>
-          )),
-        ]}
-      </Funnel>
+      {isLoading ? (
+        <div className={styles.pendingContainer}>
+          <dotlottie-player
+            key="look"
+            className={styles.lottieStyle}
+            src="/lotties/moktak_hit.lottie"
+            autoplay
+            loop
+          />
+          <p>테스트 결과를 분석 중...</p>
+        </div>
+      ) : (
+        <div
+          className={`${styles.container} ${currentStep === 'START' ? styles.startBg : styles.stepBg}`}>
+          <Funnel steps={steps}>
+            {[
+              <Step key="START" name="START">
+                <TestStart onClick={nextStep} />
+              </Step>,
+
+              ...TEST_STEPS.map(({ id, title, option1, option2 }) => (
+                <Step key={id} name={id}>
+                  <TestContent
+                    title={title}
+                    topButton={option1}
+                    bottomButton={option2}
+                    onClick={(choice) => handleSelect(choice)}
+                  />
+                </Step>
+              )),
+            ]}
+          </Funnel>
+        </div>
+      )}
     </div>
   );
 };

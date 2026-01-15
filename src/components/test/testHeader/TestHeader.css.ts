@@ -24,3 +24,7 @@ export const headerTop = style({
   width: '100%',
   padding: '0 1.2rem',
 });
+
+export const closeButton = style({
+  marginLeft: 'auto',
+});
