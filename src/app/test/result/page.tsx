@@ -33,10 +33,8 @@ const ResultPage = () => {
         text: `나의 템플 캐릭터는 무엇일까요?🌺
 성향 테스트 참여하고, 친구와 결과를 공유해보세요!
 테스트를 통해 나와 잘 맞는 템플스테이 메이트를 찾아봐요.\n
-https://www.gototemplestay.com`,
+https://www.gototemplestay.com/test`,
       });
-    } else {
-      console.log('Else');
     }
   };
 
