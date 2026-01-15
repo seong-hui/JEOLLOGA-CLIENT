@@ -35,7 +35,7 @@ export const subtitle = style({
   margin: '0.8rem 0 3.2rem 0',
 });
 
-export const saveButton = style({
+export const saveText = style({
   width: '20.6rem',
   height: '4.6rem',
   borderRadius: '40px',
@@ -44,6 +44,9 @@ export const saveButton = style({
   marginTop: '1.2rem',
   ...theme.FONTS.c5M13,
   color: theme.COLORS.green5,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
 });
 
 export const description = style({

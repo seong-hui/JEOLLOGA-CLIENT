@@ -20,7 +20,7 @@ const ResultCard = ({ color = 'NONE', type }: ResultCardProps) => {
   return (
     <div className={container({ color })}>
       <Bubble text={text} />
-      <Image src={image} alt="목탁이" width={144} height={144} />
+      <Image src={image} alt="목탁이" width={144} height={144} priority unoptimized />
     </div>
   );
 };

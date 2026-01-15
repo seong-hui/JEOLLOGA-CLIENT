@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 
 import * as styles from './resultPage.css';
 import PageBottomBtn from '@components/common/button/pageBottomBtn/PageBottomBtn';
@@ -12,8 +12,10 @@ import { useQueryClient } from '@tanstack/react-query';
 import { TestResponse } from '@apis/test/type';
 import getTestType from '@utils/getTestType';
 import { TestType } from '@constants/test';
+import { toPng } from 'html-to-image';
 
 const ResultPage = () => {
+  const cardRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
 
   const resultData = queryClient.getQueryData<TestResponse>(['test-result']);
@@ -38,7 +40,18 @@ https://www.gototemplestay.com`,
     }
   };
 
-  const handleSaveImage = () => {};
+  const handleDownload = useCallback(async () => {
+    if (!cardRef.current) return;
+    try {
+      const dataUrl = await toPng(cardRef.current, { cacheBust: true });
+      const link = document.createElement('a');
+      link.download = `${resultData.code}.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (error) {
+      console.error(error);
+    }
+  }, [resultData.code]);
 
   return (
     <div className={styles.page}>
@@ -46,12 +59,12 @@ https://www.gototemplestay.com`,
         <h1 className={styles.title}>{getTestType(resultData.code).name}</h1>
         <h3 className={styles.subtitle}>{resultData.tagline}</h3>
 
-        <div>
-          <ResultCard color="GREEN" type={resultData.code} />
-          <button className={styles.saveButton} onClick={handleSaveImage}>
-            이미지를 꾹 눌러서 저장해보세요!
-          </button>
-        </div>
+        <>
+          <div ref={cardRef} onClick={handleDownload} style={{ cursor: 'pointer' }}>
+            <ResultCard color="GREEN" type={resultData.code} />
+          </div>
+          <span className={styles.saveText}>이미지를 꾹 눌러서 저장해보세요!</span>
+        </>
 
         <ul className={styles.description}>
           {resultData.description.split('\n').map((line, idx) => (
