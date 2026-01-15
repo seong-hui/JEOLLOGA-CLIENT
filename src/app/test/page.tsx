@@ -17,7 +17,22 @@ const TestPage = () => {
   const steps = ['START', ...TEST_STEPS.map((step) => step.id)];
 
   const { Funnel, Step, nextStep, currentStep } = useFunnel(steps);
-  const { mutate } = usePostTestResult();
+  const { mutate, isPending, isSuccess } = usePostTestResult();
+
+  if (isPending || isSuccess) {
+    return (
+      <div className={styles.pendingContainer}>
+        <dotlottie-player
+          key="look"
+          className={styles.lottieStyle}
+          src="/lotties/moktak_hit.lottie"
+          autoplay
+          loop
+        />
+        <p>테스트 결과를 분석 중...</p>
+      </div>
+    );
+  }
 
   const handleSelect = (choice: string) => {
     const currentStepIndex = steps.indexOf(currentStep) - 1;

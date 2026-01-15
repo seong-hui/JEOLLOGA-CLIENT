@@ -7,7 +7,14 @@ export const usePostTestResult = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (result: string) => postJbtiTest(result),
+    mutationFn: async (result: string) => {
+      const [data] = await Promise.all([
+        postJbtiTest(result),
+        new Promise((resolve) => setTimeout(resolve, 2500)),
+      ]);
+
+      return data;
+    },
     onSuccess: (data) => {
       queryClient.setQueryData(['test-result'], data);
       router.push(`/test/result`);
