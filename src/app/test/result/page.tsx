@@ -19,12 +19,26 @@ import ExceptLayout from '@components/except/exceptLayout/ExceptLayout';
 import { getCookie } from 'cookies-next';
 
 const ResultPage = () => {
-  const cardRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLButtonElement>(null);
   const router = useRouter();
   const queryClient = useQueryClient();
   const userNickname = getCookie('userNickname');
 
   const resultData = queryClient.getQueryData<TestResponse>(['test-result']);
+
+  const handleDownload = useCallback(async () => {
+    if (!cardRef.current || !resultData) return;
+
+    try {
+      const dataUrl = await toPng(cardRef.current, { cacheBust: true });
+      const link = document.createElement('a');
+      link.download = `${resultData.code}.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (error) {
+      console.error(error);
+    }
+  }, [resultData]);
 
   if (!resultData) {
     return <ExceptLayout type="testError" />;
@@ -44,19 +58,6 @@ https://www.gototemplestay.com/test`,
     }
   };
 
-  const handleDownload = useCallback(async () => {
-    if (!cardRef.current) return;
-    try {
-      const dataUrl = await toPng(cardRef.current, { cacheBust: true });
-      const link = document.createElement('a');
-      link.download = `${resultData.code}.png`;
-      link.href = dataUrl;
-      link.click();
-    } catch (error) {
-      console.error(error);
-    }
-  }, [resultData.code]);
-
   return (
     <div className={styles.page}>
       <TestHeader onCloseClick={() => router.push('/')} />
@@ -65,9 +66,10 @@ https://www.gototemplestay.com/test`,
         <h3 className={styles.subtitle}>{resultData.tagline}</h3>
 
         <>
-          <div ref={cardRef} onClick={handleDownload} style={{ cursor: 'pointer' }}>
+          <button ref={cardRef} onClick={handleDownload}>
             <ResultCard color="GREEN" type={resultData.code} />
-          </div>
+          </button>
+
           <span className={styles.saveText}>이미지를 꾹 눌러서 저장해보세요!</span>
         </>
 
@@ -82,6 +84,7 @@ https://www.gototemplestay.com/test`,
       </section>
 
       <h2 className={styles.mateTitle}>나의 템플메이트는?</h2>
+
       <section className={styles.mateSection}>
         <div className={styles.bestMate}>
           <Image src={bestMate.image} alt={`${bestMate.name} 이미지`} width={144} height={144} />
