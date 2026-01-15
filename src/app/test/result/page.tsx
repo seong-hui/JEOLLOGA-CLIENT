@@ -16,11 +16,13 @@ import { toPng } from 'html-to-image';
 import TestHeader from '@components/test/testHeader/TestHeader';
 import { useRouter } from 'next/navigation';
 import ExceptLayout from '@components/except/exceptLayout/ExceptLayout';
+import { getCookie } from 'cookies-next';
 
 const ResultPage = () => {
   const cardRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const queryClient = useQueryClient();
+  const userNickname = getCookie('userNickname');
 
   const resultData = queryClient.getQueryData<TestResponse>(['test-result']);
 
@@ -95,8 +97,18 @@ https://www.gototemplestay.com/test`,
       </section>
 
       <div className={styles.buttonSection}>
-        <Bubble text="나에게 맞는 절을 계속 추천받을 수 있어요!" />
-        <KakaoBtn page="TEST" type={resultData.code} />
+        {userNickname ? (
+          <PageBottomBtn
+            btnText="3초만에 템플스테이 추천받기"
+            size="large"
+            onClick={() => router.push('/')}
+          />
+        ) : (
+          <>
+            <Bubble text="나에게 맞는 절을 계속 추천받을 수 있어요!" />
+            <KakaoBtn page="TEST" type={resultData.code} />
+          </>
+        )}
         <PageBottomBtn btnText="친구에게 공유하기" size="large" onClick={handleShare} />
       </div>
     </div>

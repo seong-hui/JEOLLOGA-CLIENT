@@ -13,8 +13,17 @@ export const useGetKakaoLogin = () => {
     mutationFn: ({ code }: { code: string }) => getKakaoLogin(code),
     onSuccess: async (response) => {
       const userNickname = response.data.data.nickname;
+      const hasType = response.data.data.hasType;
 
       setCookie('userNickname', userNickname, {
+        httpOnly: false,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        path: '/',
+        maxAge: 1209600, // 14일
+      });
+
+      setCookie('hasType', hasType, {
         httpOnly: false,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
@@ -48,6 +57,7 @@ export const usePostLogout = () => {
     onSuccess: () => {
       localStorage.clear();
       deleteCookie('userNickname');
+      deleteCookie('hasType');
 
       router.push('/');
     },
@@ -66,6 +76,7 @@ export const usePostWithdraw = () => {
     onSuccess: () => {
       localStorage.clear();
       deleteCookie('userNickname');
+      deleteCookie('hasType');
       router.push('/');
       window.location.reload();
     },
