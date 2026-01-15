@@ -9,3 +9,11 @@ export const postJbtiTest = async (result: string): Promise<TestResponse> => {
 
   return response.data.data;
 };
+
+export const postTestResult = async (type: string) => {
+  const response = await instance.post('/v2/user/type', {
+    type,
+  });
+
+  return response;
+};

@@ -1,16 +1,18 @@
 import { getKakaoLogin, postLogout, postWithdraw } from '@apis/auth/axios';
+import { useSaveTestResult } from '@apis/test';
+import { TestType } from '@constants/test';
 import { useMutation } from '@tanstack/react-query';
 import { deleteCookie, setCookie } from 'cookies-next';
 import { useRouter } from 'next/navigation';
 
 export const useGetKakaoLogin = () => {
   const router = useRouter();
+  const saveTestResultMutation = useSaveTestResult();
 
   return useMutation({
     mutationFn: ({ code }: { code: string }) => getKakaoLogin(code),
-    onSuccess: (response) => {
+    onSuccess: async (response) => {
       const userNickname = response.data.data.nickname;
-      const userId = response.data.data.userId;
 
       setCookie('userNickname', userNickname, {
         httpOnly: false,
@@ -20,8 +22,16 @@ export const useGetKakaoLogin = () => {
         maxAge: 1209600, // 14일
       });
 
-      localStorage.setItem('userId', userId);
+      // 비회원 상태에서 테스트 완료 후 로그인한 경우 테스트 결과 저장
+      const type = sessionStorage.getItem('type') as TestType;
 
+      if (type) {
+        try {
+          await saveTestResultMutation.mutateAsync(type);
+        } finally {
+          sessionStorage.removeItem('type');
+        }
+      }
       router.push('/');
     },
     onError: (error) => {

@@ -96,7 +96,7 @@ https://www.gototemplestay.com/test`,
 
       <div className={styles.buttonSection}>
         <Bubble text="나에게 맞는 절을 계속 추천받을 수 있어요!" />
-        <KakaoBtn type="TEST" />
+        <KakaoBtn page="TEST" type={resultData.code} />
         <PageBottomBtn btnText="친구에게 공유하기" size="large" onClick={handleShare} />
       </div>
     </div>

@@ -1,4 +1,5 @@
-import { postJbtiTest } from '@apis/test/axios';
+import { postJbtiTest, postTestResult } from '@apis/test/axios';
+import { TestType } from '@constants/test';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 
@@ -22,5 +23,11 @@ export const usePostTestResult = () => {
     onError: (error) => {
       console.error(error);
     },
+  });
+};
+
+export const useSaveTestResult = () => {
+  return useMutation({
+    mutationFn: (type: TestType) => postTestResult(type),
   });
 };
