@@ -1,6 +1,4 @@
 import { style } from '@vanilla-extract/css';
-import StartBgImage from '@assets/images/test/test_start_img.png';
-import StepBgImage from '@assets/images/test/test_question_img.png';
 import theme from '@styles/theme.css';
 
 export const layout = style({
@@ -27,11 +25,11 @@ export const container = style({
 });
 
 export const startBg = style({
-  backgroundImage: `url(${StartBgImage.src})`,
+  backgroundImage: "url('/assets/images/test/test_start_img.png')",
 });
 
 export const stepBg = style({
-  backgroundImage: `url(${StepBgImage.src})`,
+  backgroundImage: "url('/assets/images/test/test_question_img.png')",
 });
 
 export const lottieStyle = style({
