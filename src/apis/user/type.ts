@@ -23,3 +23,11 @@ export interface MyPageType {
   religion?: string;
   hasExperience?: boolean;
 }
+
+export interface MyPageResponse {
+  type: string | null;
+  typeContent: string | null;
+  nickname: string;
+  email: string;
+  hasType: boolean;
+}

@@ -1,26 +1,64 @@
 'use client';
 import { usePostLogout, usePostWithdraw } from '@apis/auth';
 import { useGetMyPage } from '@apis/user';
+import PopupBtn from '@components/common/button/popupBtn/PopupBtn';
 import ModalContainer from '@components/common/modal/ModalContainer';
 import PageName from '@components/common/pageName/PageName';
 import ExceptLayout from '@components/except/exceptLayout/ExceptLayout';
 import Footer from '@components/footer/Footer';
+import ResultCard from '@components/test/resultCard/ResultCard';
 import UserInfo from '@components/userInfo/userInfo';
+import { TestType } from '@constants/test';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import useEventLogger from 'src/gtm/hooks/useEventLogger';
 
 import * as styles from './myPage.css';
 
+// const MOCK_USER_DATA_DONE = {
+//   type: 'IAJ',
+//   typeContent: '잔잔한 호수형 목탁이',
+//   nickname: '배영경',
+//   email: 'jjeolloga@gmail.com',
+//   hasType: true,
+// };
+
+// const MOCK_USER_DATA_NONE = {
+//   type: null,
+//   typeContent: null,
+//   nickname: '배영경',
+//   email: 'jjeolloga@gmail.com',
+//   hasType: false,
+// };
+
 const MyPage = () => {
+  const router = useRouter();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  // const userData = MOCK_USER_DATA_DONE;
+  // const userData = MOCK_USER_DATA_NONE;
 
   const postLogout = usePostLogout();
   const postWithdraw = usePostWithdraw();
 
   const { data, isLoading, isError } = useGetMyPage();
+  const userData = data?.data;
 
   const { logClickEvent } = useEventLogger('my');
+
+  const handleGoToTest = () => {
+    router.push('/test');
+  };
+
+  const handleRecommend = () => {
+    router.push('/');
+    // router.push('/curation');
+  };
+
+  const handleReTest = () => {
+    router.push('/test');
+  };
 
   const handleLogoutClick = () => {
     setIsLogoutModalOpen(true);
@@ -68,10 +106,42 @@ const MyPage = () => {
     return <ExceptLayout type="networkError" />;
   }
 
+  if (!userData) {
+    return <ExceptLayout type="networkError" />;
+  }
+
   return (
     <div className={styles.myPageWrapper}>
       <div className={styles.userInfoContainer}>
         <PageName title="마이페이지" />
+
+        <section className={styles.resultSection}>
+          <div className={styles.cardWrapper}>
+            <ResultCard color="NONE" type={(userData.type as TestType) || undefined} />
+          </div>
+
+          <div className={styles.profileInfoBox}>
+            <p className={styles.nameRow}>
+              {userData.hasType && (
+                <span className={styles.typeContent}>{userData.typeContent}</span>
+              )}
+              <span className={styles.nickname}>{userData.nickname}</span> 님
+            </p>
+            <p className={styles.email}>{userData.email}</p>
+          </div>
+
+          <div className={styles.buttonGroup}>
+            {userData.hasType ? (
+              <>
+                <PopupBtn color="green" label="절 추천받기" onClick={handleRecommend} />
+                <PopupBtn color="gray" label="테스트 다시하기" onClick={handleReTest} />
+              </>
+            ) : (
+              <PopupBtn color="green" label="성향 테스트하기" onClick={handleGoToTest} />
+            )}
+          </div>
+        </section>
+
         <UserInfo
           data={data?.data}
           onLogoutClick={handleLogoutClick}

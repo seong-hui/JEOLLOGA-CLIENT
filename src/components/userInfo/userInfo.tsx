@@ -3,9 +3,6 @@ import useEventLogger from 'src/gtm/hooks/useEventLogger';
 import infoContainerStyle from './userInfo.css';
 import AccountActions from './userInfoContent/accountAction/AccountAction';
 import HelpSection from './userInfoContent/helpContent/HelpContent';
-import TopInfo from './userInfoContent/nameContent/NameContent';
-import MemberInfo from './userInfoContent/userDetailInfo.tsx/UserDetailInfo';
-import UserInfoSection from './userInfoContent/userInfoSection/userInfoSection';
 
 interface UserInfoProps {
   data?: {
@@ -37,17 +34,7 @@ const UserInfo = ({ data, onLogoutClick, onDeleteClick }: UserInfoProps) => {
 
   return (
     <div className={infoContainerStyle}>
-      <TopInfo nickname={data.nickname} email={data.email} />
-      <UserInfoSection title="회원정보">
-        <MemberInfo
-          ageRange={data.ageRange || '정보 없음'}
-          gender={data.gender || '정보 없음'}
-          religion={data.religion || '정보 없음'}
-        />
-      </UserInfoSection>
-      <UserInfoSection title="도움말">
-        <HelpSection onNoticeClick={handleNoticeClick} onQuestionClick={handleQuestionClick} />
-      </UserInfoSection>
+      <HelpSection onNoticeClick={handleNoticeClick} onQuestionClick={handleQuestionClick} />
       <AccountActions onLogoutClick={onLogoutClick} onDeleteClick={onDeleteClick} />
     </div>
   );
