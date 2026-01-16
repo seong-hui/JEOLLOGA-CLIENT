@@ -7,7 +7,7 @@ import React from 'react';
 import * as styles from './exceptLayout.css';
 
 interface ExceptLayoutProps {
-  type: 'loading' | 'networkError';
+  type: 'loading' | 'networkError' | 'testError';
 }
 
 const ExceptLayout = ({ type }: ExceptLayoutProps) => {

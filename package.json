@@ -22,6 +22,7 @@
     "@vanilla-extract/vite-plugin": "^4.0.19",
     "axios": "^1.7.9",
     "cookies-next": "^6.0.0",
+    "html-to-image": "^1.11.13",
     "jotai": "^2.11.1",
     "motion": "^12.10.1",
     "next": "^15.2.4",

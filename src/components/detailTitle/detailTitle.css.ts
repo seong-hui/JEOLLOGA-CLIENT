@@ -34,3 +34,8 @@ export const titleStyle = recipe({
     },
   },
 });
+
+export const subtitleStyle = style({
+  ...theme.FONTS.c6R13,
+  color: theme.COLORS.gray8,
+});

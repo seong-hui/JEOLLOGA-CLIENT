@@ -9,6 +9,11 @@ const EXCEPT_INFOS = {
     lottie: '/lotties/tree_fall.lottie',
     subtitle: '새로고침 버튼을 눌러주세요!',
   },
+  testError: {
+    title: '테스트 결과를 불러올 수 없어요',
+    lottie: '/lotties/tree_fall.lottie',
+    subtitle: '새로고침 버튼을 눌러\n다시 테스트를 진행해주세요!',
+  },
 };
 
 export default EXCEPT_INFOS;

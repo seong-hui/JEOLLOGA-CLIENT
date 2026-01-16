@@ -28,7 +28,7 @@ const container = recipe({
     },
   },
   defaultVariants: {
-    color: 'NONE', // 기본값
+    color: 'NONE',
   },
 });
 

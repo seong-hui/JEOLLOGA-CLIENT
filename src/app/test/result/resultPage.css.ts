@@ -14,6 +14,7 @@ export const resultSection = style({
   flex: 1,
   width: '100%',
   minHeight: '91.8rem',
+  backgroundImage: "url('/assets/images/test/test_result_img.png')",
   backgroundSize: 'cover',
   backgroundRepeat: 'no-repeat',
   padding: '5.4rem 0',
@@ -34,7 +35,7 @@ export const subtitle = style({
   margin: '0.8rem 0 3.2rem 0',
 });
 
-export const saveButton = style({
+export const saveText = style({
   width: '20.6rem',
   height: '4.6rem',
   borderRadius: '40px',
@@ -43,12 +44,15 @@ export const saveButton = style({
   marginTop: '1.2rem',
   ...theme.FONTS.c5M13,
   color: theme.COLORS.green5,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
 });
 
 export const description = style({
   ...theme.FONTS.c4M14,
   color: theme.COLORS.gray10,
-  padding: '4rem 2rem 5rem 2rem',
+  padding: '4rem 2rem 0 2rem',
 });
 
 globalStyle(`${description} li`, {
@@ -66,6 +70,7 @@ export const footerText = style({
   color: theme.COLORS.green7,
   textShadow: theme.COLORS.titleDropshadow,
   textAlign: 'center',
+  whiteSpace: 'pre-wrap',
 });
 
 export const mateSection = style({
@@ -86,22 +91,35 @@ export const mateSubtitle = style({
   marginTop: '1.6rem',
 });
 
-export const bestMate = style({
-  ...theme.FONTS.h5Sb16,
-  color: theme.COLORS.primary600,
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
+export const mateName = style({
+  marginTop: '0.1rem',
+  width: '10.4rem',
+  textAlign: 'center',
+  wordBreak: 'keep-all',
 });
 
-export const worstMate = style({
+const baseMateStyle = style({
   ...theme.FONTS.h5Sb16,
-  color: theme.COLORS.pink2,
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
+  textAlign: 'center',
+  wordBreak: 'keep-all', // 단어 단위 줄바꿈
 });
+
+export const bestMate = style([
+  baseMateStyle,
+  {
+    color: theme.COLORS.primary600,
+  },
+]);
+
+export const worstMate = style([
+  baseMateStyle,
+  {
+    color: theme.COLORS.pink2,
+  },
+]);
 
 export const buttonSection = style({
   marginTop: '5.8rem',

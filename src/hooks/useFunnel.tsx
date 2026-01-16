@@ -18,7 +18,7 @@ type SetStepOptions = {
   query?: Record<string, unknown>;
 };
 
-const useFunnel = (steps: string[], completePath: string) => {
+const useFunnel = (steps: string[]) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -52,8 +52,6 @@ const useFunnel = (steps: string[], completePath: string) => {
     const nextIndex = currentIndex + 1;
     if (nextIndex < steps.length) {
       setStep(steps[nextIndex]);
-    } else {
-      router.push(completePath);
     }
   };
 
