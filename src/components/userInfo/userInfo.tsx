@@ -34,17 +34,7 @@ const UserInfo = ({ data, onLogoutClick, onDeleteClick }: UserInfoProps) => {
 
   return (
     <div className={infoContainerStyle}>
-      {/* <TopInfo nickname={data.nickname} email={data.email} /> */}
-      {/* <UserInfoSection title="회원정보">
-        <MemberInfo
-          ageRange={data.ageRange || '정보 없음'}
-          gender={data.gender || '정보 없음'}
-          religion={data.religion || '정보 없음'}
-        />
-      </UserInfoSection> */}
-      {/* <UserInfoSection title="도움말"> */}
       <HelpSection onNoticeClick={handleNoticeClick} onQuestionClick={handleQuestionClick} />
-      {/* </UserInfoSection> */}
       <AccountActions onLogoutClick={onLogoutClick} onDeleteClick={onDeleteClick} />
     </div>
   );
