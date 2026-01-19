@@ -17,12 +17,14 @@ import TestHeader from '@components/test/testHeader/TestHeader';
 import { useRouter } from 'next/navigation';
 import ExceptLayout from '@components/except/exceptLayout/ExceptLayout';
 import { getCookie } from 'cookies-next';
+import { getStorageValue } from '@hooks/useLocalStorage';
 
 const ResultPage = () => {
   const cardRef = useRef<HTMLButtonElement>(null);
   const router = useRouter();
   const queryClient = useQueryClient();
   const userNickname = getCookie('userNickname');
+  const prevPath = getStorageValue('prevPage') || '';
 
   const resultData = queryClient.getQueryData<TestResponse>(['test-result']);
 
@@ -60,7 +62,7 @@ https://www.gototemplestay.com/test`,
 
   return (
     <div className={styles.page}>
-      <TestHeader onCloseClick={() => router.push('/')} />
+      <TestHeader onCloseClick={() => router.push(prevPath)} />
       <section className={styles.resultSection}>
         <h1 className={styles.title}>{getTestType(resultData.code).name}</h1>
         <h3 className={styles.subtitle}>{resultData.tagline}</h3>
