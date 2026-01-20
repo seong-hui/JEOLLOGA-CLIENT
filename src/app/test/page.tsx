@@ -3,7 +3,7 @@
 export const dynamic = 'force-dynamic';
 
 import useFunnel from '@hooks/useFunnel';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import TestContent from '@components/test/testContent/TestContent';
 import { TEST_STEPS } from '@constants/test';
@@ -24,6 +24,10 @@ const TestPage = () => {
   const steps = ['START', ...TEST_STEPS.map((step) => step.id)];
   const hasType = getCookie('hasType');
   const prevPath = getStorageValue('prevPage') || '';
+
+  useEffect(() => {
+    sessionStorage.removeItem('test-result');
+  }, []);
 
   const { Funnel, Step, nextStep, prevStep, currentStep } = useFunnel(steps);
   const progressStep = steps.indexOf(currentStep);

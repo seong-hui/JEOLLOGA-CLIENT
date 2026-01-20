@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 
 import * as styles from './resultPage.css';
 import PageBottomBtn from '@components/common/button/pageBottomBtn/PageBottomBtn';
@@ -18,6 +18,7 @@ import { useRouter } from 'next/navigation';
 import ExceptLayout from '@components/except/exceptLayout/ExceptLayout';
 import { getCookie } from 'cookies-next';
 import { getStorageValue } from '@hooks/useLocalStorage';
+import dynamic from 'next/dynamic';
 
 const ResultPage = () => {
   const cardRef = useRef<HTMLButtonElement>(null);
@@ -26,7 +27,9 @@ const ResultPage = () => {
   const userNickname = getCookie('userNickname');
   const prevPath = getStorageValue('prevPage') || '';
 
-  const resultData = queryClient.getQueryData<TestResponse>(['test-result']);
+  const resultData =
+    queryClient.getQueryData<TestResponse>(['test-result']) ||
+    (JSON.parse(sessionStorage.getItem('test-result') || 'null') as TestResponse);
 
   const handleDownload = useCallback(async () => {
     if (!cardRef.current || !resultData) return;
@@ -120,4 +123,6 @@ https://www.gototemplestay.com/test`,
   );
 };
 
-export default ResultPage;
+export default dynamic(() => Promise.resolve(ResultPage), {
+  ssr: false,
+});
