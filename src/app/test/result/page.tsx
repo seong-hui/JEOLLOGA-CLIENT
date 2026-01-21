@@ -19,6 +19,7 @@ import ExceptLayout from '@components/except/exceptLayout/ExceptLayout';
 import { getCookie } from 'cookies-next';
 import { getStorageValue } from '@hooks/useLocalStorage';
 import dynamic from 'next/dynamic';
+import PopupBtn from '@components/common/button/popupBtn/PopupBtn';
 
 const ResultPage = () => {
   const cardRef = useRef<HTMLButtonElement>(null);
@@ -46,7 +47,14 @@ const ResultPage = () => {
   }, [resultData]);
 
   if (!resultData) {
-    return <ExceptLayout type="testError" />;
+    return (
+      <ExceptLayout type="testError">
+        <div className={styles.exceptButtonWrapper}>
+          <PopupBtn color="gray" label="홈으로 가기" onClick={() => router.push('/')} />
+          <PopupBtn color="green" label="테스트 다시하기" onClick={() => router.push('/test')} />
+        </div>
+      </ExceptLayout>
+    );
   }
 
   const bestMate = getTestType(resultData.bestMate as TestType);
