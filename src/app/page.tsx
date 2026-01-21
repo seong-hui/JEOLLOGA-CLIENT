@@ -21,7 +21,9 @@ const HomePage = async () => {
       <SearchBar />
       <FilterTypeBoxClient />
 
-      <RecommendTempleClient isLoggedIn={isLoggedIn} />
+      <section id="recommend">
+        <RecommendTempleClient isLoggedIn={isLoggedIn} />
+      </section>
 
       <TestBanner />
 

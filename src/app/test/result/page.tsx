@@ -134,7 +134,9 @@ ${url}`,
           <PageBottomBtn
             btnText="3초만에 템플스테이 추천받기"
             size="large"
-            onClick={() => router.push('/')}
+            onClick={() => {
+              router.push('/?scrollTo=recommend');
+            }}
           />
         ) : (
           <>

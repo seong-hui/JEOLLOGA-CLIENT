@@ -22,6 +22,7 @@ import { useState } from 'react';
 import useEventLogger from 'src/gtm/hooks/useEventLogger';
 
 import styles from '../components/card/recommendCard/recommendCard.css';
+import useScrollToTarget from '@hooks/useScrollToTarget';
 
 interface RecommendTempleClientProps {
   isLoggedIn: boolean;
@@ -39,6 +40,7 @@ const TYPE_IMAGE_MAP: { [key: string]: string } = {
 };
 
 const RecommendTempleClient = ({ isLoggedIn }: RecommendTempleClientProps) => {
+  useScrollToTarget();
   const queryClient = useQueryClient();
   const addWishlistMutation = useAddWishlistV2();
   const removeWishlistMutation = useRemoveWishlistV2();
