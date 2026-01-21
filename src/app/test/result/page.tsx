@@ -52,14 +52,31 @@ const ResultPage = () => {
   const bestMate = getTestType(resultData.bestMate as TestType);
   const worstMate = getTestType(resultData.worstMate as TestType);
 
+  const isMobile =
+    navigator.maxTouchPoints > 1 &&
+    /mobile|android|iphone|ipad|phone/i.test(navigator.userAgent.toLowerCase());
+
   const handleShare = async () => {
-    if (navigator.share) {
-      await navigator.share({
-        text: `나의 템플 캐릭터는 무엇일까요?🌺
+    const url = 'https://www.gototemplestay.com/test';
+
+    if (isMobile && navigator.share) {
+      try {
+        await navigator.share({
+          text: `나의 템플 캐릭터는 무엇일까요?🌺
 성향 테스트 참여하고, 친구와 결과를 공유해보세요!
 테스트를 통해 나와 잘 맞는 템플스테이 메이트를 찾아봐요.\n
-https://www.gototemplestay.com/test`,
-      });
+${url}`,
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(url);
+        alert('링크가 복사되었습니다.');
+      } catch (e) {
+        console.error('링크 복사 실패', e);
+      }
     }
   };
 
