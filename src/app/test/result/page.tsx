@@ -1,25 +1,29 @@
 'use client';
 
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 
-import * as styles from './resultPage.css';
-import PageBottomBtn from '@components/common/button/pageBottomBtn/PageBottomBtn';
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+
+import { toPng } from 'html-to-image';
+import { getCookie } from 'cookies-next';
+import { useQueryClient } from '@tanstack/react-query';
+
+import { TestResponse } from '@apis/test/type';
+import PageBottomBtn from '@components/common/button/pageBottomBtn/PageBottomBtn';
 import KakaoBtn from '@components/common/button/kakaoBtn/KakaoBtn';
 import Bubble from '@components/common/bubble/Bubble';
+import PopupBtn from '@components/common/button/popupBtn/PopupBtn';
 import ResultCard from '@components/test/resultCard/ResultCard';
-import { useQueryClient } from '@tanstack/react-query';
-import { TestResponse } from '@apis/test/type';
+import TestHeader from '@components/test/testHeader/TestHeader';
+import ExceptLayout from '@components/except/exceptLayout/ExceptLayout';
+
+import { getStorageValue } from '@hooks/useLocalStorage';
 import getTestType from '@utils/getTestType';
 import { TestType } from '@constants/test';
-import { toPng } from 'html-to-image';
-import TestHeader from '@components/test/testHeader/TestHeader';
-import { useRouter } from 'next/navigation';
-import ExceptLayout from '@components/except/exceptLayout/ExceptLayout';
-import { getCookie } from 'cookies-next';
-import { getStorageValue } from '@hooks/useLocalStorage';
-import dynamic from 'next/dynamic';
-import PopupBtn from '@components/common/button/popupBtn/PopupBtn';
+
+import * as styles from './resultPage.css';
 
 const ResultPage = () => {
   const cardRef = useRef<HTMLButtonElement>(null);
