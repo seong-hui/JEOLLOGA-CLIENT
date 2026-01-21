@@ -14,7 +14,6 @@ const BANNER_DATA: BannerItem[] = [
     detailImage: '/assets/images/banner/banner_1_detail.png',
     alt: '사찰음식 템플스테이',
     link: '/curation/temple-food',
-    // link: '/searchResult?keyword=사찰음식',
     type: 'internal',
   },
   {
