@@ -7,16 +7,23 @@ interface InfoSectionProps {
   templestayName: string;
   region: string;
   type: string;
+  size?: 'default' | 'small';
 }
 
-const InfoSection = ({ templeName, templestayName, region, type }: InfoSectionProps) => {
+const InfoSection = ({
+  templeName,
+  templestayName,
+  region,
+  type,
+  size = 'default',
+}: InfoSectionProps) => {
   return (
-    <section className={styles.infoBox}>
+    <section className={styles.infoBox({ size })}>
       <div>
-        <h2 className={styles.hashTag}>{templeName}</h2>
-        <h2 className={styles.title}>{templestayName}</h2>
+        <h2 className={styles.hashTag({ size })}>{templeName}</h2>
+        <h2 className={styles.title({ size })}>{templestayName}</h2>
       </div>
-      <div className={styles.tagBox}>
+      <div className={styles.tagBox({ size })}>
         <Tag color="brown" label={region} />
         <Tag color="blue" label={type} />
       </div>
