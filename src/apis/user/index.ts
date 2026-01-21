@@ -10,10 +10,11 @@ export const usePostOnboardingData = () => {
   });
 };
 
-export const useGetMyPage = () => {
+export const useGetMyPage = (enabled: boolean = true) => {
   const { data, isLoading, isError } = useQuery<ApiResponse<MyPageResponse>>({
     queryKey: ['myPage'],
     queryFn: () => getMyPage(),
+    enabled,
   });
 
   return { data, isLoading, isError };
