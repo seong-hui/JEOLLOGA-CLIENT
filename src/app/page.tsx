@@ -1,9 +1,10 @@
 import HomeClient from '@app/HomeClient';
-import LookCard from '@components/card/lookCard/LookCard';
-import MapCard from '@components/card/mapCard/MapCard';
+import RecommendTempleClient from '@app/RecommendTempleClient';
 import DetailTitle from '@components/detailTitle/DetailTitle';
+import FilterTypeBoxClient from '@components/filter/filterTypeBox/FilterTypeBoxClient';
 import Footer from '@components/footer/Footer';
 import Header from '@components/header/Header';
+import SearchBar from '@components/search/searchBar/SearchBar';
 import TestBanner from '@components/test/testBanner/TestBanner';
 import { cookies } from 'next/headers';
 
@@ -12,13 +13,18 @@ import * as styles from './homePage.css';
 const HomePage = async () => {
   const cookieStore = await cookies();
   const userName = cookieStore.get('userNickname')?.value;
+  const isLoggedIn = !!userName;
 
   return (
     <div className={styles.homeWrapper}>
       <Header />
-      <LookCard name={userName} />
-      <MapCard />
+      <SearchBar />
+      <FilterTypeBoxClient />
+
+      <RecommendTempleClient isLoggedIn={isLoggedIn} />
+
       <TestBanner />
+
       <div className={styles.popularCarouselStyle}>
         <DetailTitle
           title="이번 주 인기 템플스테이"

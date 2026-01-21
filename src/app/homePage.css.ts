@@ -40,3 +40,15 @@ export const modalOverlay = style({
   alignItems: 'center',
   zIndex: 1,
 });
+
+export const titleWithIconStyle = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '0.8rem',
+});
+
+export const typeIconStyle = style({
+  width: '2.8rem',
+  height: '2.8rem',
+  flexShrink: 0,
+});
