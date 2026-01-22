@@ -1,5 +1,6 @@
 import HomeClient from '@app/HomeClient';
 import RecommendTempleClient from '@app/RecommendTempleClient';
+import MainBanner from '@components/banner/MainBanner';
 import DetailTitle from '@components/detailTitle/DetailTitle';
 import FilterTypeBoxClient from '@components/filter/filterTypeBox/FilterTypeBoxClient';
 import Footer from '@components/footer/Footer';
@@ -20,6 +21,8 @@ const HomePage = async () => {
       <Header />
       <SearchBar />
       <FilterTypeBoxClient />
+
+      <MainBanner />
 
       <section id="recommend">
         <RecommendTempleClient isLoggedIn={isLoggedIn} />
