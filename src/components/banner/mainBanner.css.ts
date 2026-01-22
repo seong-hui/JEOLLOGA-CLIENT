@@ -6,6 +6,7 @@ export const container = style({
   width: '100%',
   overflow: 'hidden',
   aspectRatio: '375 / 347',
+  marginBottom: '40px',
 });
 
 export const slideList = style({
