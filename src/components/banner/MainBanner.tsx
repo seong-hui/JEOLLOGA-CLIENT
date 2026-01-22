@@ -28,33 +28,33 @@ const MainBanner = () => {
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
+  const moveNext = useCallback(() => {
+    setIsAnimate(true);
+    setCurrentIndex((prev) => prev + 1);
+  }, []);
+
+  const movePrev = useCallback(() => {
+    setIsAnimate(true);
+    setCurrentIndex((prev) => prev - 1);
+  }, []);
+
+  const stopAutoSlide = useCallback(() => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+  }, []);
+
   const startAutoSlide = useCallback(() => {
     stopAutoSlide();
     timerRef.current = setInterval(() => {
       moveNext();
     }, 4000);
-  }, [currentIndex]);
-
-  const stopAutoSlide = () => {
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-    }
-  };
+  }, [moveNext, stopAutoSlide]);
 
   useEffect(() => {
     startAutoSlide();
     return () => stopAutoSlide();
-  }, [startAutoSlide]);
-
-  const moveNext = () => {
-    setIsAnimate(true);
-    setCurrentIndex((prev) => prev + 1);
-  };
-
-  const movePrev = () => {
-    setIsAnimate(true);
-    setCurrentIndex((prev) => prev - 1);
-  };
+  }, [startAutoSlide, stopAutoSlide, currentIndex]);
 
   const handleTransitionEnd = () => {
     if (currentIndex === 0) {
@@ -79,7 +79,7 @@ const MainBanner = () => {
     setCurrentX(e.clientX);
   };
 
-  const handleMouseUp = (e: React.MouseEvent) => {
+  const handleMouseUp = () => {
     if (!isDragging) return;
     setIsDragging(false);
     startAutoSlide();
@@ -128,8 +128,8 @@ const MainBanner = () => {
 
   return (
     <div className={styles.container}>
+      {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
       <div
-        // eslint-disable-next-line jsx-a11y/no-static-element-interactions
         className={styles.slideList}
         style={{
           transform: `translateX(calc(-${currentIndex * 100}% + ${dragOffset}px))`,
