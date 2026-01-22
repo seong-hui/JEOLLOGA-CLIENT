@@ -3,7 +3,7 @@
 export const dynamic = 'force-dynamic';
 
 import useFunnel from '@hooks/useFunnel';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import TestContent from '@components/test/testContent/TestContent';
 import { TEST_STEPS } from '@constants/test';
@@ -15,6 +15,7 @@ import { useRouter } from 'next/navigation';
 import TestHeader from '@components/test/testHeader/TestHeader';
 import { getCookie } from 'cookies-next';
 import ModalContainer from '@components/common/modal/ModalContainer';
+import { getStorageValue } from '@hooks/useLocalStorage';
 
 const TestPage = () => {
   const router = useRouter();
@@ -22,6 +23,11 @@ const TestPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const steps = ['START', ...TEST_STEPS.map((step) => step.id)];
   const hasType = getCookie('hasType');
+  const prevPath = getStorageValue('prevPage') || '';
+
+  useEffect(() => {
+    sessionStorage.removeItem('test-result');
+  }, []);
 
   const { Funnel, Step, nextStep, prevStep, currentStep } = useFunnel(steps);
   const progressStep = steps.indexOf(currentStep);
@@ -30,7 +36,7 @@ const TestPage = () => {
   const isLoading = isPending || isSuccess;
 
   const handleStartClick = () => {
-    if (hasType) {
+    if (hasType === 'true') {
       setIsModalOpen(true);
     } else {
       nextStep();
@@ -64,7 +70,7 @@ const TestPage = () => {
         currentStep={isLoading ? undefined : progressStep}
         totalSteps={isLoading ? undefined : TEST_STEPS.length}
         onBackClick={prevStep}
-        onCloseClick={() => router.push('/')}
+        onCloseClick={() => router.push(prevPath)}
       />
 
       {isLoading ? (

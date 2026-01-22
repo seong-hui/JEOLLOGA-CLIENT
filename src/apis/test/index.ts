@@ -26,6 +26,7 @@ export const usePostTestResult = () => {
         maxAge: 1209600,
       });
 
+      sessionStorage.setItem('test-result', JSON.stringify(data));
       queryClient.setQueryData(['test-result'], data);
       router.push(`/test/result`);
     },

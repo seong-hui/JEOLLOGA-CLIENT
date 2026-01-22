@@ -2,29 +2,39 @@
 
 import React, { useCallback, useRef } from 'react';
 
-import * as styles from './resultPage.css';
-import PageBottomBtn from '@components/common/button/pageBottomBtn/PageBottomBtn';
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+
+import { toPng } from 'html-to-image';
+import { getCookie } from 'cookies-next';
+import { useQueryClient } from '@tanstack/react-query';
+
+import { TestResponse } from '@apis/test/type';
+import PageBottomBtn from '@components/common/button/pageBottomBtn/PageBottomBtn';
 import KakaoBtn from '@components/common/button/kakaoBtn/KakaoBtn';
 import Bubble from '@components/common/bubble/Bubble';
+import PopupBtn from '@components/common/button/popupBtn/PopupBtn';
 import ResultCard from '@components/test/resultCard/ResultCard';
-import { useQueryClient } from '@tanstack/react-query';
-import { TestResponse } from '@apis/test/type';
+import TestHeader from '@components/test/testHeader/TestHeader';
+import ExceptLayout from '@components/except/exceptLayout/ExceptLayout';
+
+import { getStorageValue } from '@hooks/useLocalStorage';
 import getTestType from '@utils/getTestType';
 import { TestType } from '@constants/test';
-import { toPng } from 'html-to-image';
-import TestHeader from '@components/test/testHeader/TestHeader';
-import { useRouter } from 'next/navigation';
-import ExceptLayout from '@components/except/exceptLayout/ExceptLayout';
-import { getCookie } from 'cookies-next';
+
+import * as styles from './resultPage.css';
 
 const ResultPage = () => {
   const cardRef = useRef<HTMLButtonElement>(null);
   const router = useRouter();
   const queryClient = useQueryClient();
   const userNickname = getCookie('userNickname');
+  const prevPath = getStorageValue('prevPage') || '';
 
-  const resultData = queryClient.getQueryData<TestResponse>(['test-result']);
+  const resultData =
+    queryClient.getQueryData<TestResponse>(['test-result']) ||
+    (JSON.parse(sessionStorage.getItem('test-result') || 'null') as TestResponse);
 
   const handleDownload = useCallback(async () => {
     if (!cardRef.current || !resultData) return;
@@ -41,26 +51,50 @@ const ResultPage = () => {
   }, [resultData]);
 
   if (!resultData) {
-    return <ExceptLayout type="testError" />;
+    return (
+      <ExceptLayout type="testError">
+        <div className={styles.exceptButtonWrapper}>
+          <PopupBtn color="gray" label="홈으로 가기" onClick={() => router.push('/')} />
+          <PopupBtn color="green" label="테스트 다시하기" onClick={() => router.push('/test')} />
+        </div>
+      </ExceptLayout>
+    );
   }
 
   const bestMate = getTestType(resultData.bestMate as TestType);
   const worstMate = getTestType(resultData.worstMate as TestType);
 
+  const isMobile =
+    navigator.maxTouchPoints > 1 &&
+    /mobile|android|iphone|ipad|phone/i.test(navigator.userAgent.toLowerCase());
+
   const handleShare = async () => {
-    if (navigator.share) {
-      await navigator.share({
-        text: `나의 템플 캐릭터는 무엇일까요?🌺
+    const url = 'https://www.gototemplestay.com/test';
+
+    if (isMobile && navigator.share) {
+      try {
+        await navigator.share({
+          text: `나의 템플 캐릭터는 무엇일까요?🌺
 성향 테스트 참여하고, 친구와 결과를 공유해보세요!
 테스트를 통해 나와 잘 맞는 템플스테이 메이트를 찾아봐요.\n
-https://www.gototemplestay.com/test`,
-      });
+${url}`,
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(url);
+        alert('링크가 복사되었습니다.');
+      } catch (e) {
+        console.error('링크 복사 실패', e);
+      }
     }
   };
 
   return (
     <div className={styles.page}>
-      <TestHeader onCloseClick={() => router.push('/')} />
+      <TestHeader onCloseClick={() => router.push(prevPath)} />
       <section className={styles.resultSection}>
         <h1 className={styles.title}>{getTestType(resultData.code).name}</h1>
         <h3 className={styles.subtitle}>{resultData.tagline}</h3>
@@ -104,7 +138,9 @@ https://www.gototemplestay.com/test`,
           <PageBottomBtn
             btnText="3초만에 템플스테이 추천받기"
             size="large"
-            onClick={() => router.push('/')}
+            onClick={() => {
+              router.push('/?scrollTo=recommend');
+            }}
           />
         ) : (
           <>
@@ -118,4 +154,6 @@ https://www.gototemplestay.com/test`,
   );
 };
 
-export default ResultPage;
+export default dynamic(() => Promise.resolve(ResultPage), {
+  ssr: false,
+});

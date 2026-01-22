@@ -34,14 +34,17 @@ export const useGetKakaoLogin = () => {
       // 비회원 상태에서 테스트 완료 후 로그인한 경우 테스트 결과 저장
       const type = sessionStorage.getItem('type') as TestType;
 
+      let url = '/';
+
       if (type) {
         try {
           await saveTestResultMutation.mutateAsync(type);
+          url = '/?scrollTo=recommend';
         } finally {
           sessionStorage.removeItem('type');
         }
       }
-      router.push('/');
+      router.push(url);
     },
     onError: (error) => {
       console.error(error);

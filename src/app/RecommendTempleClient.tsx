@@ -14,8 +14,11 @@ import TempleStayCard from '@components/card/templeStayCard/TempleStayCard';
 import ModalContainer from '@components/common/modal/ModalContainer';
 import DetailTitle from '@components/detailTitle/DetailTitle';
 import ExceptLayout from '@components/except/exceptLayout/ExceptLayout';
+import { TestType } from '@constants/test';
 import useNavigateTo from '@hooks/useNavigateTo';
+import useScrollToTarget from '@hooks/useScrollToTarget';
 import { useQueryClient } from '@tanstack/react-query';
+import getTestType from '@utils/getTestType';
 import { getCookie } from 'cookies-next';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -27,27 +30,18 @@ interface RecommendTempleClientProps {
   isLoggedIn: boolean;
 }
 
-const TYPE_IMAGE_MAP: { [key: string]: string } = {
-  EAJ: '/assets/images/test/test_img_large_EAJ.png',
-  EAP: '/assets/images/test/test_img_large_EAP.png',
-  EHJ: '/assets/images/test/test_img_large_EHJ.png',
-  EHP: '/assets/images/test/test_img_large_EHP.png',
-  IAJ: '/assets/images/test/test_img_large_IAJ.png',
-  IAP: '/assets/images/test/test_img_large_IAP.png',
-  IHJ: '/assets/images/test/test_img_large_IHJ.png',
-  IHP: '/assets/images/test/test_img_large_IHP.png',
-};
-
 const RecommendTempleClient = ({ isLoggedIn }: RecommendTempleClientProps) => {
+  useScrollToTarget();
   const queryClient = useQueryClient();
   const addWishlistMutation = useAddWishlistV2();
   const removeWishlistMutation = useRemoveWishlistV2();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { data: myPageData } = useGetMyPage(isLoggedIn);
-  const userType = myPageData?.data?.type;
+  const userType = myPageData?.data?.type as TestType;
   const userName = myPageData?.data?.nickname;
   const hasType = myPageData?.data?.hasType;
+  const userTypeImage = userType ? getTestType(userType)?.image : null;
 
   const { data: typeRecommendData, isLoading: isTypeRecommendLoading } = useGetTypeRecommend(
     isLoggedIn && hasType,
@@ -118,19 +112,17 @@ const RecommendTempleClient = ({ isLoggedIn }: RecommendTempleClientProps) => {
   const isLoading = isLoggedIn && hasType ? isTypeRecommendLoading : isTypeRandomLoading;
 
   const title =
-    isLoggedIn && userName && hasType && userType ? (
+    isLoggedIn && userName && hasType && userType && userTypeImage ? (
       <>
         <div className={titleWithIconStyle}>
           <span>휴식하는 아기 동자</span>
-          {TYPE_IMAGE_MAP[userType] && (
-            <Image
-              src={TYPE_IMAGE_MAP[userType]}
-              alt={userType}
-              width={28}
-              height={28}
-              className={typeIconStyle}
-            />
-          )}
+          <Image
+            src={userTypeImage}
+            alt={userType}
+            width={28}
+            height={28}
+            className={typeIconStyle}
+          />
         </div>
         {userName}님만의 템플스테이 추천
       </>

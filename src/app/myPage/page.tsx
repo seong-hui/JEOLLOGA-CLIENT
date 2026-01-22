@@ -48,16 +48,13 @@ const MyPage = () => {
   const { logClickEvent } = useEventLogger('my');
 
   const handleGoToTest = () => {
+    localStorage.setItem('prevPage', '/myPage');
     router.push('/test');
   };
 
   const handleRecommend = () => {
     router.push('/');
     // router.push('/curation');
-  };
-
-  const handleReTest = () => {
-    router.push('/test');
   };
 
   const handleLogoutClick = () => {
@@ -133,8 +130,8 @@ const MyPage = () => {
           <div className={styles.buttonGroup}>
             {userData.hasType ? (
               <>
+                <PopupBtn color="gray" label="테스트 다시하기" onClick={handleGoToTest} />
                 <PopupBtn color="green" label="절 추천받기" onClick={handleRecommend} />
-                <PopupBtn color="gray" label="테스트 다시하기" onClick={handleReTest} />
               </>
             ) : (
               <PopupBtn color="green" label="성향 테스트하기" onClick={handleGoToTest} />

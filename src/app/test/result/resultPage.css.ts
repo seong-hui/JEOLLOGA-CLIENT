@@ -129,3 +129,8 @@ export const buttonSection = style({
   gap: '1.2rem',
   paddingBottom: '4.4rem',
 });
+
+export const exceptButtonWrapper = style({
+  display: 'flex',
+  gap: '0.9rem',
+});
