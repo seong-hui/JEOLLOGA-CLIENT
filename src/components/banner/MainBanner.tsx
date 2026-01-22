@@ -2,29 +2,38 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 
-import BANNER_DATA from './bannerData';
+import BANNER_DATA, { BannerItem } from './bannerData';
 import * as styles from './mainBanner.css';
 
+type SlideItem = BannerItem & { uniqueKey: string };
+
 const MainBanner = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
   const router = useRouter();
-  const totalSlides = BANNER_DATA.length;
+
+  const slides = [
+    { ...BANNER_DATA[BANNER_DATA.length - 1], uniqueKey: 'clone-last' },
+    ...BANNER_DATA.map((item) => ({ ...item, uniqueKey: `real-${item.id}` })),
+    { ...BANNER_DATA[0], uniqueKey: 'clone-first' },
+  ];
+
+  const totalOriginalSlides = BANNER_DATA.length;
+
+  const [currentIndex, setCurrentIndex] = useState(1);
+  const [isAnimate, setIsAnimate] = useState(true);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [currentX, setCurrentX] = useState(0);
+
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // 5초 자동 슬라이드 설정
-  useEffect(() => {
-    startAutoSlide();
-    return () => stopAutoSlide();
-  }, [currentIndex]);
-
-  const startAutoSlide = () => {
-    stopAutoSlide(); // 기존 타이머 제거 후 재설정
+  const startAutoSlide = useCallback(() => {
+    stopAutoSlide();
     timerRef.current = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % totalSlides);
-    }, 5000);
-  };
+      moveNext();
+    }, 4000);
+  }, [currentIndex]);
 
   const stopAutoSlide = () => {
     if (timerRef.current) {
@@ -32,7 +41,72 @@ const MainBanner = () => {
     }
   };
 
-  const handleBannerClick = (banner: (typeof BANNER_DATA)[0]) => {
+  useEffect(() => {
+    startAutoSlide();
+    return () => stopAutoSlide();
+  }, [startAutoSlide]);
+
+  const moveNext = () => {
+    setIsAnimate(true);
+    setCurrentIndex((prev) => prev + 1);
+  };
+
+  const movePrev = () => {
+    setIsAnimate(true);
+    setCurrentIndex((prev) => prev - 1);
+  };
+
+  const handleTransitionEnd = () => {
+    if (currentIndex === 0) {
+      setIsAnimate(false);
+      setCurrentIndex(totalOriginalSlides);
+    } else if (currentIndex === slides.length - 1) {
+      setIsAnimate(false);
+      setCurrentIndex(1);
+    }
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    stopAutoSlide();
+    setIsDragging(true);
+    setStartX(e.clientX);
+    setCurrentX(e.clientX);
+    setIsAnimate(false);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    setCurrentX(e.clientX);
+  };
+
+  const handleMouseUp = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    startAutoSlide();
+
+    const diff = currentX - startX;
+    const threshold = 50;
+
+    if (diff < -threshold) {
+      moveNext();
+    } else if (diff > threshold) {
+      movePrev();
+    } else {
+      setIsAnimate(true);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (isDragging) {
+      setIsDragging(false);
+      setIsAnimate(true);
+      startAutoSlide();
+    }
+  };
+
+  const handleBannerClick = (banner: SlideItem) => {
+    if (Math.abs(currentX - startX) > 5) return;
+
     if (banner.type === 'internal') {
       router.push(banner.link);
     } else {
@@ -40,44 +114,55 @@ const MainBanner = () => {
     }
   };
 
-  const handleKeyDown = (
-    e: React.KeyboardEvent<HTMLDivElement>,
-    banner: (typeof BANNER_DATA)[0],
-  ) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>, banner: SlideItem) => {
     if (e.key === 'Enter' || e.key === ' ') {
       handleBannerClick(banner);
     }
   };
 
+  let displayIndex = currentIndex;
+  if (currentIndex === 0) displayIndex = totalOriginalSlides;
+  else if (currentIndex === slides.length - 1) displayIndex = 1;
+
+  const dragOffset = isDragging ? currentX - startX : 0;
+
   return (
     <div className={styles.container}>
       <div
+        // eslint-disable-next-line jsx-a11y/no-static-element-interactions
         className={styles.slideList}
-        style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-        onMouseEnter={stopAutoSlide} // 마우스 올리면 멈춤
-        onMouseLeave={startAutoSlide}>
-        {BANNER_DATA.map((banner) => (
+        style={{
+          transform: `translateX(calc(-${currentIndex * 100}% + ${dragOffset}px))`,
+          transition: isAnimate ? 'transform 0.5s ease-in-out' : 'none',
+        }}
+        onTransitionEnd={handleTransitionEnd}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseLeave}>
+        {slides.map((banner) => (
           <div
-            key={banner.id}
+            key={banner.uniqueKey}
             className={styles.slideItem}
             onClick={() => handleBannerClick(banner)}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => handleKeyDown(e, banner)}
-            aria-label={`${banner.alt} 배너로 이동`}>
+            aria-label={`${banner.alt} 배너로 이동`}
+            onDragStart={(e) => e.preventDefault()}>
             <Image
               src={banner.thumbnailImage}
               alt={banner.alt}
               fill
               className={styles.bannerImage}
-              priority={banner.id === 1} // 첫번째 이미지는 우선 로딩
+              priority={banner.id === 1 && banner.uniqueKey.startsWith('real')}
             />
           </div>
         ))}
       </div>
 
       <div className={styles.counterBadge}>
-        {currentIndex + 1} / {totalSlides}
+        {displayIndex} / {totalOriginalSlides}
       </div>
     </div>
   );
