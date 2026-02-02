@@ -52,3 +52,28 @@ export const typeIconStyle = style({
   height: '2.8rem',
   flexShrink: 0,
 });
+
+export const searchInput = style({
+  flex: 1,
+  background: 'transparent',
+  ...theme.FONTS.c6R13,
+  cursor: 'pointer',
+
+  selectors: {
+    '&::placeholder': {
+      color: theme.COLORS.gray7,
+    },
+  },
+});
+
+export const searchWrapper = style({
+  display: 'flex',
+  alignItems: 'center',
+  width: '33.5rem',
+  height: '4rem',
+  padding: '1.2rem',
+  borderRadius: 8,
+  backgroundColor: theme.COLORS.gray1,
+  cursor: 'pointer',
+  marginTop: '1.2rem',
+});
