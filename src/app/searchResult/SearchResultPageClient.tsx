@@ -23,9 +23,12 @@ import useEventLogger from 'src/gtm/hooks/useEventLogger';
 
 import * as styles from './searchResultPage.css';
 import Icon from '@assets/svgs';
+import { filterListInstance, priceAtom } from 'src/store/store';
+import { useSetAtom } from 'jotai';
 
 export default function SearchResultPageClient() {
   const searchParams = useSearchParams();
+  const setPrice = useSetAtom(priceAtom);
 
   const getJoinedArrayParam = (key: string): string | undefined => {
     const values = searchParams.getAll(key);
@@ -100,6 +103,21 @@ export default function SearchResultPageClient() {
     updateSearchParams({ ...queryParams, page: 1, sort: option });
   };
 
+  const handleResetGroup = (groupKey: string) => {
+    const newParams: Record<string, string | number | undefined> = { ...queryParams };
+
+    if (groupKey === 'price') {
+      setPrice({ minPrice: 0, maxPrice: 30 });
+      newParams.min = 0;
+      newParams.max = 30;
+    } else {
+      filterListInstance.resetGroup(groupKey);
+      newParams[groupKey] = undefined;
+    }
+
+    updateSearchParams({ ...newParams, page: 1 });
+  };
+
   const navigateToLogin = useNavigateTo('/loginStart');
   const { logClickEvent } = useEventLogger('searchReault');
 
@@ -136,7 +154,7 @@ export default function SearchResultPageClient() {
 
       <div className={styles.headerContainer}>
         <SearchHeader searchText={searchText} prevPath={prevPath} />
-        <FilterTypeBox activeFilters={activeFilters} />
+        <FilterTypeBox activeFilters={activeFilters} onResetGroup={handleResetGroup} />
       </div>
 
       {templestays.length === 0 ? (

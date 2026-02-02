@@ -8,9 +8,10 @@ import * as styles from './filterTypeBox.css';
 
 interface FilterTypeBoxProps {
   activeFilters: string[];
+  onResetGroup?: (group: string) => void;
 }
 
-const FilterTypeBox = ({ activeFilters }: FilterTypeBoxProps) => {
+const FilterTypeBox = ({ activeFilters, onResetGroup }: FilterTypeBoxProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedTap, setSelectedTap] = useState<string>('region');
 
@@ -37,6 +38,10 @@ const FilterTypeBox = ({ activeFilters }: FilterTypeBoxProps) => {
               label={label}
               isActive={activeFilters.includes(key)}
               onClick={() => handleClickFilter(key)}
+              rightIcon={
+                activeFilters.includes(key) && onResetGroup ? 'IcnCloseSmallGray' : undefined
+              }
+              onRightIconClick={() => onResetGroup?.(key)}
             />
           );
         })}
