@@ -15,6 +15,8 @@ import Icon from '@assets/svgs';
 const HomePage = async () => {
   const cookieStore = await cookies();
   const userName = cookieStore.get('userNickname')?.value;
+  const hasType = cookieStore.get('hasType')?.value;
+
   const isLoggedIn = !!userName;
 
   return (
@@ -37,7 +39,11 @@ const HomePage = async () => {
         <RecommendTempleClient isLoggedIn={isLoggedIn} />
       </section>
 
-      <TestBanner />
+      {hasType === 'false' && (
+        <div className={styles.testBannerWrapper}>
+          <TestBanner />
+        </div>
+      )}
 
       <div className={styles.popularCarouselStyle}>
         <DetailTitle

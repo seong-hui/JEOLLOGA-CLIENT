@@ -6,7 +6,6 @@ const container = style({
   gap: '7px',
   width: '100%',
   marginTop: '1.2rem',
-  marginBottom: '5.4rem',
 });
 
 export default { container };

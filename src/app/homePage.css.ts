@@ -77,3 +77,7 @@ export const searchWrapper = style({
   cursor: 'pointer',
   marginTop: '1.2rem',
 });
+
+export const testBannerWrapper = style({
+  marginTop: '5.4rem',
+});
