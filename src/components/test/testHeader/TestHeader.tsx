@@ -28,7 +28,7 @@ const TestHeader = ({
 
     if (showProgressBar && currentStep >= 1) {
       return (
-        <button className={styles.backButton} onClick={onBackClick}>
+        <button className={styles.headerButton} onClick={onBackClick}>
           <Icon.IcnArrowBlackLeft />
         </button>
       );
@@ -45,9 +45,9 @@ const TestHeader = ({
     <div className={styles.headerContainer}>
       <div className={styles.headerTop}>
         {renderLeftIcon()}
-
+        <h2 className={styles.title}>나의 템플 캐릭터는?</h2>
         {onCloseClick && (
-          <button onClick={onCloseClick} className={styles.closeButton}>
+          <button onClick={onCloseClick} className={styles.headerButton}>
             <Icon.IcnCloseLargeGray />
           </button>
         )}

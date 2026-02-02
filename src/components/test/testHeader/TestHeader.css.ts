@@ -11,20 +11,26 @@ export const headerContainer = style({
   height: '6.4rem',
 });
 
-export const backButton = style({
+export const headerButton = style({
   width: '4rem',
   height: '4rem',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  flexShrink: 0,
 });
 
 export const headerTop = style({
   display: 'flex',
-  justifyContent: 'space-between',
-  height: '100%',
   alignItems: 'center',
+  height: '100%',
   width: '100%',
   padding: '0 1.2rem',
 });
 
-export const closeButton = style({
-  marginLeft: 'auto',
+export const title = style({
+  flex: 1,
+  textAlign: 'center',
+  color: theme.COLORS.gray11,
+  ...theme.FONTS.b6M16,
 });
