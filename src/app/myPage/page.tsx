@@ -92,7 +92,7 @@ const MyPage = () => {
   return (
     <div className={styles.myPageWrapper}>
       <div className={styles.userInfoContainer}>
-        <PageName title="마이페이지" />
+        <PageName title="마이페이지" isBackToHome />
 
         <section className={styles.resultSection}>
           <div className={styles.cardWrapper}>
