@@ -22,11 +22,12 @@ const TestHeader = ({
   const router = useRouter();
 
   const showProgressBar = currentStep !== undefined && totalSteps !== undefined;
+  const showBackButton = showProgressBar && currentStep >= 1;
 
   const renderLeftIcon = () => {
     if (isLoading) return null;
 
-    if (showProgressBar && currentStep >= 1) {
+    if (showBackButton) {
       return (
         <button className={styles.headerButton} onClick={onBackClick}>
           <Icon.IcnArrowBlackLeft />
@@ -45,9 +46,9 @@ const TestHeader = ({
     <div className={styles.headerContainer}>
       <div className={styles.headerTop}>
         {renderLeftIcon()}
-        <h2 className={styles.title}>나의 템플 캐릭터는?</h2>
+        {showBackButton && <h2 className={styles.title}>나의 템플 캐릭터는?</h2>}
         {onCloseClick && (
-          <button onClick={onCloseClick} className={styles.headerButton}>
+          <button onClick={onCloseClick} className={`${styles.headerButton} ${styles.closeButton}`}>
             <Icon.IcnCloseLargeGray />
           </button>
         )}

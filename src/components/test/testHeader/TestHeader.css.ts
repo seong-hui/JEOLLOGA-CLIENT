@@ -34,3 +34,7 @@ export const title = style({
   color: theme.COLORS.gray11,
   ...theme.FONTS.b6M16,
 });
+
+export const closeButton = style({
+  marginLeft: 'auto',
+});
