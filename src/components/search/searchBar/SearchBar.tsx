@@ -25,6 +25,12 @@ const SearchBar = ({ searchText }: SearchBarProps) => {
     }
   };
 
+  const handleClearInput = () => {
+    setInputValue('');
+
+    logClickEvent('click_delete', { label: inputValue });
+  };
+
   const handleClickSearch = () => {
     if (inputValue.trim() === '') return;
 
@@ -51,14 +57,6 @@ const SearchBar = ({ searchText }: SearchBarProps) => {
   return (
     <div className={styles.searchBarContainer}>
       <div className={styles.searchBarLayout}>
-        <input
-          className={styles.inputStyle}
-          placeholder="찾으시려는 템플스테이의 키워드를 검색해 보세요"
-          value={inputValue}
-          onChange={handleChangeInput}
-          onKeyDown={handleKeyDown}
-          maxLength={10}
-        />
         <div
           className={styles.pointer}
           role="button"
@@ -67,10 +65,18 @@ const SearchBar = ({ searchText }: SearchBarProps) => {
           onKeyDown={(e) => e.key === 'Enter' && handleClickSearch()}>
           <Icon.IcnSearchMediumGray />
         </div>
+        <input
+          className={styles.inputStyle}
+          placeholder="사찰명을 입력해 주세요"
+          value={inputValue}
+          onChange={handleChangeInput}
+          onKeyDown={handleKeyDown}
+          maxLength={10}
+        />
       </div>
-      {/* <button className={styles.pointer} onClick={() => handleClearInput()}>
+      <button className={styles.pointer} onClick={() => handleClearInput()}>
         <Icon.IcnCloseLargeGray />
-      </button> */}
+      </button>
     </div>
   );
 };
