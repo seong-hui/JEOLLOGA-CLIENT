@@ -16,9 +16,10 @@ import * as styles from './filterModalContent.css';
 interface Props {
   onComplete?: () => void;
   scrollRef: React.RefObject<HTMLDivElement>;
+  searchText?: string;
 }
 
-const FilterModalContent = ({ onComplete, scrollRef }: Props) => {
+const FilterModalContent = ({ onComplete, scrollRef, searchText }: Props) => {
   const { toggleFilter, handleResetFilter, handleSearch } = useFilter();
   const { logClickEvent } = useEventLogger('filter_tag');
   const [price, setPrice] = useAtom(priceAtom);
@@ -34,6 +35,7 @@ const FilterModalContent = ({ onComplete, scrollRef }: Props) => {
     };
 
     return {
+      search: searchText,
       region: getFilterValue(selectedFilters.region),
       type: getFilterValue(selectedFilters.type),
       activity: getFilterValue(selectedFilters.activity),
@@ -43,7 +45,7 @@ const FilterModalContent = ({ onComplete, scrollRef }: Props) => {
       page: 1,
       size: 5,
     };
-  }, [price, filtersState]);
+  }, [price, filtersState, searchText]);
 
   const { data } = useFetchFilteredListV2(currentSearchParams);
   const totalCount = data?.totalElements || 0;
@@ -66,6 +68,7 @@ const FilterModalContent = ({ onComplete, scrollRef }: Props) => {
       ...selectedFilters,
       min: price.minPrice,
       max: price.maxPrice,
+      search: searchText,
     };
     handleSearch(searchParams);
     logClickEvent('click_list', { label: '' });

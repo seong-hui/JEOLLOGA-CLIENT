@@ -9,12 +9,14 @@ interface FilterBottomSheetModalProps {
   selectedTap: string;
   handleCloseModal: () => void;
   isOpen: boolean;
+  searchText?: string;
 }
 
 const FilterBottomSheetModal = ({
   selectedTap,
   handleCloseModal,
   isOpen,
+  searchText,
 }: FilterBottomSheetModalProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -32,7 +34,11 @@ const FilterBottomSheetModal = ({
           />
         </>
       }>
-      <FilterModalContent onComplete={handleCloseModal} scrollRef={scrollRef} />
+      <FilterModalContent
+        onComplete={handleCloseModal}
+        scrollRef={scrollRef}
+        searchText={searchText}
+      />
     </BottomSheet>
   );
 };

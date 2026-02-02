@@ -12,6 +12,7 @@ import Pagination from '@components/common/pagination/Pagination';
 import ExceptLayout from '@components/except/exceptLayout/ExceptLayout';
 import FilterTypeBox from '@components/filter/filterTypeBox/FilterTypeBox';
 import SearchHeader from '@components/search/searchHeader/SearchHeader';
+import Header from '@components/header/Header';
 import { SortOption, SORT_LABELS, SORT_OPTIONS } from '@constants/sort';
 import { getStorageValue } from '@hooks/useLocalStorage';
 import useNavigateTo from '@hooks/useNavigateTo';
@@ -153,8 +154,12 @@ export default function SearchResultPageClient() {
       )}
 
       <div className={styles.headerContainer}>
-        <SearchHeader searchText={searchText} prevPath={prevPath} />
-        <FilterTypeBox activeFilters={activeFilters} onResetGroup={handleResetGroup} />
+        {searchText ? <SearchHeader searchText={searchText} prevPath={prevPath} /> : <Header />}
+        <FilterTypeBox
+          activeFilters={activeFilters}
+          onResetGroup={handleResetGroup}
+          searchText={searchText}
+        />
       </div>
 
       {templestays.length === 0 ? (

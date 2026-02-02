@@ -9,9 +9,10 @@ import * as styles from './filterTypeBox.css';
 interface FilterTypeBoxProps {
   activeFilters: string[];
   onResetGroup?: (group: string) => void;
+  searchText?: string;
 }
 
-const FilterTypeBox = ({ activeFilters, onResetGroup }: FilterTypeBoxProps) => {
+const FilterTypeBox = ({ activeFilters, onResetGroup, searchText }: FilterTypeBoxProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedTap, setSelectedTap] = useState<string>('region');
 
@@ -49,6 +50,7 @@ const FilterTypeBox = ({ activeFilters, onResetGroup }: FilterTypeBoxProps) => {
           selectedTap={selectedTap}
           isOpen={isOpen}
           handleCloseModal={handleCloseModal}
+          searchText={searchText}
         />
       </div>
     </div>
