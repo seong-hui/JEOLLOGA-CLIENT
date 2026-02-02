@@ -164,7 +164,7 @@ export default function SearchResultPageClient() {
 
       {templestays.length === 0 ? (
         <div className={styles.emptyContainer}>
-          <SearchEmpty text={searchText} />
+          <SearchEmpty text={searchText || undefined} />
         </div>
       ) : (
         <div className={styles.bodyContainer}>

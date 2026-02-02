@@ -6,7 +6,7 @@ import React from 'react';
 import * as styles from './searchEmpty.css';
 
 interface SearchEmptyProps {
-  text: string;
+  text?: string;
 }
 
 const SearchEmpty = ({ text }: SearchEmptyProps) => {
@@ -14,7 +14,13 @@ const SearchEmpty = ({ text }: SearchEmptyProps) => {
     <div>
       <div className={styles.container}>
         <p className={styles.textStyle}>
-          '<span className={styles.highlight}>{`${text}`}</span>'{'에 대한\n검색 결과가 없어요'}
+          {text ? (
+            <>
+              '<span className={styles.highlight}>{`${text}`}</span>'{'에 대한\n검색 결과가 없어요'}
+            </>
+          ) : (
+            '해당되는 템플스테이를\n찾지 못했어요'
+          )}
         </p>
         <LottiePlayer
           keyId="search"
