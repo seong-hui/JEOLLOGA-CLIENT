@@ -22,6 +22,7 @@ import { useState } from 'react';
 import useEventLogger from 'src/gtm/hooks/useEventLogger';
 
 import * as styles from './searchResultPage.css';
+import Icon from '@assets/svgs';
 
 export default function SearchResultPageClient() {
   const searchParams = useSearchParams();
@@ -163,7 +164,7 @@ export default function SearchResultPageClient() {
                       onClick={() => handleSortChange(value)}
                       className={`${styles.sortOptionButton} ${isActive && styles.active}`}>
                       {SORT_LABELS[value as SortOption]}
-                      {isActive && '✔️'}
+                      {isActive && <Icon.IcnCheckBlack />}
                     </button>
                   );
                 })}
