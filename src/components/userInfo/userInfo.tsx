@@ -19,12 +19,12 @@ interface UserInfoProps {
 const UserInfo = ({ data, onLogoutClick, onDeleteClick }: UserInfoProps) => {
   const { logClickEvent } = useEventLogger('my');
   const handleNoticeClick = () => {
-    window.open('https://www.notion.so/1817c7beb7788076bdddfd4ba4b43008?pvs=4', '_blank');
+    window.open('https://plucky-chicory-985.notion.site/gototemplestay-notices', '_blank');
     logClickEvent('click_announce');
   };
 
   const handleQuestionClick = () => {
-    window.open('https://www.notion.so/1807c7beb7788005a73bc799ce8719bf?pvs=4', '_blank');
+    window.open('https://forms.gle/Rx7gXQMP2qhWNFPK7', '_blank');
     logClickEvent('click_contact');
   };
 
