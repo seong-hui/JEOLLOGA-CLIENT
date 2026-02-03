@@ -16,7 +16,7 @@ const SearchEmpty = ({ text }: SearchEmptyProps) => {
         <p className={styles.textStyle}>
           {text ? (
             <>
-              '<span className={styles.highlight}>{`${text}`}</span>'{'에 대한\n검색 결과가 없어요'}
+              '<span className={styles.highlight}>{`${text}`}</span>'에 대한 검색 결과가 없어요
             </>
           ) : (
             '해당되는 템플스테이를\n찾지 못했어요'
