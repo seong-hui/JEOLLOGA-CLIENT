@@ -109,7 +109,7 @@ const TestPage = () => {
           modalTitle="성향테스트를 이미 받으셨어요!"
           modalBody="다시 받고싶으시다면 ‘다시하기’를 눌러주세요"
           isOpen={isModalOpen}
-          handleClose={() => setIsModalOpen(false)}
+          handleClose={() => router.push(prevPath)}
           handleSubmit={() => {
             setIsModalOpen(false);
             nextStep();
