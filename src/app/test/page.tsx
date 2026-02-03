@@ -22,16 +22,18 @@ const TestPage = () => {
   const [selections, setSelections] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const steps = ['START', ...TEST_STEPS.map((step) => step.id)];
-  const [initialHasType] = useState(() => getCookie('hasType') === 'true');
   const prevPath = getStorageValue('prevPage') || '';
 
   useEffect(() => {
     sessionStorage.removeItem('test-result');
 
-    if (initialHasType) {
+    const nickname = getCookie('userNickname');
+    const hasType = getCookie('hasType') === 'true';
+
+    if (nickname && hasType) {
       setIsModalOpen(true);
     }
-  }, [initialHasType]);
+  }, []);
 
   const { Funnel, Step, nextStep, prevStep, currentStep } = useFunnel(steps);
   const progressStep = steps.indexOf(currentStep);
