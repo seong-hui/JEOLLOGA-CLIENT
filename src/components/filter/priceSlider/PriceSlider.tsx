@@ -1,7 +1,7 @@
 'use client';
 import debounce from '@hooks/debounce';
 import { useAtom } from 'jotai';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { priceAtom } from 'src/store/store';
 
 import * as styles from './priceSlider.css';
@@ -11,6 +11,10 @@ const PriceSlider = () => {
   const MAX_PRICE = 30;
   const [price, setPrice] = useAtom(priceAtom);
   const [localPrice, setLocalPrice] = useState(price);
+
+  useEffect(() => {
+    setLocalPrice(price);
+  }, [price]);
 
   // 디바운스 처리한 price 업데이트 핸들러
   const handleDebounceSetPrice = useCallback(
