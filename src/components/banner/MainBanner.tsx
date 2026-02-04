@@ -120,6 +120,38 @@ const MainBanner = () => {
     }
   };
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    stopAutoSlide();
+    setIsDragging(true);
+    const touchX = e.touches[0].clientX;
+    setStartX(touchX);
+    setCurrentX(touchX);
+    setIsAnimate(false);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging) return;
+    const touchX = e.touches[0].clientX;
+    setCurrentX(touchX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    startAutoSlide();
+
+    const diff = currentX - startX;
+    const threshold = 50;
+
+    if (diff < -threshold) {
+      moveNext();
+    } else if (diff > threshold) {
+      movePrev();
+    } else {
+      setIsAnimate(true);
+    }
+  };
+
   let displayIndex = currentIndex;
   if (currentIndex === 0) displayIndex = totalOriginalSlides;
   else if (currentIndex === slides.length - 1) displayIndex = 1;
@@ -139,7 +171,10 @@ const MainBanner = () => {
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseLeave}>
+        onMouseLeave={handleMouseLeave}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}>
         {slides.map((banner) => (
           <div
             key={banner.uniqueKey}
