@@ -16,6 +16,8 @@ export const textStyle = style({
   marginBottom: '5rem',
   width: '23.4rem',
   whiteSpace: 'pre-line',
+  wordBreak: 'keep-all',
+  overflowWrap: 'break-word',
 });
 
 export const highlight = style({

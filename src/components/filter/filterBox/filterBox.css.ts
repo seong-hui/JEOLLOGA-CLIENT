@@ -19,3 +19,9 @@ export const buttonWrapper = style({
   gap: '0.8rem',
   flexWrap: 'wrap',
 });
+
+export const helperText = style({
+  color: theme.COLORS.gray6,
+  ...theme.FONTS.c2R14,
+  marginTop: '-2.2rem',
+});

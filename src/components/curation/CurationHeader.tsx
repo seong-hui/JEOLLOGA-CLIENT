@@ -14,7 +14,9 @@ const CurationHeader = () => {
   return (
     <div className={styles.headerContainer}>
       <div className={styles.headerTop}>
-        <Icon.SmallLogo />
+        <button onClick={() => router.push('/')}>
+          <Icon.SmallLogo />
+        </button>
 
         <button onClick={handleClose}>
           <Icon.IcnCloseLargeGray />

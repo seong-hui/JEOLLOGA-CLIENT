@@ -61,6 +61,14 @@ class FilterList {
 
     return selectedFilters;
   }
+
+  resetGroup(groupName: string): void {
+    this.filters.forEach((filter) => {
+      if (filter.getGroup() === groupName) {
+        filter.setState(0);
+      }
+    });
+  }
 }
 
 export default FilterList;

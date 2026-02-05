@@ -8,9 +8,11 @@ import * as styles from './filterTypeBox.css';
 
 interface FilterTypeBoxProps {
   activeFilters: string[];
+  onResetGroup?: (group: string) => void;
+  searchText?: string;
 }
 
-const FilterTypeBox = ({ activeFilters }: FilterTypeBoxProps) => {
+const FilterTypeBox = ({ activeFilters, onResetGroup, searchText }: FilterTypeBoxProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedTap, setSelectedTap] = useState<string>('region');
 
@@ -37,6 +39,10 @@ const FilterTypeBox = ({ activeFilters }: FilterTypeBoxProps) => {
               label={label}
               isActive={activeFilters.includes(key)}
               onClick={() => handleClickFilter(key)}
+              rightIcon={
+                activeFilters.includes(key) && onResetGroup ? 'IcnCloseSmallGray' : undefined
+              }
+              onRightIconClick={() => onResetGroup?.(key)}
             />
           );
         })}
@@ -44,6 +50,7 @@ const FilterTypeBox = ({ activeFilters }: FilterTypeBoxProps) => {
           selectedTap={selectedTap}
           isOpen={isOpen}
           handleCloseModal={handleCloseModal}
+          searchText={searchText}
         />
       </div>
     </div>

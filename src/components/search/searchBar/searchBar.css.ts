@@ -7,7 +7,7 @@ export const searchBarContainer = style({
   alignItems: 'center',
   gap: '0.6rem',
 
-  width: '33.5rem',
+  width: '29.5rem',
   height: '4.4rem',
   padding: '1rem 0.8rem',
   borderRadius: 8,
@@ -23,14 +23,13 @@ export const searchBarLayout = style({
   justifyContent: 'space-between',
   gap: '0.6rem',
 
-  width: '100%',
+  width: '24.9rem',
   height: '2.4rem',
 });
 
 export const inputStyle = style({
-  width: '26rem',
+  width: '21.9rem',
   backgroundColor: 'inherit',
-  ...theme.FONTS.c6R13,
 
   selectors: {
     '&::placeholder': {

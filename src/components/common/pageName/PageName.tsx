@@ -7,14 +7,14 @@ import * as PageNameStyle from './pageName.css';
 
 interface PageNameProps {
   title: string;
-  isPrivate?: boolean;
+  isBackToHome?: boolean;
 }
 
-const PageName = ({ title, isPrivate }: PageNameProps) => {
+const PageName = ({ title, isBackToHome }: PageNameProps) => {
   const router = useRouter();
 
   const handleToBack = () => {
-    if (isPrivate) {
+    if (isBackToHome) {
       router.push('/');
     } else {
       router.back();

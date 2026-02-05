@@ -5,21 +5,32 @@ import DetailTitle from '@components/detailTitle/DetailTitle';
 import FilterTypeBoxClient from '@components/filter/filterTypeBox/FilterTypeBoxClient';
 import Footer from '@components/footer/Footer';
 import Header from '@components/header/Header';
-import SearchBar from '@components/search/searchBar/SearchBar';
 import TestBanner from '@components/test/testBanner/TestBanner';
 import { cookies } from 'next/headers';
 
 import * as styles from './homePage.css';
+import Link from 'next/link';
+import Icon from '@assets/svgs';
 
 const HomePage = async () => {
   const cookieStore = await cookies();
   const userName = cookieStore.get('userNickname')?.value;
+  const hasType = cookieStore.get('hasType')?.value;
+
   const isLoggedIn = !!userName;
 
   return (
     <div className={styles.homeWrapper}>
       <Header />
-      <SearchBar />
+      <Link href="/search" className={styles.searchWrapper}>
+        <input
+          className={styles.searchInput}
+          placeholder="찾으시는 템플스테이의 키워드를 검색해보세요"
+          readOnly
+        />
+        <Icon.IcnSearchMediumGray />
+      </Link>
+
       <FilterTypeBoxClient />
 
       <MainBanner />
@@ -28,7 +39,11 @@ const HomePage = async () => {
         <RecommendTempleClient isLoggedIn={isLoggedIn} />
       </section>
 
-      <TestBanner />
+      {hasType !== 'true' && (
+        <div className={styles.testBannerWrapper}>
+          <TestBanner />
+        </div>
+      )}
 
       <div className={styles.popularCarouselStyle}>
         <DetailTitle

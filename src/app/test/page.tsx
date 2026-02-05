@@ -22,26 +22,26 @@ const TestPage = () => {
   const [selections, setSelections] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const steps = ['START', ...TEST_STEPS.map((step) => step.id)];
-  const hasType = getCookie('hasType');
   const prevPath = getStorageValue('prevPage') || '';
-
-  useEffect(() => {
-    sessionStorage.removeItem('test-result');
-  }, []);
 
   const { Funnel, Step, nextStep, prevStep, currentStep } = useFunnel(steps);
   const progressStep = steps.indexOf(currentStep);
 
+  useEffect(() => {
+    sessionStorage.removeItem('test-result');
+
+    if (currentStep !== 'START') return;
+
+    const nickname = getCookie('userNickname');
+    const hasType = getCookie('hasType') === 'true';
+
+    if (nickname && hasType) {
+      setIsModalOpen(true);
+    }
+  }, [currentStep]);
+
   const { mutate, isPending, isSuccess } = usePostTestResult();
   const isLoading = isPending || isSuccess;
-
-  const handleStartClick = () => {
-    if (hasType === 'true') {
-      setIsModalOpen(true);
-    } else {
-      nextStep();
-    }
-  };
 
   const handleSelect = (choice: string) => {
     const currentStepIndex = steps.indexOf(currentStep) - 1;
@@ -90,7 +90,7 @@ const TestPage = () => {
           <Funnel steps={steps}>
             {[
               <Step key="START" name="START">
-                <TestStart onClick={handleStartClick} />
+                <TestStart onClick={() => nextStep()} />
               </Step>,
 
               ...TEST_STEPS.map(({ id, title, option1, option2 }) => (
@@ -113,7 +113,7 @@ const TestPage = () => {
           modalTitle="성향테스트를 이미 받으셨어요!"
           modalBody="다시 받고싶으시다면 ‘다시하기’를 눌러주세요"
           isOpen={isModalOpen}
-          handleClose={() => setIsModalOpen(false)}
+          handleClose={() => router.push(prevPath)}
           handleSubmit={() => {
             setIsModalOpen(false);
             nextStep();
