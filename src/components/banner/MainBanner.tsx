@@ -24,6 +24,7 @@ const MainBanner = () => {
   const [isAnimate, setIsAnimate] = useState(true);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
+  const [startY, setStartY] = useState(0);
   const [currentX, setCurrentX] = useState(0);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -124,7 +125,9 @@ const MainBanner = () => {
     stopAutoSlide();
     setIsDragging(true);
     const touchX = e.touches[0].clientX;
+    const touchY = e.touches[0].clientY;
     setStartX(touchX);
+    setStartY(touchY);
     setCurrentX(touchX);
     setIsAnimate(false);
   };
@@ -132,11 +135,26 @@ const MainBanner = () => {
   const handleTouchMove = (e: React.TouchEvent) => {
     if (!isDragging) return;
     const touchX = e.touches[0].clientX;
+    const touchY = e.touches[0].clientY;
+
+    const diffX = Math.abs(touchX - startX);
+    const diffY = Math.abs(touchY - startY);
+
+    // 스크롤 의도 파악
+    if (diffY > diffX && diffY > 10) {
+      setIsDragging(false);
+      return;
+    }
+
     setCurrentX(touchX);
   };
 
   const handleTouchEnd = () => {
-    if (!isDragging) return;
+    if (!isDragging) {
+      startAutoSlide();
+      return;
+    }
+
     setIsDragging(false);
     startAutoSlide();
 
@@ -166,6 +184,7 @@ const MainBanner = () => {
         style={{
           transform: `translateX(calc(-${currentIndex * 100}% + ${dragOffset}px))`,
           transition: isAnimate ? 'transform 0.5s ease-in-out' : 'none',
+          touchAction: 'pan-y',
         }}
         onTransitionEnd={handleTransitionEnd}
         onMouseDown={handleMouseDown}
