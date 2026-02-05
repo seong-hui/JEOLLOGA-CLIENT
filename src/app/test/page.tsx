@@ -24,8 +24,13 @@ const TestPage = () => {
   const steps = ['START', ...TEST_STEPS.map((step) => step.id)];
   const prevPath = getStorageValue('prevPage') || '';
 
+  const { Funnel, Step, nextStep, prevStep, currentStep } = useFunnel(steps);
+  const progressStep = steps.indexOf(currentStep);
+
   useEffect(() => {
     sessionStorage.removeItem('test-result');
+
+    if (currentStep !== 'START') return;
 
     const nickname = getCookie('userNickname');
     const hasType = getCookie('hasType') === 'true';
@@ -33,10 +38,7 @@ const TestPage = () => {
     if (nickname && hasType) {
       setIsModalOpen(true);
     }
-  }, []);
-
-  const { Funnel, Step, nextStep, prevStep, currentStep } = useFunnel(steps);
-  const progressStep = steps.indexOf(currentStep);
+  }, [currentStep]);
 
   const { mutate, isPending, isSuccess } = usePostTestResult();
   const isLoading = isPending || isSuccess;
