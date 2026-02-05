@@ -39,7 +39,7 @@ const HomePage = async () => {
         <RecommendTempleClient isLoggedIn={isLoggedIn} />
       </section>
 
-      {hasType === 'false' && (
+      {hasType !== 'true' && (
         <div className={styles.testBannerWrapper}>
           <TestBanner />
         </div>
