@@ -72,7 +72,6 @@ const useFilter = () => {
   // 필터 초기화
   const handleResetFilter = async () => {
     filterListInstance.resetAllStates();
-    router.replace('/searchResult');
 
     queryClient.invalidateQueries({ queryKey: ['filteredList'], exact: false });
   };

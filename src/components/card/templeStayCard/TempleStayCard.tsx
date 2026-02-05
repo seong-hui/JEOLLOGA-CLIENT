@@ -13,6 +13,7 @@ import * as styles from './templeStayCard.css';
 interface TempleStayCardProps {
   item: WishItemV2;
   layout: 'vertical' | 'horizontal';
+  size?: 'default' | 'small';
   onToggleWishlist: (templestayId: number, currentLiked: boolean) => void;
   onRequireLogin?: () => void;
   link: string;
@@ -21,6 +22,7 @@ interface TempleStayCardProps {
 const TempleStayCard = ({
   item,
   layout,
+  size = 'default',
   onToggleWishlist,
   link,
   onRequireLogin,
@@ -29,7 +31,6 @@ const TempleStayCard = ({
 
   const { logClickEvent } = useEventLogger('templestay_card');
   const pathname = usePathname();
-  const isHorizontal = layout === 'horizontal';
   const isWishPage = pathname === '/wishList';
 
   const onClickWishBtn = (e: React.MouseEvent) => {
@@ -54,16 +55,16 @@ const TempleStayCard = ({
   return (
     <a
       href={link}
-      className={isHorizontal ? styles.horizontalContainer : styles.verticalContainer}
+      className={styles.container({ layout, size })}
       onClick={() =>
         logClickEvent('click_card_detail', {
           label: String(item.templestayId),
         })
       }>
       {item.imgUrl ? (
-        <section className={isHorizontal ? styles.horizontalImgSection : styles.verticalImgSection}>
+        <section className={styles.imgSection({ layout, size })}>
           <img
-            className={isHorizontal ? styles.horizontalImage : styles.verticalImage}
+            className={styles.image({ layout })}
             src={item.imgUrl}
             alt={item.templeName + ' 대표사진'}
           />
@@ -72,10 +73,7 @@ const TempleStayCard = ({
           </button>
         </section>
       ) : (
-        <div
-          className={
-            isHorizontal ? styles.horizontalEmptyImgSection : styles.verticalEmptyImgSection
-          }>
+        <div className={styles.emptyImgSection({ layout, size })}>
           <img src={errorImage} alt="빈이미지"></img>
         </div>
       )}
@@ -85,6 +83,7 @@ const TempleStayCard = ({
         templestayName={item.templestayName}
         region={item.region}
         type={item.type}
+        size={size}
       />
     </a>
   );

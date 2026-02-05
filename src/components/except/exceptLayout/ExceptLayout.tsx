@@ -7,10 +7,11 @@ import React from 'react';
 import * as styles from './exceptLayout.css';
 
 interface ExceptLayoutProps {
-  type: 'loading' | 'networkError';
+  type: 'loading' | 'networkError' | 'testError';
+  children?: React.ReactNode;
 }
 
-const ExceptLayout = ({ type }: ExceptLayoutProps) => {
+const ExceptLayout = ({ type, children }: ExceptLayoutProps) => {
   const { title, lottie, subtitle } = EXCEPT_INFOS[type];
 
   return (
@@ -20,6 +21,7 @@ const ExceptLayout = ({ type }: ExceptLayoutProps) => {
         <LottiePlayer keyId={type} src={lottie} style={{ width: 210, height: 210 }} />
       </div>
       <span className={styles.subtitle[type]}>{subtitle}</span>
+      {children}
     </section>
   );
 };

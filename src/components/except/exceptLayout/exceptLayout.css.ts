@@ -30,4 +30,10 @@ export const subtitle = styleVariants({
     ...theme.FONTS.b9R15,
     color: theme.COLORS.gray10,
   },
+  testError: {
+    ...theme.FONTS.b9R15,
+    color: theme.COLORS.gray10,
+    whiteSpace: 'pre-wrap',
+    textAlign: 'center',
+  },
 });

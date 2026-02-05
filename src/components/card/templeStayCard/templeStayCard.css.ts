@@ -1,66 +1,165 @@
 import theme from '@styles/theme.css';
 import { style } from '@vanilla-extract/css';
+import { recipe } from '@vanilla-extract/recipes';
 
-export const verticalContainer = style({
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '0.8rem',
-  width: '16.3rem',
-  height: '27.7rem',
-  cursor: 'pointer',
-});
-
-export const horizontalContainer = style({
-  position: 'relative',
-  display: 'flex',
-  gap: '1.2rem',
-  width: '33.5rem',
-  height: '13.5rem',
-
-  borderRadius: '4px',
-  cursor: 'pointer',
-  backgroundColor: theme.COLORS.white,
-});
-
-export const horizontalImgSection = style({
-  width: '12rem',
-  height: '13.5rem',
-});
-
-export const verticalImgSection = style({
-  position: 'relative',
-  width: '16.3rem',
-  height: '17.2rem',
-});
-
-export const verticalImage = style({
-  width: '100%',
-  height: '100%',
-  objectFit: 'cover',
-  borderRadius: '4px',
-
-  transition: '0.15s ease-out',
-
-  selectors: {
-    [`${verticalContainer}:hover &`]: {
-      filter: 'brightness(88%)',
+export const container = recipe({
+  base: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0.8rem',
+    cursor: 'pointer',
+  },
+  variants: {
+    layout: {
+      vertical: {
+        width: '16.3rem',
+        height: '27.7rem',
+      },
+      horizontal: {
+        position: 'relative',
+        flexDirection: 'row',
+        gap: '1.2rem',
+        width: '33.5rem',
+        height: '13.5rem',
+        borderRadius: '4px',
+        backgroundColor: theme.COLORS.white,
+      },
     },
+    size: {
+      default: {},
+      small: {
+        width: '10.7rem',
+        height: 'auto',
+        gap: '0.4rem',
+      },
+    },
+  },
+  defaultVariants: {
+    layout: 'vertical',
+    size: 'default',
+  },
+  compoundVariants: [
+    {
+      variants: {
+        layout: 'vertical',
+        size: 'small',
+      },
+      style: {
+        width: '10.7rem',
+      },
+    },
+  ],
+});
+
+export const imgSection = recipe({
+  variants: {
+    layout: {
+      vertical: {
+        position: 'relative',
+        width: '16.3rem',
+        height: '17.2rem',
+      },
+      horizontal: {
+        width: '12rem',
+        height: '13.5rem',
+      },
+    },
+    size: {
+      default: {},
+      small: {
+        minWidth: '10.7rem',
+        minHeight: '12.4rem',
+      },
+    },
+  },
+  defaultVariants: {
+    layout: 'vertical',
+    size: 'default',
+  },
+  compoundVariants: [
+    {
+      variants: {
+        layout: 'vertical',
+        size: 'small',
+      },
+      style: {
+        width: '10.7rem',
+        height: '12.4rem',
+      },
+    },
+  ],
+});
+
+export const image = recipe({
+  base: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    transition: '0.15s ease-out',
+  },
+  variants: {
+    layout: {
+      vertical: {
+        borderRadius: '4px',
+      },
+      horizontal: {
+        width: '12rem',
+        height: '13.5rem',
+        borderRadius: '4px 0 0 4px',
+      },
+    },
+  },
+  defaultVariants: {
+    layout: 'vertical',
   },
 });
 
-export const horizontalImage = style({
-  width: '12rem',
-  height: '13.5rem',
-  objectFit: 'cover',
-  borderRadius: '4px 0 0 4px',
-
-  transition: '0.15s ease-out',
-
-  selectors: {
-    [`${horizontalContainer}:hover &`]: {
-      filter: 'brightness(88%)',
+export const emptyImgSection = recipe({
+  base: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    objectFit: 'cover',
+    backgroundColor: theme.COLORS.gray2,
+    transition: '0.15s ease-out',
+  },
+  variants: {
+    layout: {
+      vertical: {
+        width: '16.3rem',
+        height: '17.2rem',
+        borderRadius: 4,
+      },
+      horizontal: {
+        width: '12rem',
+        height: '13.5rem',
+        borderRadius: '4px 0 0 4px',
+      },
+    },
+    size: {
+      default: {},
+      small: {
+        minWidth: '10.7rem',
+        minHeight: '12.4rem',
+      },
     },
   },
+  defaultVariants: {
+    layout: 'vertical',
+    size: 'default',
+  },
+  compoundVariants: [
+    {
+      variants: {
+        layout: 'vertical',
+        size: 'small',
+      },
+      style: {
+        width: '10.7rem',
+        height: '12.4rem',
+      },
+    },
+  ],
 });
 
 export const wishBtn = style({
@@ -77,37 +176,20 @@ export const wishBtn = style({
   zIndex: '2',
 });
 
-export const horizontalEmptyImgSection = style({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: '12rem',
-  height: '13.5rem',
-  objectFit: 'cover',
-  borderRadius: '4px 0 0 4px',
-  backgroundColor: theme.COLORS.gray2,
+// hover 효과를 위한 별도 스타일
+export const verticalContainer = style({});
+export const verticalSmallContainer = style({});
+export const horizontalContainer = style({});
 
-  transition: '0.15s ease-out',
-
+export const verticalImage = style({
   selectors: {
-    [`${verticalContainer}:hover &`]: {
+    [`${verticalContainer}:hover &, ${verticalSmallContainer}:hover &`]: {
       filter: 'brightness(88%)',
     },
   },
 });
 
-export const verticalEmptyImgSection = style({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: '16.3rem',
-  height: '17.2rem',
-  objectFit: 'cover',
-  borderRadius: 4,
-  backgroundColor: theme.COLORS.gray2,
-
-  transition: '0.15s ease-out',
-
+export const horizontalImage = style({
   selectors: {
     [`${horizontalContainer}:hover &`]: {
       filter: 'brightness(88%)',

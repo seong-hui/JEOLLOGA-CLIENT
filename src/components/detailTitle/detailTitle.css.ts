@@ -2,9 +2,14 @@ import theme from '@styles/theme.css';
 import { style } from '@vanilla-extract/css';
 import { recipe } from '@vanilla-extract/recipes';
 
+export const detailTitleStyle = style({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '0.4rem',
+});
+
 export const titleContainerStyle = style({
   width: '33.5rem',
-  height: '3.3rem',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
@@ -27,10 +32,17 @@ export const titleStyle = recipe({
     size: {
       small: {
         ...theme.FONTS.h5Sb16,
+        whiteSpace: 'pre-line',
       },
       medium: {
         ...theme.FONTS.h2Sb20,
+        whiteSpace: 'pre-line',
       },
     },
   },
+});
+
+export const subtitleStyle = style({
+  ...theme.FONTS.c6R13,
+  color: theme.COLORS.gray8,
 });

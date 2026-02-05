@@ -68,6 +68,7 @@ instance.interceptors.response.use(
 
         localStorage.clear();
         deleteCookie('userNickname');
+        deleteCookie('hasType');
         console.error(error);
         alert(MESSAGES.EXPIRED);
         window.location.replace('/');

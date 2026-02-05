@@ -29,6 +29,8 @@ const theme = createGlobalTheme(':root', {
     green4: '#6EBE7D',
     green5: '#779971',
     green6: '#EDF7F3',
+    green7: '#408F07',
+    green8: '#C8FB87',
 
     pink1: '#FF9999',
     pink2: '#FF8B8B',
@@ -39,10 +41,14 @@ const theme = createGlobalTheme(':root', {
     kakao: '#FEE500',
 
     gradient: 'linear-gradient(180deg, #00000000 61.26%, #000000BF 100%)',
+    btnGradient: 'linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.4) 100%)',
 
     filerDropshadow: '0px 4px 7px 0px rgba(0, 0, 0, 0.05)',
     reserveBtnDropshadow: '0px -4px 7px 0px #0000000D',
     boxArrowBtnDropshadow: '0px 3px 19px 0px rgba(0, 0, 0, 0.08)',
+    titleDropshadow: '0px 0px 7px rgba(251, 221, 109, 0.5)',
+    blueDropshadow: '0px 0px 7px #2193E8',
+    greenDropshadow: '0px 0px 7px #65C677',
   },
 
   FONTS: {
@@ -220,7 +226,13 @@ const theme = createGlobalTheme(':root', {
     i1R15: {
       fontSize: '1.5rem',
       fontFamily: "'Pretendard-Regular', sans-serif",
-      lineHeight: '170%',
+      lineHeight: '160%',
+      letterSpacing: '1%',
+    },
+    i2R14: {
+      fontSize: '1.4rem',
+      fontFamily: "'Pretendard-Regular', sans-serif",
+      lineHeight: '140%',
       letterSpacing: '1%',
     },
   },

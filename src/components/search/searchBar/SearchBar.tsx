@@ -20,7 +20,7 @@ const SearchBar = ({ searchText }: SearchBarProps) => {
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (value.length <= 10) {
+    if (value.length <= 16) {
       setInputValue(value);
     }
   };
@@ -71,7 +71,7 @@ const SearchBar = ({ searchText }: SearchBarProps) => {
           value={inputValue}
           onChange={handleChangeInput}
           onKeyDown={handleKeyDown}
-          maxLength={10}
+          maxLength={16}
         />
       </div>
       <button className={styles.pointer} onClick={() => handleClearInput()}>

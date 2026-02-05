@@ -8,6 +8,7 @@ export const loginBtn = style({
   justifyContent: 'center',
   padding: '1.6rem',
   width: '33.5rem',
+  height: '5.2rem',
   backgroundColor: theme.COLORS.kakao,
   borderRadius: 8,
 

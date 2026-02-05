@@ -1,0 +1,159 @@
+'use client';
+
+import React, { useCallback, useRef } from 'react';
+
+import dynamic from 'next/dynamic';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+
+import { toPng } from 'html-to-image';
+import { getCookie } from 'cookies-next';
+import { useQueryClient } from '@tanstack/react-query';
+
+import { TestResponse } from '@apis/test/type';
+import PageBottomBtn from '@components/common/button/pageBottomBtn/PageBottomBtn';
+import KakaoBtn from '@components/common/button/kakaoBtn/KakaoBtn';
+import Bubble from '@components/common/bubble/Bubble';
+import PopupBtn from '@components/common/button/popupBtn/PopupBtn';
+import ResultCard from '@components/test/resultCard/ResultCard';
+import TestHeader from '@components/test/testHeader/TestHeader';
+import ExceptLayout from '@components/except/exceptLayout/ExceptLayout';
+
+import { getStorageValue } from '@hooks/useLocalStorage';
+import getTestType from '@utils/getTestType';
+import { TestType } from '@constants/test';
+
+import * as styles from './resultPage.css';
+
+const ResultPage = () => {
+  const cardRef = useRef<HTMLButtonElement>(null);
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const userNickname = getCookie('userNickname');
+  const prevPath = getStorageValue('prevPage') || '';
+
+  const resultData =
+    queryClient.getQueryData<TestResponse>(['test-result']) ||
+    (JSON.parse(sessionStorage.getItem('test-result') || 'null') as TestResponse);
+
+  const handleDownload = useCallback(async () => {
+    if (!cardRef.current || !resultData) return;
+
+    try {
+      const dataUrl = await toPng(cardRef.current, { cacheBust: true });
+      const link = document.createElement('a');
+      link.download = `${resultData.code}.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (error) {
+      console.error(error);
+    }
+  }, [resultData]);
+
+  if (!resultData) {
+    return (
+      <ExceptLayout type="testError">
+        <div className={styles.exceptButtonWrapper}>
+          <PopupBtn color="gray" label="홈으로 가기" onClick={() => router.push('/')} />
+          <PopupBtn color="green" label="테스트 다시하기" onClick={() => router.push('/test')} />
+        </div>
+      </ExceptLayout>
+    );
+  }
+
+  const bestMate = getTestType(resultData.bestMate as TestType);
+  const worstMate = getTestType(resultData.worstMate as TestType);
+
+  const isMobile =
+    navigator.maxTouchPoints > 1 &&
+    /mobile|android|iphone|ipad|phone/i.test(navigator.userAgent.toLowerCase());
+
+  const handleShare = async () => {
+    const url = 'https://www.gototemplestay.com/test';
+
+    if (isMobile && navigator.share) {
+      try {
+        await navigator.share({
+          text: `나의 템플 캐릭터는 무엇일까요?🌺
+성향 테스트 참여하고, 친구와 결과를 공유해보세요!
+테스트를 통해 나와 잘 맞는 템플스테이 메이트를 찾아봐요.\n
+${url}`,
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(url);
+        alert('링크가 복사되었습니다.');
+      } catch (e) {
+        console.error('링크 복사 실패', e);
+      }
+    }
+  };
+
+  return (
+    <div className={styles.page}>
+      <TestHeader onCloseClick={() => router.push(prevPath)} />
+      <section className={styles.resultSection}>
+        <h1 className={styles.title}>{getTestType(resultData.code).name}</h1>
+        <h3 className={styles.subtitle}>{resultData.tagline}</h3>
+
+        <>
+          <button ref={cardRef} onClick={handleDownload}>
+            <ResultCard color="GREEN" type={resultData.code} />
+          </button>
+
+          <span className={styles.saveText}>이미지를 꾹 눌러서 저장해보세요!</span>
+        </>
+
+        <ul className={styles.description}>
+          {resultData.description.split('\n').map((line, idx) => (
+            <li key={idx}>{line}</li>
+          ))}
+        </ul>
+
+        <div className={styles.divider}></div>
+        <h2 className={styles.footerText}>{resultData.requirement}</h2>
+      </section>
+
+      <h2 className={styles.mateTitle}>나의 템플메이트는?</h2>
+
+      <section className={styles.mateSection}>
+        <div className={styles.bestMate}>
+          <Image src={bestMate.image} alt={`${bestMate.name} 이미지`} width={144} height={144} />
+          <p className={styles.mateSubtitle}>환상의 템플메이트</p>
+          <h5 className={styles.mateName}>{bestMate.name}</h5>
+        </div>
+
+        <div className={styles.worstMate}>
+          <Image src={worstMate.image} alt={`${worstMate.name} 이미지`} width={144} height={144} />
+          <p className={styles.mateSubtitle}>환장의 템플메이트</p>
+          <h5 className={styles.mateName}>{worstMate.name}</h5>
+        </div>
+      </section>
+
+      <div className={styles.buttonSection}>
+        {userNickname ? (
+          <PageBottomBtn
+            btnText="3초만에 템플스테이 추천받기"
+            size="large"
+            onClick={() => {
+              router.push('/?scrollTo=recommend');
+            }}
+          />
+        ) : (
+          <>
+            <Bubble text="나에게 맞는 절을 계속 추천받을 수 있어요!" />
+            <KakaoBtn page="TEST" type={resultData.code} />
+          </>
+        )}
+        <PageBottomBtn btnText="친구에게 공유하기" size="large" onClick={handleShare} />
+      </div>
+    </div>
+  );
+};
+
+export default dynamic(() => Promise.resolve(ResultPage), {
+  ssr: false,
+});

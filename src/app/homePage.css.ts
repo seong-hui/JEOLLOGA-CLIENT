@@ -22,7 +22,7 @@ export const curationCarouselStyle = style([
 export const popularCarouselStyle = style([
   flexCenterColumn,
   {
-    gap: '0.8rem',
+    gap: '1.2rem',
     margin: '5.4rem 0 28rem 0',
     touchAction: 'none',
   },
@@ -39,4 +39,45 @@ export const modalOverlay = style({
   justifyContent: 'center',
   alignItems: 'center',
   zIndex: 1,
+});
+
+export const titleWithIconStyle = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '0.8rem',
+});
+
+export const typeIconStyle = style({
+  width: '2.8rem',
+  height: '2.8rem',
+  flexShrink: 0,
+});
+
+export const searchInput = style({
+  flex: 1,
+  background: 'transparent',
+  ...theme.FONTS.c6R13,
+  cursor: 'pointer',
+
+  selectors: {
+    '&::placeholder': {
+      color: theme.COLORS.gray7,
+    },
+  },
+});
+
+export const searchWrapper = style({
+  display: 'flex',
+  alignItems: 'center',
+  width: '33.5rem',
+  height: '4rem',
+  padding: '1.2rem',
+  borderRadius: 8,
+  backgroundColor: theme.COLORS.gray1,
+  cursor: 'pointer',
+  marginTop: '1.2rem',
+});
+
+export const testBannerWrapper = style({
+  marginTop: '5.4rem',
 });
