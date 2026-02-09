@@ -12,13 +12,13 @@ const meta = {
     total: {
       control: { type: 'number' },
     },
-    currentIndex: {
+    displayIndex: {
       control: { type: 'number' },
     },
   },
   args: {
     total: 3,
-    currentIndex: 2,
+    displayIndex: 2,
   },
 } satisfies Meta<typeof CarouselIndex>;
 

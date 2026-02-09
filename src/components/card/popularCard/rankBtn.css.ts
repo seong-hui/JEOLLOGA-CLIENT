@@ -10,7 +10,8 @@ const rankBox = style({
   borderRadius: '0 0 8px 8px',
   backgroundColor: theme.COLORS.black60,
   ...theme.FONTS.c2R14,
-  marginRight: '2rem',
+  color: theme.COLORS.white,
+  right: '2rem',
   position: 'absolute',
   zIndex: 1,
 });
