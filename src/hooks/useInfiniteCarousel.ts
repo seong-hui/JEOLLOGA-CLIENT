@@ -21,6 +21,7 @@ const useInfiniteCarousel = <T>({ data, autoPlayInterval }: UseInfiniteCarouselP
   const [isAnimate, setIsAnimate] = useState(true);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
+  const [startY, setStartY] = useState(0);
   const [currentX, setCurrentX] = useState(0);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -62,16 +63,25 @@ const useInfiniteCarousel = <T>({ data, autoPlayInterval }: UseInfiniteCarouselP
     }
   };
 
-  const handleDragStart = (clientX: number) => {
+  const handleDragStart = (clientX: number, clientY: number = 0) => {
     stopAutoSlide();
     setIsDragging(true);
     setStartX(clientX);
-    setCurrentX(clientX); // 시작할 때 현재 위치도 초기화
+    setStartY(clientY);
+    setCurrentX(clientX);
     setIsAnimate(false);
   };
 
-  const handleDragMove = (clientX: number) => {
+  const handleDragMove = (clientX: number, clientY: number = 0) => {
     if (!isDragging) return;
+
+    const diffX = Math.abs(clientX - startX);
+    const diffY = Math.abs(clientY - startY);
+    if (diffY > diffX && diffY > 10) {
+      setIsDragging(false);
+      return;
+    }
+
     setCurrentX(clientX);
   };
 
@@ -115,6 +125,11 @@ const useInfiniteCarousel = <T>({ data, autoPlayInterval }: UseInfiniteCarouselP
       onMouseMove: (e: React.MouseEvent) => handleDragMove(e.clientX),
       onMouseUp: handleDragEnd,
       onMouseLeave: handleDragEnd,
+      onTouchStart: (e: React.TouchEvent) =>
+        handleDragStart(e.touches[0].clientX, e.touches[0].clientY),
+      onTouchMove: (e: React.TouchEvent) =>
+        handleDragMove(e.touches[0].clientX, e.touches[0].clientY),
+      onTouchEnd: handleDragEnd,
       onTransitionEnd: handleTransitionEnd,
     },
   };

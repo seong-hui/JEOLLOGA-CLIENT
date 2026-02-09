@@ -1,12 +1,12 @@
 'use client';
 
+import useInfiniteCarousel from '@hooks/useInfiniteCarousel';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
 import BANNER_DATA from './bannerData';
 import * as styles from './mainBanner.css';
-import useInfiniteCarousel from '@hooks/useInfiniteCarousel';
 
 const MainBanner = () => {
   const router = useRouter();
@@ -45,7 +45,7 @@ const MainBanner = () => {
           touchAction: 'pan-y',
         }}
         {...handlers}>
-        {slides.map((banner, index) => (
+        {slides.map((banner) => (
           <div
             key={banner.uniqueKey}
             className={styles.slideItem}
