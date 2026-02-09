@@ -3,17 +3,25 @@
 import Icon from '@assets/svgs';
 import useFilter from '@hooks/useFilter';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import useEventLogger from 'src/gtm/hooks/useEventLogger';
 
 import * as styles from './searchBar.css';
 
 interface SearchBarProps {
   searchText?: string;
+  autoFocus?: boolean;
 }
 
-const SearchBar = ({ searchText }: SearchBarProps) => {
+const SearchBar = ({ searchText, autoFocus = false }: SearchBarProps) => {
   const [inputValue, setInputValue] = useState(searchText || '');
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (autoFocus && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
 
   const { handleSearch } = useFilter();
   const { logClickEvent } = useEventLogger('search_bar');
@@ -27,8 +35,11 @@ const SearchBar = ({ searchText }: SearchBarProps) => {
 
   const handleClearInput = () => {
     setInputValue('');
-
     logClickEvent('click_delete', { label: inputValue });
+
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
   };
 
   const handleClickSearch = () => {
@@ -66,6 +77,7 @@ const SearchBar = ({ searchText }: SearchBarProps) => {
           <Icon.IcnSearchMediumGray />
         </div>
         <input
+          ref={inputRef}
           className={styles.inputStyle}
           placeholder="사찰명을 입력해 주세요"
           value={inputValue}
