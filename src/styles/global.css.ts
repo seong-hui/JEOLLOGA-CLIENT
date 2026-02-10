@@ -4,6 +4,10 @@ globalStyle('*', {
   boxSizing: 'border-box',
 });
 
+globalStyle('html', {
+  paddingRight: '0px !important',
+});
+
 globalStyle('html, body', {
   width: '100%',
   fontSize: '62.5%',
