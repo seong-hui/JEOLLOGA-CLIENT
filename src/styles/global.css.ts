@@ -4,6 +4,10 @@ globalStyle('*', {
   boxSizing: 'border-box',
 });
 
+globalStyle('::-webkit-scrollbar', {
+  display: 'none',
+});
+
 globalStyle('html', {
   paddingRight: '0px !important',
 });
