@@ -43,7 +43,12 @@ const PopularCard = ({
       onClick={onClick}
       role="button"
       tabIndex={0}
-      onKeyDown={(e) => e.key === 'Enter' || (e.key === ' ' && onClick())}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick();
+        }
+      }}
       aria-label={`${templestayName} 로 이동`}
       onDragStart={(e) => e.preventDefault()}>
       <div className={styles.slideContent}>
