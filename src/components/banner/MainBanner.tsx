@@ -42,6 +42,7 @@ const MainBanner = () => {
         style={{
           transform: `translateX(calc(-${currentIndex * 100}% + ${dragOffset}px))`,
           transition: isAnimate ? 'transform 0.5s ease-in-out' : 'none',
+          touchAction: 'pan-y',
         }}
         {...handlers}>
         {slides.map((banner) => (
