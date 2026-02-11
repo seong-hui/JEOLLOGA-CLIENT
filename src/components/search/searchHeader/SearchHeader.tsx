@@ -6,10 +6,10 @@ import useNavigateTo from '@hooks/useNavigateTo';
 interface SearchHeader {
   searchText?: string;
   prevPath: string | number;
-  autoFocus?: boolean;
+  inputAutoFocus?: boolean;
 }
 
-const SearchHeader = ({ searchText, prevPath, autoFocus = false }: SearchHeader) => {
+const SearchHeader = ({ searchText, prevPath, inputAutoFocus = false }: SearchHeader) => {
   const handleToBack = useNavigateTo(prevPath);
 
   return (
@@ -17,7 +17,7 @@ const SearchHeader = ({ searchText, prevPath, autoFocus = false }: SearchHeader)
       <button className={styles.backBtn} onClick={handleToBack}>
         <Icon.IcnArrowBlackLeft />
       </button>
-      <SearchBar searchText={searchText} autoFocus={autoFocus} />
+      <SearchBar searchText={searchText} inputAutoFocus={inputAutoFocus} />
     </header>
   );
 };

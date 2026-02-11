@@ -10,15 +10,15 @@ import * as styles from './searchBar.css';
 
 interface SearchBarProps {
   searchText?: string;
-  autoFocus?: boolean;
+  inputAutoFocus?: boolean;
 }
 
-const SearchBar = ({ searchText, autoFocus = false }: SearchBarProps) => {
+const SearchBar = ({ searchText, inputAutoFocus = false }: SearchBarProps) => {
   const [inputValue, setInputValue] = useState(searchText || '');
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (autoFocus && inputRef.current) {
+    if (inputAutoFocus && inputRef.current) {
       inputRef.current.focus();
     }
   }, []);

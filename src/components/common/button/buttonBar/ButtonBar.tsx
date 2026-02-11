@@ -1,7 +1,8 @@
-import { buttonBarWrapper, buttonBarContainer } from './buttonBar.css';
 import FlowerBtn from '@components/common/button/flowerBtn/FlowerBtn';
 import PageBottomBtn from '@components/common/button/pageBottomBtn/PageBottomBtn';
 import TextBtn from '@components/common/button/textBtn/TextBtn';
+
+import { buttonBarWrapper, buttonBarContainer } from './buttonBar.css';
 
 interface ButtonBarProps {
   type: 'reset' | 'wish';

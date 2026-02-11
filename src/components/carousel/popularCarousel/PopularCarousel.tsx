@@ -80,7 +80,6 @@ const PopularCarousel = ({ onRequireLogin }: PopularCarouselProps) => {
             templeName={temple.templeName}
             templestayId={temple.id}
             onLikeToggle={handleLikeToggle}
-            link={`/detail/${temple.id}`}
             onClick={() => {
               if (isSwiped) return;
 

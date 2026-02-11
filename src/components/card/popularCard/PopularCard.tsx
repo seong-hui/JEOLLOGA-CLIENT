@@ -15,7 +15,6 @@ interface PopularCardProps {
   onLikeToggle: (templestayId: number) => void;
   templestayId: number;
   onClick: () => void;
-  link: string;
   priority?: boolean;
 }
 
@@ -28,7 +27,6 @@ const PopularCard = ({
   isLiked,
   onLikeToggle,
   templestayId,
-  link,
   onClick,
   priority = false,
 }: PopularCardProps) => {
