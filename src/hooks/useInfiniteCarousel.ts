@@ -110,6 +110,19 @@ const useInfiniteCarousel = <T>({ data, autoPlayInterval }: UseInfiniteCarouselP
     else setIsAnimate(true);
   };
 
+  const handlers = {
+    onMouseDown: (e: React.MouseEvent) => handleDragStart(e.clientX),
+    onMouseMove: (e: React.MouseEvent) => handleDragMove(e.clientX),
+    onMouseUp: handleDragEnd,
+    onMouseLeave: handleDragEnd,
+    onTouchStart: (e: React.TouchEvent) =>
+      handleDragStart(e.touches[0].clientX, e.touches[0].clientY),
+    onTouchMove: (e: React.TouchEvent) =>
+      handleDragMove(e.touches[0].clientX, e.touches[0].clientY),
+    onTouchEnd: handleDragEnd,
+    onTransitionEnd: handleTransitionEnd,
+  };
+
   const displayIndex = !hasSlides
     ? 0
     : currentIndex === 0
@@ -118,30 +131,15 @@ const useInfiniteCarousel = <T>({ data, autoPlayInterval }: UseInfiniteCarouselP
         ? 1
         : currentIndex;
 
-  const dragOffset = isDragging ? currentX - startX : 0;
-
   return {
     slides,
     currentIndex: hasSlides ? currentIndex : 0,
     isAnimate: hasSlides ? isAnimate : false,
-    dragOffset,
+    dragOffset: isDragging ? currentX - startX : 0,
     displayIndex,
     totalOriginalSlides,
     isSwiped: hasSlides && Math.abs(currentX - startX) > 5,
-    handlers: hasSlides
-      ? {
-          onMouseDown: (e: React.MouseEvent) => handleDragStart(e.clientX),
-          onMouseMove: (e: React.MouseEvent) => handleDragMove(e.clientX),
-          onMouseUp: handleDragEnd,
-          onMouseLeave: handleDragEnd,
-          onTouchStart: (e: React.TouchEvent) =>
-            handleDragStart(e.touches[0].clientX, e.touches[0].clientY),
-          onTouchMove: (e: React.TouchEvent) =>
-            handleDragMove(e.touches[0].clientX, e.touches[0].clientY),
-          onTouchEnd: handleDragEnd,
-          onTransitionEnd: handleTransitionEnd,
-        }
-      : {},
+    handlers: hasSlides ? handlers : {},
   };
 };
 
