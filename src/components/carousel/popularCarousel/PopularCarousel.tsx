@@ -83,11 +83,11 @@ const PopularCarousel = ({ onRequireLogin }: PopularCarouselProps) => {
             onClick={() => {
               if (isSwiped) return;
 
-              router.push(`/detail/${temple.id}`);
-
               logClickEvent('click_popularity_card', {
                 label: temple.id,
               });
+
+              router.push(`/detail/${temple.id}`);
             }}
             priority={index === 1}
           />
