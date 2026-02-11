@@ -7,15 +7,7 @@ interface UseInfiniteCarouselProps<T> {
 
 const useInfiniteCarousel = <T>({ data, autoPlayInterval }: UseInfiniteCarouselProps<T>) => {
   const totalOriginalSlides = data.length;
-
-  const slides = useMemo(
-    () => [
-      { ...data[data.length - 1], uniqueKey: 'clone-last' },
-      ...data.map((item, idx) => ({ ...item, uniqueKey: `real-${idx}` })),
-      { ...data[0], uniqueKey: 'clone-first' },
-    ],
-    [data],
-  );
+  const hasSlides = totalOriginalSlides > 0;
 
   const [currentIndex, setCurrentIndex] = useState(1);
   const [isAnimate, setIsAnimate] = useState(true);
@@ -26,34 +18,51 @@ const useInfiniteCarousel = <T>({ data, autoPlayInterval }: UseInfiniteCarouselP
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
+  const slides = useMemo(() => {
+    if (!hasSlides) return [];
+
+    return [
+      { ...data[data.length - 1], uniqueKey: 'clone-last' },
+      ...data.map((item, idx) => ({ ...item, uniqueKey: `real-${idx}` })),
+      { ...data[0], uniqueKey: 'clone-first' },
+    ];
+  }, [data, hasSlides]);
+
   const moveNext = useCallback(() => {
+    if (!hasSlides) return;
+
     setIsAnimate(true);
     setCurrentIndex((prev) => prev + 1);
-  }, []);
+  }, [hasSlides]);
 
   const movePrev = useCallback(() => {
+    if (!hasSlides) return;
+
     setIsAnimate(true);
     setCurrentIndex((prev) => prev - 1);
-  }, []);
+  }, [hasSlides]);
 
   const stopAutoSlide = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
   }, []);
 
   const startAutoSlide = useCallback(() => {
-    if (!autoPlayInterval) return;
+    if (!autoPlayInterval || !hasSlides) return;
+
     stopAutoSlide();
     timerRef.current = setInterval(moveNext, autoPlayInterval);
-  }, [moveNext, stopAutoSlide, autoPlayInterval]);
+  }, [moveNext, stopAutoSlide, autoPlayInterval, hasSlides]);
 
   useEffect(() => {
-    if (autoPlayInterval) {
-      startAutoSlide();
-      return () => stopAutoSlide();
-    }
-  }, [startAutoSlide, stopAutoSlide, currentIndex, autoPlayInterval]);
+    if (!autoPlayInterval || !hasSlides) return;
+
+    startAutoSlide();
+    return () => stopAutoSlide();
+  }, [startAutoSlide, stopAutoSlide, autoPlayInterval, hasSlides]);
 
   const handleTransitionEnd = () => {
+    if (!hasSlides) return;
+
     if (currentIndex === 0) {
       setIsAnimate(false);
       setCurrentIndex(totalOriginalSlides);
@@ -63,7 +72,9 @@ const useInfiniteCarousel = <T>({ data, autoPlayInterval }: UseInfiniteCarouselP
     }
   };
 
-  const handleDragStart = (clientX: number, clientY: number = 0) => {
+  const handleDragStart = (clientX: number, clientY = 0) => {
+    if (!hasSlides) return;
+
     stopAutoSlide();
     setIsDragging(true);
     setStartX(clientX);
@@ -72,7 +83,7 @@ const useInfiniteCarousel = <T>({ data, autoPlayInterval }: UseInfiniteCarouselP
     setIsAnimate(false);
   };
 
-  const handleDragMove = (clientX: number, clientY: number = 0) => {
+  const handleDragMove = (clientX: number, clientY = 0) => {
     if (!isDragging) return;
 
     const diffX = Math.abs(clientX - startX);
@@ -94,17 +105,14 @@ const useInfiniteCarousel = <T>({ data, autoPlayInterval }: UseInfiniteCarouselP
     setIsDragging(false);
     if (autoPlayInterval) startAutoSlide();
 
-    if (diff < -threshold) {
-      moveNext();
-    } else if (diff > threshold) {
-      movePrev();
-    } else {
-      setIsAnimate(true);
-    }
+    if (diff < -threshold) moveNext();
+    else if (diff > threshold) movePrev();
+    else setIsAnimate(true);
   };
 
-  const displayIndex =
-    currentIndex === 0
+  const displayIndex = !hasSlides
+    ? 0
+    : currentIndex === 0
       ? totalOriginalSlides
       : currentIndex === slides.length - 1
         ? 1
@@ -114,24 +122,26 @@ const useInfiniteCarousel = <T>({ data, autoPlayInterval }: UseInfiniteCarouselP
 
   return {
     slides,
-    currentIndex,
-    isAnimate,
+    currentIndex: hasSlides ? currentIndex : 0,
+    isAnimate: hasSlides ? isAnimate : false,
     dragOffset,
     displayIndex,
     totalOriginalSlides,
-    isSwiped: Math.abs(currentX - startX) > 5,
-    handlers: {
-      onMouseDown: (e: React.MouseEvent) => handleDragStart(e.clientX),
-      onMouseMove: (e: React.MouseEvent) => handleDragMove(e.clientX),
-      onMouseUp: handleDragEnd,
-      onMouseLeave: handleDragEnd,
-      onTouchStart: (e: React.TouchEvent) =>
-        handleDragStart(e.touches[0].clientX, e.touches[0].clientY),
-      onTouchMove: (e: React.TouchEvent) =>
-        handleDragMove(e.touches[0].clientX, e.touches[0].clientY),
-      onTouchEnd: handleDragEnd,
-      onTransitionEnd: handleTransitionEnd,
-    },
+    isSwiped: hasSlides && Math.abs(currentX - startX) > 5,
+    handlers: hasSlides
+      ? {
+          onMouseDown: (e: React.MouseEvent) => handleDragStart(e.clientX),
+          onMouseMove: (e: React.MouseEvent) => handleDragMove(e.clientX),
+          onMouseUp: handleDragEnd,
+          onMouseLeave: handleDragEnd,
+          onTouchStart: (e: React.TouchEvent) =>
+            handleDragStart(e.touches[0].clientX, e.touches[0].clientY),
+          onTouchMove: (e: React.TouchEvent) =>
+            handleDragMove(e.touches[0].clientX, e.touches[0].clientY),
+          onTouchEnd: handleDragEnd,
+          onTransitionEnd: handleTransitionEnd,
+        }
+      : {},
   };
 };
 
