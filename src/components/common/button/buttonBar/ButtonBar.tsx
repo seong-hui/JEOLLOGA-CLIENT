@@ -1,7 +1,8 @@
-import buttonBarContainer from '@components/common/button/buttonBar/buttonBar.css';
 import FlowerBtn from '@components/common/button/flowerBtn/FlowerBtn';
 import PageBottomBtn from '@components/common/button/pageBottomBtn/PageBottomBtn';
 import TextBtn from '@components/common/button/textBtn/TextBtn';
+
+import { buttonBarWrapper, buttonBarContainer } from './buttonBar.css';
 
 interface ButtonBarProps {
   type: 'reset' | 'wish';
@@ -10,6 +11,7 @@ interface ButtonBarProps {
   handleResetFilter?: () => void;
   liked?: boolean;
   onToggleWishlist?: () => void;
+  isDisabled?: boolean;
 }
 
 const ButtonBar = ({
@@ -19,6 +21,7 @@ const ButtonBar = ({
   handleResetFilter = () => {},
   liked,
   onToggleWishlist,
+  isDisabled = false,
 }: ButtonBarProps) => {
   const renderLeftButton = () =>
     type === 'wish' ? (
@@ -34,11 +37,17 @@ const ButtonBar = ({
     );
 
   return (
-    <div className={buttonBarContainer}>
-      {renderLeftButton()}
-      <PageBottomBtn btnText={label} size="small" onClick={largeBtnClick} />
+    <div className={buttonBarWrapper}>
+      <div className={buttonBarContainer}>
+        {renderLeftButton()}
+        <PageBottomBtn
+          btnText={label}
+          size="small"
+          onClick={largeBtnClick}
+          isDisabled={isDisabled}
+        />
+      </div>
     </div>
   );
 };
-
 export default ButtonBar;

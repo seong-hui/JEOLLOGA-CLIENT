@@ -1,30 +1,46 @@
+import theme from '@styles/theme.css';
+
 import { style } from '@vanilla-extract/css';
 
-export const carouselWrapper = style({
+export const container = style({
+  width: '100%',
+  overflow: 'hidden',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  justifyContent: 'center',
-  gap: '1.5rem',
 });
 
-export const carouselContainer = style({
+export const slideList = style({
+  display: 'flex',
   width: '33.5rem',
-  overflow: 'hidden',
-  display: 'flex',
-});
-
-export const carouselBox = style({
-  display: 'flex',
   gap: '2rem',
 });
 
-export const carouselItem = style({
-  flexShrink: 0,
+export const slideItem = style({
+  minWidth: '100%',
+  height: '100%',
+  cursor: 'pointer',
 });
 
-export const emptyBox = style({
-  width: '2rem',
-  height: '100%',
-  flexShrink: 0,
+export const imageWrapper = style({
+  position: 'relative',
+
+  width: '100%',
+
+  height: '137px',
+
+  overflow: 'hidden',
+
+  borderRadius: 8,
+});
+
+export const templestayName = style({
+  ...theme.FONTS.h3Sb18,
+  textAlign: 'left',
+});
+
+export const slideContent = style({
+  display: 'flex',
+
+  flexDirection: 'column',
 });

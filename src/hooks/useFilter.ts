@@ -1,9 +1,10 @@
 import useLocalStorage from '@hooks/useLocalStorage';
 import { getCookie } from 'cookies-next';
+import { useSetAtom } from 'jotai';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 import queryClient from 'src/queryClient';
-import { filterListInstance } from 'src/store/store';
+import { filterListInstance, priceAtom } from 'src/store/store';
 
 type FilterQueryParams = {
   region?: string[];
@@ -22,6 +23,7 @@ const isLoggedIn = getCookie('userNickname');
 
 const useFilter = () => {
   const { addStorageValue } = useLocalStorage();
+  const setPrice = useSetAtom(priceAtom);
 
   // 필터 상태 토글
   const toggleFilter = async (filterName: string) => {
@@ -37,6 +39,9 @@ const useFilter = () => {
 
   const handleSearch = useCallback(
     (params: FilterQueryParams = {}) => {
+      filterListInstance.resetAllStates();
+      setPrice({ minPrice: 0, maxPrice: 30 });
+
       const searchParams = new URLSearchParams();
 
       Object.entries(params).forEach(([key, value]) => {

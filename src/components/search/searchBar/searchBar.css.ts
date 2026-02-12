@@ -13,7 +13,6 @@ export const searchBarContainer = style({
   borderRadius: 8,
   backgroundColor: theme.COLORS.gray1,
 
-  ...theme.FONTS.b8M15,
   color: theme.COLORS.black,
 });
 
@@ -30,14 +29,19 @@ export const searchBarLayout = style({
 export const inputStyle = style({
   width: '21.9rem',
   backgroundColor: 'inherit',
-
+  ...theme.FONTS.b7R16,
+  lineHeight: '1.5rem',
+  transform: 'scale(0.9375)',
+  transformOrigin: 'left center',
   selectors: {
     '&::placeholder': {
       color: theme.COLORS.gray5,
+      lineHeight: '1.5rem',
+      transform: 'scale(0.9375)',
+      transformOrigin: 'left center',
     },
   },
 });
-
 export const pointer = style({
   cursor: 'pointer',
   display: 'flex',

@@ -1,25 +1,41 @@
 import theme from '@styles/theme.css';
 import { style } from '@vanilla-extract/css';
 
-export const cardWrapper = style({
+export const container = style({
+  width: '100%',
+  overflow: 'hidden',
+  touchAction: 'pan-y',
+});
+
+export const slideList = style({
+  display: 'flex',
   width: '33.5rem',
+  gap: '2rem',
+});
+
+export const slideItem = style({
+  minWidth: '100%',
+  height: '100%',
   cursor: 'pointer',
 });
 
-export const cardContainer = style({
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '0.8rem',
-});
-
-export const templeInfoBox = style({
-  display: 'flex',
-  flexDirection: 'column',
+export const imageWrapper = style({
+  position: 'relative',
+  width: '100%',
+  height: '137px',
+  overflow: 'hidden',
+  borderRadius: 8,
 });
 
 export const templestayName = style({
   ...theme.FONTS.h3Sb18,
   textAlign: 'left',
+});
+
+export const slideContent = style({
+  display: 'flex',
+
+  flexDirection: 'column',
 });
 
 export const bottomBox = style({
@@ -32,17 +48,6 @@ export const bottomBox = style({
 
 export const likeBtn = style({
   padding: '1rem',
-});
-
-export const imgBox = style({
-  height: '13.7rem',
-  borderRadius: 8,
-  display: 'flex',
-  justifyContent: 'flex-end',
-  color: theme.COLORS.white,
-  overflow: 'hidden',
-  backgroundPosition: 'center',
-  position: 'relative',
 });
 
 export const bottomContainer = style({

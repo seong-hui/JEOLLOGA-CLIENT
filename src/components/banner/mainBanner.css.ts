@@ -7,6 +7,7 @@ export const container = style({
   overflow: 'hidden',
   aspectRatio: '375 / 347',
   marginBottom: '40px',
+  touchAction: 'pan-y',
 });
 
 export const slideList = style({

@@ -3,11 +3,11 @@ import { useAddWishlistV2, useRemoveWishlistV2 } from '@apis/wish';
 import PopularCard from '@components/card/popularCard/PopularCard';
 import CarouselIndex from '@components/carousel/popularCarousel/CarouselIndex';
 import ExceptLayout from '@components/except/exceptLayout/ExceptLayout';
-import useCarousel from '@hooks/useCarousel';
+import { useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
-import registDragEvent from '@utils/registDragEvent';
 import { getCookie } from 'cookies-next';
 import useEventLogger from 'src/gtm/hooks/useEventLogger';
+import useInfiniteCarousel from '@hooks/useInfiniteCarousel';
 
 import * as styles from './popularCarousel.css';
 
@@ -19,24 +19,26 @@ const PopularCarousel = ({ onRequireLogin }: PopularCarouselProps) => {
   const queryClient = useQueryClient();
   const addWishlistMutation = useAddWishlistV2();
   const removeWishlistMutation = useRemoveWishlistV2();
+  const { logClickEvent } = useEventLogger('home_popularity_component');
+  const router = useRouter();
 
   const { data, isLoading, isError } = useGetRanking();
 
-  const { currentIndex, carouselRef, transformStyle, handleDragChange, handleDragEnd } =
-    useCarousel({
-      itemCount: data?.length || 0,
-      moveDistance: 355,
-    });
+  const {
+    slides,
+    currentIndex,
+    isAnimate,
+    dragOffset,
+    displayIndex,
+    totalOriginalSlides,
+    isSwiped,
+    handlers,
+  } = useInfiniteCarousel({
+    data: data || [],
+  });
 
-  const { logClickEvent } = useEventLogger('home_popularity_component');
-
-  if (isLoading) {
-    return <ExceptLayout type="loading" />;
-  }
-
-  if (isError) {
-    return <ExceptLayout type="networkError" />;
-  }
+  if (isLoading) return <ExceptLayout type="loading" />;
+  if (isError) return <ExceptLayout type="networkError" />;
 
   const handleLikeToggle = (templestayId: number) => {
     const userNickname = getCookie('userNickname');
@@ -59,39 +61,41 @@ const PopularCarousel = ({ onRequireLogin }: PopularCarouselProps) => {
   };
 
   return (
-    <section className={styles.carouselWrapper}>
-      <div ref={carouselRef} className={styles.carouselContainer}>
-        <div
-          className={styles.carouselBox}
-          style={transformStyle}
-          {...registDragEvent({
-            onDragChange: handleDragChange,
-            onDragEnd: handleDragEnd,
-          })}>
-          {data &&
-            data.map((temple) => (
-              <PopularCard
-                key={temple.id}
-                ranking={temple.rank}
-                templestayName={temple.templestayName}
-                templeLoc={temple.region}
-                templeImg={temple.imgUrl}
-                isLiked={temple.wish}
-                templeName={temple.templeName}
-                templestayId={temple.id}
-                onLikeToggle={handleLikeToggle}
-                link={`/detail/${temple.id}`}
-                onClick={() => {
-                  logClickEvent('click_popularity_card', {
-                    label: temple.id,
-                  });
-                }}
-              />
-            ))}
-        </div>
+    <div className={styles.container}>
+      <div
+        className={styles.slideList}
+        style={{
+          transform: `translateX(calc(-${currentIndex * (33.5 + 2)}rem + ${dragOffset}px))`,
+          transition: isAnimate ? 'transform 0.5s ease-in-out' : 'none',
+        }}
+        {...handlers}>
+        {slides.map((temple, index) => (
+          <PopularCard
+            key={temple.uniqueKey}
+            ranking={temple.rank}
+            templestayName={temple.templestayName}
+            templeLoc={temple.region}
+            templeImg={temple.imgUrl}
+            isLiked={temple.wish}
+            templeName={temple.templeName}
+            templestayId={temple.id}
+            onLikeToggle={handleLikeToggle}
+            onClick={() => {
+              if (isSwiped) return;
+
+              logClickEvent('click_popularity_card', {
+                label: temple.id,
+              });
+
+              router.push(`/detail/${temple.id}`);
+            }}
+            priority={index === 1}
+          />
+        ))}
       </div>
-      <CarouselIndex total={data?.length || 0} currentIndex={currentIndex} />
-    </section>
+
+      <CarouselIndex total={totalOriginalSlides} displayIndex={displayIndex} />
+    </div>
   );
 };
 
