@@ -60,6 +60,13 @@ const useInfiniteCarousel = <T>({ data, autoPlayInterval }: UseInfiniteCarouselP
     return () => stopAutoSlide();
   }, [startAutoSlide, stopAutoSlide, autoPlayInterval, hasSlides]);
 
+  useEffect(() => {
+    if (currentIndex >= slides.length) {
+      setIsAnimate(false);
+      setCurrentIndex(1);
+    }
+  }, [currentIndex, slides.length]);
+
   const handleTransitionEnd = () => {
     if (!hasSlides) return;
 
@@ -123,13 +130,16 @@ const useInfiniteCarousel = <T>({ data, autoPlayInterval }: UseInfiniteCarouselP
     onTransitionEnd: handleTransitionEnd,
   };
 
-  const displayIndex = !hasSlides
-    ? 0
-    : currentIndex === 0
-      ? totalOriginalSlides
-      : currentIndex === slides.length - 1
-        ? 1
-        : currentIndex;
+  const getDisplayIndex = () => {
+    if (!hasSlides) return 0;
+
+    if (currentIndex === 0) return totalOriginalSlides;
+    if (currentIndex === slides.length - 1) return 1;
+
+    return ((currentIndex - 1) % totalOriginalSlides) + 1;
+  };
+
+  const displayIndex = getDisplayIndex();
 
   return {
     slides,
