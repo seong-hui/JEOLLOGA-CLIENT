@@ -1,5 +1,6 @@
 import HomeClient from '@app/HomeClient';
 import RecommendTempleClient from '@app/RecommendTempleClient';
+import Icon from '@assets/svgs';
 import MainBanner from '@components/banner/MainBanner';
 import DetailTitle from '@components/detailTitle/DetailTitle';
 import FilterTypeBoxClient from '@components/filter/filterTypeBox/FilterTypeBoxClient';
@@ -7,10 +8,9 @@ import Footer from '@components/footer/Footer';
 import Header from '@components/header/Header';
 import TestBanner from '@components/test/testBanner/TestBanner';
 import { cookies } from 'next/headers';
+import Link from 'next/link';
 
 import * as styles from './homePage.css';
-import Link from 'next/link';
-import Icon from '@assets/svgs';
 
 const HomePage = async () => {
   const cookieStore = await cookies();

@@ -39,7 +39,6 @@ const meta = {
     templeImg:
       'https://img.danawa.com/images/descFiles/6/110/5109431_agiLaciMHn_1659098198501.jpeg',
     templeName: '봉선사',
-    link: 'https://www.gototemplestay.com/',
     isLiked: false,
     templestayId: 123,
     onLikeToggle: (id) => alert(`Toggled like for ID: ${id}`),

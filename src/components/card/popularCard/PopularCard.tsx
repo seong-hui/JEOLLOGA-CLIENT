@@ -1,10 +1,9 @@
 'use client';
 
 import Icon from '@assets/svgs';
-import RankBtn from '@components/card/popularCard/RankBtn';
 import Image from 'next/image';
-
 import * as styles from './popularCard.css';
+import RankBtn from '@components/card/popularCard/RankBtn';
 
 interface PopularCardProps {
   ranking: number;
@@ -15,8 +14,8 @@ interface PopularCardProps {
   isLiked: boolean;
   onLikeToggle: (templestayId: number) => void;
   templestayId: number;
-  link: string;
   onClick: () => void;
+  priority?: boolean;
 }
 
 const PopularCard = ({
@@ -28,8 +27,8 @@ const PopularCard = ({
   isLiked,
   onLikeToggle,
   templestayId,
-  link,
   onClick,
+  priority = false,
 }: PopularCardProps) => {
   const handleLikeClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -39,22 +38,31 @@ const PopularCard = ({
   };
 
   return (
-    <a
-      href={link}
-      className={styles.cardWrapper}
-      draggable={false}
-      onDragStart={(e) => e.preventDefault()}
-      onClick={onClick}>
-      <div>
-        <div className={styles.imgBox}>
+    <div
+      className={styles.slideItem}
+      onClick={onClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick();
+        }
+      }}
+      aria-label={`${templestayName} 로 이동`}
+      onDragStart={(e) => e.preventDefault()}>
+      <div className={styles.slideContent}>
+        <div className={styles.imageWrapper}>
           <Image
             src={templeImg}
             alt={`${templestayName} 대표 이미지`}
             fill
-            style={{ objectFit: 'cover' }}
+            style={{ objectFit: 'cover', objectPosition: 'center' }}
+            priority={priority}
           />
           <RankBtn ranking={ranking} />
         </div>
+
         <div className={styles.bottomWrapper}>
           <div className={styles.bottomContainer}>
             <h3 className={styles.templestayName}>{templestayName}</h3>
@@ -64,12 +72,13 @@ const PopularCard = ({
               <span>{templeName}</span>
             </div>
           </div>
+
           <button className={styles.likeBtn} onClick={handleLikeClick}>
             {isLiked ? <Icon.IcnFlowerPink /> : <Icon.IcnFlowerGray />}
           </button>
         </div>
       </div>
-    </a>
+    </div>
   );
 };
 

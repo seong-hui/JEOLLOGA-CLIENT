@@ -17,7 +17,7 @@ export const headerContainer = style({
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
-  paddingTop: '1rem',
+  paddingTop: '1.2rem',
   marginBottom: '1rem',
   zIndex: 3,
 });

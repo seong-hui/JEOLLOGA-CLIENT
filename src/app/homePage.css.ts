@@ -35,10 +35,9 @@ export const modalOverlay = style({
   width: '100%',
   height: 'calc(100% + 1.2rem)',
   marginTop: '-1.2rem',
-  backgroundColor: theme.COLORS.black60,
   justifyContent: 'center',
   alignItems: 'center',
-  zIndex: 1,
+  zIndex: 100,
 });
 
 export const titleWithIconStyle = style({

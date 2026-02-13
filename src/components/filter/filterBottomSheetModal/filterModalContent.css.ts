@@ -13,4 +13,10 @@ export const main = style({
   overflowY: 'auto',
   maxHeight: 'calc(100vh - 280px)',
   height: '100vh',
+
+  selectors: {
+    '&::-webkit-scrollbar': {
+      display: 'none',
+    },
+  },
 });

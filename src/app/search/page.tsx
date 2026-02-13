@@ -8,7 +8,7 @@ import leftPaddingStyle from './searchPage.css';
 const SearchPage = () => {
   return (
     <>
-      <SearchHeader prevPath={'/'} />
+      <SearchHeader prevPath={'/'} inputAutoFocus={true} />
       <div className={leftPaddingStyle}>
         <RecentBtnBox />
       </div>

@@ -60,7 +60,6 @@ export const title = recipe({
   variants: {
     size: {
       default: {
-        height: '4.8rem',
         ...theme.FONTS.h5Sb16,
       },
       small: {
